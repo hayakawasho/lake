@@ -7,18 +7,17 @@ type SvelteAppType = typeof SvelteComponent
 
 class WithSvelte implements IComponent {
   #svelteApp!: SvelteComponent
-  #svelteContext = new Map()
+  #context$ = new Map()
 
   constructor(private SvelteApp: SvelteAppType) {}
 
   setup = (element: HTMLElement, props = {}) => {
     const rootRef = element
-
     const newProps = {
       ...props,
     }
 
-    this.#svelteContext.set('$', {
+    this.#context$.set('$', {
       rootRef,
       useDOMRef: <T>(ref: RefValue): ReturnDOMRef<T> => ({
         refs: domRefs(ref, rootRef)
@@ -28,13 +27,13 @@ class WithSvelte implements IComponent {
     this.#svelteApp = new this.SvelteApp({
       target: rootRef,
       props: newProps,
-      context: this.#svelteContext
+      context: this.#context$
     })
   }
 
   destroy = () => {
     this.#svelteApp.$destroy()
-    this.#svelteContext.clear()
+    this.#context$.clear()
   }
 }
 
