@@ -14,19 +14,24 @@
     "/dist",
     "/types"
   ],
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "watch": "vite build -w",
-    "serve": "vite preview"
-  },
   "author": "hayakawasho",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hayakawasho/lake/issues"
   },
   "homepage": "https://github.com/hayakawasho/lake#readme",
+  "keywords": [
+    "svelte",
+    "svelte component"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "watch": "vite build -w",
+    "serve": "vite preview"
+  },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.41",
     "svelte": "^3.47.0",
     "typescript": "^4.6.3",
     "vite": "^2.9.1"
