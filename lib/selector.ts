@@ -1,6 +1,6 @@
 export const q = <T extends HTMLElement>(
   query: string,
-  context = document.body
+  context: HTMLElement | Document = document
 ) => {
   const nodes: T[] = Array.from(context.querySelectorAll(query))
   return nodes

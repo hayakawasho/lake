@@ -20,14 +20,3 @@ export function parseValue(value: any) {
 
   return value
 }
-
-export function getNodeDataType(node: HTMLElement) {
-  const data: { [key: string]: any } = {}
-  const attrs = node.dataset
-
-  for (const i in attrs) {
-    data[i] = parseValue(attrs[i])
-  }
-
-  return data
-}

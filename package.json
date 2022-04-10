@@ -1,0 +1,35 @@
+{
+  "name": "lake",
+  "version": "0.0.1",
+  "main": "./dist/main.umd.js",
+  "module": "./dist/main.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.umd.js"
+    }
+  },
+  "types": "./types/main.d.ts",
+  "files": [
+    "/dist",
+    "/types"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "watch": "vite build -w",
+    "serve": "vite preview"
+  },
+  "author": "hayakawasho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hayakawasho/lake/issues"
+  },
+  "homepage": "https://github.com/hayakawasho/lake#readme",
+  "devDependencies": {
+    "svelte": "^3.47.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.1"
+  },
+  "dependencies": {}
+}

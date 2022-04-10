@@ -1,19 +1,20 @@
 import { assert } from './assert'
-import { guard } from './guard'
 import type { IComponent } from './types'
-import { parseValue } from './html'
 import { q } from './selector'
 
 class Lake {
-  definitions = new Map<{}, { fn: IComponent, deps: string[]}>()
+  definitions = new Map<{}, { fn: IComponent }>()
 
   static create() {
     return new Lake()
   }
 
-  define = (name: string, fn: IComponent, deps = [] as string[]) => {
-    guard(this.definitions.has(name))
-    this.definitions.set(name, { fn, deps })
+  define = (name: string, fn: IComponent) => {
+    if (this.definitions.has(name)) {
+      return
+    }
+
+    this.definitions.set(name, { fn })
   }
 
   resolve = (name: string) => {
@@ -24,17 +25,17 @@ class Lake {
 
   onSetup = () => {
     q(`[data-component]`).forEach(el => {
-      const { component, props } = el.dataset
-      guard(component)
+      const { component } = el.dataset
+      assert(component, `${component} does not exist`)
       const context = this.resolve(component)
-      context.setup(el, parseValue(props))
+      context.setup(el, el.dataset.props)
     })
   }
 
-  onCleanup = (scope: HTMLElement) => {
+  onCleanup = () => {
     q(`[data-component]`).forEach(el => {
       const { component } = el.dataset
-      guard(component)
+      assert(component, `${component} does not exist`)
       const context = this.resolve(component)
       context.destroy()
     })
@@ -46,7 +47,7 @@ const {
   define: defineComponent,
   resolve: resolveComponent,
   onSetup,
-  onCleanup
+  onCleanup,
 } = Lake.create()
 
 export { lake, defineComponent, resolveComponent, onSetup, onCleanup }

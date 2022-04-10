@@ -1,6 +1,7 @@
 import type { SvelteComponent } from 'svelte'
 import { getContext } from 'svelte'
 import { domRefs } from './domRefs'
+import { parseValue } from './html'
 import type { IComponent, RefValue, ReturnDOMRef, Context$ } from './types'
 
 type SvelteAppType = typeof SvelteComponent
@@ -13,9 +14,7 @@ class WithSvelte implements IComponent {
 
   setup = (element: HTMLElement, props = {}) => {
     const rootRef = element
-    const newProps = {
-      ...props,
-    }
+    const newProps = parseValue(props)
 
     this.#context$.set('$', {
       rootRef,

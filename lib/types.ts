@@ -1,23 +1,6 @@
-export type Config = {
-  context: string | Symbol,
-  dataComponent: string,
-  dataRef: string,
-  dataProps: string
-}
-
 export interface IComponent {
-  setup(
-    el: HTMLElement,
-    props: {
-      [key: string]: any
-    }
-  ): void
+  setup(el: HTMLElement, props: any): void
   destroy(): void
-}
-
-export interface IScene extends IComponent {
-  enter(scope?: HTMLElement): Promise<unknown>
-  leave(): Promise<unknown> | void
 }
 
 export type RefValue = Set<string>

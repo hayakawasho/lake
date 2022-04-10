@@ -4,12 +4,12 @@ import type { RefValue } from './types'
 export function domRefs(ref: RefValue, scope: HTMLElement) {
   const parent = scope
 
-  const reducer = (nodes: HTMLElement[]) => {
+  const reducer = (nodes: HTMLElement[], query: string) => {
     switch (nodes.length) {
       case 1:
         return nodes[0]
       case 0:
-        throw new Error("DOM doesn't exist")
+        throw new Error(`data-ref=${query} does not exist`)
       default:
         return nodes
     }
@@ -17,7 +17,7 @@ export function domRefs(ref: RefValue, scope: HTMLElement) {
 
   const $$ = (query: string) => {
     const nodes = q(`[data-ref="${query}"]`, parent)
-    return reducer(nodes)
+    return reducer(nodes, query)
   }
 
   const childRef = [...ref].reduce<any>((acc, cur) => {
