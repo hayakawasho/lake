@@ -1,0 +1,1 @@
+{"version":3,"file":"withSvelte.d.ts","sourceRoot":"","sources":["../src/withSvelte.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,QAAQ,CAAA;AAI7C,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAA;AAEvC,iBAAS,UAAU,CAAC,SAAS,EAAE,OAAO,eAAe;;;EA6BpD;AAED,iBAAS,WAAW,aAEnB;AAED,OAAO,EAAE,UAAU,EAAE,WAAW,EAAE,CAAA"}
