@@ -1,7 +1,5 @@
-export const q = <T extends HTMLElement>(
-  query: string,
-  context: HTMLElement | Document = document
-) => {
-  const nodes: T[] = Array.from(context.querySelectorAll(query))
-  return nodes
+import type { DOMNode } from './types'
+
+export const q = <T extends DOMNode>(query: string, scope?: DOMNode): T[] => {
+  return Array.from((scope ?? document).querySelectorAll(query))
 }

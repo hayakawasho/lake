@@ -1,5 +1,7 @@
+export type DOMNode = HTMLElement | SVGElement
+
 export interface IComponent {
-  setup(element: HTMLElement, props?: object): void
+  setup(el: DOMNode, props?: object): void
   cleanup(): void
   components?: {
     [key: string]: IComponent
@@ -14,5 +16,5 @@ type ReturnDOMRef<T> = {
 
 export type Context$ = {
   useDOMRef: <T>(...refKey: string[]) => ReturnDOMRef<T>
-  rootRef: HTMLElement
+  rootRef: DOMNode
 }

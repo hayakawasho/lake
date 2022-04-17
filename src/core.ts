@@ -1,60 +1,37 @@
 import { assert } from './assert'
-import type { IComponent } from './types'
+import type { IComponent, DOMNode } from './types'
 
 const COMPONENTS_IMPLEMENTATION_MAP = new Map<string, IComponent>()
+const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, IComponent>()
 
-const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<HTMLElement, IComponent>()
-
-function bindDOMNodeToComponentObject(
-  node: HTMLElement,
-  Component: IComponent
-) {
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, Component)
+function bindDOMNodeToComponentObject(node: DOMNode, component: IComponent) {
+  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
 }
 
-function defineComponent({ setup, cleanup }: IComponent) {
-  return {
-    setup,
-    cleanup,
-  }
+function defineComponent(options: IComponent) {
+  return options
 }
 
-function mountComponent<T extends HTMLElement>(
-  el: T,
-  props: object,
-  componentName: string
-) {
-  if (!COMPONENTS_IMPLEMENTATION_MAP.has(componentName)) {
+function registerComponent(name: string, component: IComponent) {
+  assert(!COMPONENTS_IMPLEMENTATION_MAP.has(name), `${name} was already registered`)
+  COMPONENTS_IMPLEMENTATION_MAP.set(name, component)
+}
+
+function mountComponent(node: DOMNode, props: object, componentName: string) {
+  if (COMPONENTS_IMPLEMENTATION_MAP.has(componentName) === false) {
     return
   }
 
-  const context = COMPONENTS_IMPLEMENTATION_MAP.get(componentName) as IComponent
+  const component = COMPONENTS_IMPLEMENTATION_MAP.get(componentName) as IComponent
+  bindDOMNodeToComponentObject(node, component)
 
-  bindDOMNodeToComponentObject(el, context)
-
-  context.setup(el, props)
-
-  return context
+  component.setup(node, props)
 }
 
-function unmount(targets: HTMLElement[]) {
-  return targets.map(el => {
-    if (!DOM_COMPONENT_INSTANCE_PROPERTY.has(el)) {
-      return
-    }
-
-    DOM_COMPONENT_INSTANCE_PROPERTY.get(el)!.cleanup()
-
-    return el
-  })
+function unmount(nodes: DOMNode[]) {
+  return nodes
+    .filter(el => DOM_COMPONENT_INSTANCE_PROPERTY.has(el))
+    .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as IComponent).cleanup())
 }
 
-function register(name: string, Component: IComponent) {
-  assert(
-    !COMPONENTS_IMPLEMENTATION_MAP.has(name),
-    `${name} was already registered`
-  )
-  COMPONENTS_IMPLEMENTATION_MAP.set(name, Component)
-}
-
-export { defineComponent, mountComponent, unmount, register }
+export { defineComponent, registerComponent, mountComponent, unmount }

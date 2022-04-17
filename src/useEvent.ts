@@ -1,12 +1,12 @@
 import { onDestroy } from 'svelte'
+import type { DOMNode } from './types'
 
 type Options = boolean | AddEventListenerOptions
 
 export function useEvent<
-  T extends HTMLElement = HTMLElement,
   U extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 >(
-  target: T,
+  target: DOMNode,
   eventType: U,
   handler: EventListenerOrEventListenerObject,
   options?: Options
