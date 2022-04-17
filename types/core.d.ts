@@ -1,10 +1,7 @@
-import type { IComponent } from './types';
-declare function defineComponent({ setup, cleanup }: IComponent): {
-    setup: (element: HTMLElement, props?: object | undefined) => void;
-    cleanup: () => void;
-};
-declare function mountComponent<T extends HTMLElement>(el: T, props: object, componentName: string): IComponent | undefined;
-declare function unmount(targets: HTMLElement[]): (HTMLElement | undefined)[];
-declare function register(name: string, Component: IComponent): void;
-export { defineComponent, mountComponent, unmount, register };
+import type { IComponent, DOMNode } from './types';
+declare function defineComponent(options: IComponent): IComponent;
+declare function registerComponent(name: string, component: IComponent): void;
+declare function mountComponent(node: DOMNode, props: object, componentName: string): void;
+declare function unmount(nodes: DOMNode[]): void;
+export { defineComponent, registerComponent, mountComponent, unmount };
 //# sourceMappingURL=core.d.ts.map

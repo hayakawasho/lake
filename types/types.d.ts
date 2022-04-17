@@ -1,5 +1,6 @@
+export declare type DOMNode = HTMLElement | SVGElement;
 export interface IComponent {
-    setup(element: HTMLElement, props?: object): void;
+    setup(el: DOMNode, props?: object): void;
     cleanup(): void;
     components?: {
         [key: string]: IComponent;
@@ -11,7 +12,7 @@ declare type ReturnDOMRef<T> = {
 };
 export declare type Context$ = {
     useDOMRef: <T>(...refKey: string[]) => ReturnDOMRef<T>;
-    rootRef: HTMLElement;
+    rootRef: DOMNode;
 };
 export {};
 //# sourceMappingURL=types.d.ts.map

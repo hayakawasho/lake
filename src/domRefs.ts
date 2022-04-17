@@ -1,22 +1,20 @@
 import { q } from './selector'
-import type { RefValue } from './types'
+import type { RefValue, DOMNode } from './types'
 
-export function domRefs(ref: RefValue, scope: HTMLElement) {
-  const parent = scope
-
-  const reducer = (nodes: HTMLElement[], query: string) => {
+export function domRefs(ref: RefValue, scope: DOMNode) {
+  const reducer = (nodes: DOMNode[], query: string) => {
     switch (nodes.length) {
+      case 0:
+        throw new Error(`data-ref="${query}" does not exist`)
       case 1:
         return nodes[0]
-      case 0:
-        throw new Error(`data-ref=${query} does not exist`)
       default:
         return nodes
     }
   }
 
   const $$ = (query: string) => {
-    const nodes = q(`[data-ref="${query}"]`, parent)
+    const nodes = q(`[data-ref="${query}"]`, scope)
     return reducer(nodes, query)
   }
 
