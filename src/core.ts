@@ -8,14 +8,11 @@ import {
 const REGISTERED_COMPONENTS_MAP = new Map<string, any>()
 
 export function defineComponent(options: FC) {
-  return {
-    ...options,
-  }
+  return options
 }
 
 export function register(name: string, componentWrapper: FC) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`)
-
   REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper))
 
   return REGISTERED_COMPONENTS_MAP
@@ -23,7 +20,6 @@ export function register(name: string, componentWrapper: FC) {
 
 export function unregister(name: string) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered`)
-
   REGISTERED_COMPONENTS_MAP.delete(name)
 
   return REGISTERED_COMPONENTS_MAP

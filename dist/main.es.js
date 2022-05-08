@@ -64,7 +64,7 @@ function createComponent(componentWrapper) {
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 function defineComponent(options) {
-  return __spreadValues({}, options);
+  return options;
 }
 function register(name, componentWrapper) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
@@ -149,4 +149,4 @@ function useEvent(targetOrTargets, eventType, handler, options) {
     isArray ? targetOrTargets.forEach((el) => el.removeEventListener(eventType, handler, options)) : targetOrTargets.removeEventListener(eventType, handler, options);
   });
 }
-export { assert, getContext$, isFunction, mount, q, register, unmount, unregister, useEvent, withSvelte };
+export { assert, defineComponent, getContext$, isFunction, mount, q, register, unmount, unregister, useEvent, withSvelte };
