@@ -24,7 +24,7 @@ class Component {
 
 export function createComponent(componentWrapper: FC) {
   const { components } = componentWrapper
-  const subComponents = components && createSubComponents(components)
+  components && createSubComponents(components)
 
   return ({ el, ...props }: { el: DOMNode }) => {
     const cleanup = componentWrapper.setup(el, props)

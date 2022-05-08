@@ -1,19 +1,29 @@
 import { onDestroy } from 'svelte'
-import type { DOMNode } from './types'
+import type { DOMNode } from './internal/types'
 
 type Options = boolean | AddEventListenerOptions
 
 export function useEvent<
   U extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 >(
-  target: DOMNode,
+  targetOrTargets: DOMNode | DOMNode[],
   eventType: U,
   handler: EventListenerOrEventListenerObject,
   options?: Options
 ) {
-  target.addEventListener(eventType, handler, options)
+  const isArray = Array.isArray(targetOrTargets)
+
+  isArray
+    ? targetOrTargets.forEach(el =>
+        el.addEventListener(eventType, handler, options)
+      )
+    : targetOrTargets.addEventListener(eventType, handler, options)
 
   onDestroy(() => {
-    target.removeEventListener(eventType, handler, options)
+    isArray
+      ? targetOrTargets.forEach(el =>
+          el.removeEventListener(eventType, handler, options)
+        )
+      : targetOrTargets.removeEventListener(eventType, handler, options)
   })
 }
