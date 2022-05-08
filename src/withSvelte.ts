@@ -1,10 +1,13 @@
 import type { SvelteComponent } from 'svelte'
 import { getContext } from 'svelte'
 import { defineComponent } from './core'
-import { domRefs } from './internal/domRefs'
-import type { Context$ } from './internal/types'
+import { domRefs } from './domRefs'
+import type { Context$ } from './types'
 
-export function withSvelte(SvelteApp: typeof SvelteComponent) {
+function withSvelte(SvelteApp: typeof SvelteComponent) {
+  const app$ = new WeakMap<object, SvelteComponent>()
+  const symbol = {} as const
+
   return defineComponent({
     setup(el, props) {
       const context = new Map<'$', Context$>()
@@ -21,13 +24,17 @@ export function withSvelte(SvelteApp: typeof SvelteComponent) {
         context,
       })
 
-      return () => {
-        app.$destroy()
-      }
+      app$.set(symbol, app)
+    },
+
+    cleanup() {
+      app$.get(symbol)?.$destroy()
     },
   })
 }
 
-export function getContext$() {
+function getContext$() {
   return getContext<Context$>('$')
 }
+
+export { withSvelte, getContext$ }

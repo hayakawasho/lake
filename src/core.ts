@@ -1,44 +1,37 @@
-import { assert } from './main'
-import type { DOMNode, FC } from './internal/types'
-import {
-  createComponent,
-  DOM_COMPONENT_INSTANCE_PROPERTY,
-} from './internal/component'
+import { assert } from './assert'
+import type { IComponent, DOMNode } from './types'
 
-const REGISTERED_COMPONENTS_MAP = new Map<string, any>()
+const COMPONENTS_IMPLEMENTATION_MAP = new Map<string, IComponent>()
+const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, IComponent>()
 
-export function defineComponent(options: FC) {
-  return {
-    ...options,
+function bindDOMNodeToComponentObject(node: DOMNode, component: IComponent) {
+  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
+}
+
+function defineComponent(options: IComponent) {
+  return options
+}
+
+function registerComponent(name: string, component: IComponent) {
+  assert(!COMPONENTS_IMPLEMENTATION_MAP.has(name), `${name} was already registered`)
+  COMPONENTS_IMPLEMENTATION_MAP.set(name, component)
+}
+
+function mountComponent(node: DOMNode, props: object, componentName: string) {
+  if (COMPONENTS_IMPLEMENTATION_MAP.has(componentName) === false) {
+    return
   }
+
+  const component = COMPONENTS_IMPLEMENTATION_MAP.get(componentName) as IComponent
+  bindDOMNodeToComponentObject(node, component)
+
+  component.setup(node, props)
 }
 
-export function register(name: string, componentWrapper: FC) {
-  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`)
-
-  REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper))
-
-  return REGISTERED_COMPONENTS_MAP
-}
-
-export function unregister(name: string) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered`)
-
-  REGISTERED_COMPONENTS_MAP.delete(name)
-
-  return REGISTERED_COMPONENTS_MAP
-}
-
-export function mount(node: DOMNode, props = {}, componentName: string) {
-  const mountComponent = REGISTERED_COMPONENTS_MAP.get(componentName)
-  return mountComponent && mountComponent({ el: node, ...props })
-}
-
-export function unmount(nodes: DOMNode[]) {
+function unmount(nodes: DOMNode[]) {
   return nodes
-    .filter(node => DOM_COMPONENT_INSTANCE_PROPERTY.has(node))
-    .map(node => {
-      DOM_COMPONENT_INSTANCE_PROPERTY.get(node).unmount()
-      return node
-    })
+    .filter(el => DOM_COMPONENT_INSTANCE_PROPERTY.has(el))
+    .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as IComponent).cleanup())
 }
+
+export { defineComponent, registerComponent, mountComponent, unmount }
