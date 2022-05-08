@@ -1,7 +1,7 @@
-export { assert } from './util/assert'
-export { q } from './util/selector'
-export { isFunction } from './util/is'
+export { assert } from './assert'
+export { q } from './selector'
 
-export { register, unregister, mount, unmount } from './core'
+export type { IComponent, DOMNode } from './types'
+export * from './core'
 export { withSvelte, getContext$ } from './withSvelte'
 export { useEvent } from './useEvent'
