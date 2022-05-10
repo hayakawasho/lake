@@ -23,6 +23,7 @@ export function withSvelte(SvelteApp: typeof SvelteComponent) {
 
       return () => {
         app.$destroy()
+        context.clear()
       }
     },
   })

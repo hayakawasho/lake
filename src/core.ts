@@ -1,14 +1,17 @@
 import { assert } from './main'
 import type { DOMNode, FC } from './internal/types'
-import {
-  createComponent,
-  DOM_COMPONENT_INSTANCE_PROPERTY,
-} from './internal/component'
+import { createComponent, DOM_COMPONENT_INSTANCE_PROPERTY } from './internal/component'
+import type { ComponentContext } from './internal/component'
 
-const REGISTERED_COMPONENTS_MAP = new Map<string, any>()
+type ComponentType = ReturnType<typeof createComponent>
 
-export function defineComponent(options: FC) {
-  return options
+const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>()
+
+export function defineComponent({ setup, components }: FC) {
+  return {
+    setup,
+    components,
+  }
 }
 
 export function register(name: string, componentWrapper: FC) {
@@ -25,16 +28,19 @@ export function unregister(name: string) {
   return REGISTERED_COMPONENTS_MAP
 }
 
-export function mount(node: DOMNode, props = {}, componentName: string) {
-  const mountComponent = REGISTERED_COMPONENTS_MAP.get(componentName)
-  return mountComponent && mountComponent({ el: node, ...props })
+export function mount(node: DOMNode, props: Record<string, any>, name: string) {
+  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`)
+  const component = REGISTERED_COMPONENTS_MAP.get(name) as ComponentType
+
+  return component({ el: node, ...props })
 }
 
 export function unmount(nodes: DOMNode[]) {
   return nodes
-    .filter(node => DOM_COMPONENT_INSTANCE_PROPERTY.has(node))
-    .map(node => {
-      DOM_COMPONENT_INSTANCE_PROPERTY.get(node).unmount()
-      return node
-    })
+    .filter(v => DOM_COMPONENT_INSTANCE_PROPERTY.has(v))
+    .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as ComponentContext).unmount())
+}
+
+export function component(componentWrapper: FC) {
+  return (el: DOMNode, props = {}) => createComponent(componentWrapper)({ el, ...props })
 }

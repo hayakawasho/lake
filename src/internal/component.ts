@@ -1,33 +1,53 @@
-import { isFunction } from '../main'
-import type { DOMNode, FC } from './types'
+import { isFunc } from '../util/is'
+import type { DOMNode, FC, SubComponents } from './types'
 
-export const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, any>()
+class ComponentContext {
+  parent: ComponentContext | null = null
+  children: any
 
-function bindDOMNode2Component(node: DOMNode, component: unknown) {
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
-}
-
-function createSubComponents(components: { [key: string]: FC } = {}) {
-  return Object.entries(components).reduce<any>((acc, [key, value]) => {
-    acc[key] = createComponent(value)
-    return acc
-  }, {})
-}
-
-class Component {
-  constructor(private _cleanup: unknown) {}
+  constructor(private _cleanup: unknown, props: { children: any }) {
+    this.children = props.children
+  }
 
   unmount() {
-    return isFunction(this._cleanup) && this._cleanup()
+    if (!isFunc(this._cleanup)) {
+      return
+    }
+    this._cleanup()
   }
+}
+
+export const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<
+  DOMNode,
+  ComponentContext
+>()
+
+function connectDOM2Component(node: DOMNode, component: ComponentContext) {
+  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
+
+  console.log(DOM_COMPONENT_INSTANCE_PROPERTY)
 }
 
 export function createComponent(componentWrapper: FC) {
   const { components } = componentWrapper
-  components && createSubComponents(components)
+  const children = createSubComponents(components ?? {})
 
   return ({ el, ...props }: { el: DOMNode }) => {
     const cleanup = componentWrapper.setup(el, props)
-    bindDOMNode2Component(el, new Component(cleanup))
+    connectDOM2Component(el, new ComponentContext(cleanup, { children }))
   }
 }
+
+type ComponentType = ReturnType<typeof createComponent>
+
+function createSubComponents(components: SubComponents) {
+  return Object.entries(components).reduce<Record<string, ComponentType>>(
+    (acc, [key, value]) => {
+      acc[key] = createComponent(value)
+      return acc
+    },
+    {}
+  )
+}
+
+export type { ComponentContext, ComponentType }
