@@ -1,5 +1,5 @@
 import { assert } from './main'
-import type { DOMNode, FC, Props } from './internal/types'
+import type { DOMNode, FC, ComponentProps } from './internal/types'
 import {
   createComponent,
   DOM_COMPONENT_INSTANCE_PROPERTY,
@@ -31,7 +31,7 @@ export function unregister(name: string) {
   return REGISTERED_COMPONENTS_MAP
 }
 
-export function mount(node: DOMNode, props: Props<any>, name: string) {
+export function mount(node: DOMNode, props: ComponentProps<any>, name: string) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`)
   const component = REGISTERED_COMPONENTS_MAP.get(name) as ComponentType
 

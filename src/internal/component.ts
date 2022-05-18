@@ -1,4 +1,4 @@
-import type { DOMNode, FC, SubComponents, Props } from './types'
+import type { DOMNode, FC, SubComponents, ComponentProps } from './types'
 
 function noop() {}
 
@@ -29,7 +29,7 @@ export function createComponent(componentWrapper: FC) {
   const { components } = componentWrapper
   const children = createSubComponents(components ?? {})
 
-  return (el: DOMNode, props: Props<any>) => {
+  return (el: DOMNode, props: ComponentProps<any>) => {
     const cleanup = componentWrapper.setup(el, props)
     connectDOM2Component(el, new ComponentContext(cleanup, { children }))
   }
@@ -38,7 +38,7 @@ export function createComponent(componentWrapper: FC) {
 type ComponentType = ReturnType<typeof createComponent>
 
 function createSubComponents(components: SubComponents) {
-  return Object.entries(components).reduce<Props<ComponentType>>(
+  return Object.entries(components).reduce<ComponentProps<ComponentType>>(
     (acc, [key, value]) => {
       acc[key] = createComponent(value)
       return acc

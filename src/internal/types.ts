@@ -14,4 +14,4 @@ export type Context$ = {
   rootRef: DOMNode
 }
 
-export type Props<T> = Record<string, T>
+export type ComponentProps<Prop> = Record<string, Prop>
