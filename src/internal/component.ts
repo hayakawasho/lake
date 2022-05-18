@@ -1,5 +1,6 @@
-import { isFunc } from '../util/is'
-import type { DOMNode, FC, SubComponents } from './types'
+import type { DOMNode, FC, SubComponents, Props } from './types'
+
+function noop() {}
 
 class ComponentContext {
   parent: ComponentContext | null = null
@@ -10,10 +11,8 @@ class ComponentContext {
   }
 
   unmount() {
-    if (!isFunc(this._cleanup)) {
-      return
-    }
-    this._cleanup()
+    const cleanup = (this._cleanup as Function) || noop
+    cleanup()
   }
 }
 
@@ -24,15 +23,13 @@ export const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<
 
 function connectDOM2Component(node: DOMNode, component: ComponentContext) {
   DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
-
-  console.log(DOM_COMPONENT_INSTANCE_PROPERTY)
 }
 
 export function createComponent(componentWrapper: FC) {
   const { components } = componentWrapper
   const children = createSubComponents(components ?? {})
 
-  return ({ el, ...props }: { el: DOMNode }) => {
+  return (el: DOMNode, props: Props<any>) => {
     const cleanup = componentWrapper.setup(el, props)
     connectDOM2Component(el, new ComponentContext(cleanup, { children }))
   }
@@ -41,7 +38,7 @@ export function createComponent(componentWrapper: FC) {
 type ComponentType = ReturnType<typeof createComponent>
 
 function createSubComponents(components: SubComponents) {
-  return Object.entries(components).reduce<Record<string, ComponentType>>(
+  return Object.entries(components).reduce<Props<ComponentType>>(
     (acc, [key, value]) => {
       acc[key] = createComponent(value)
       return acc

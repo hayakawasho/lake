@@ -1,5 +1,5 @@
-export function assert(condition: unknown, message: string): asserts condition {
+export function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
-    throw new Error(message)
+    throw new Error(msg || `unexpected condition`)
   }
 }
