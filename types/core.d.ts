@@ -1,6 +1,6 @@
 import type { DOMNode, FC, ComponentProps } from './internal/types';
 export declare function defineComponent({ setup, components }: FC): {
-    setup: (el: DOMNode, props: Record<string, any>) => unknown;
+    setup: (el: DOMNode, props: ComponentProps<any>) => import("./internal/types").Cleanup;
     components: import("./internal/types").SubComponents | undefined;
 };
 export declare function register(name: string, componentWrapper: FC): Map<string, (el: DOMNode, props: ComponentProps<any>) => void>;

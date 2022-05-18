@@ -1,9 +1,9 @@
-import type { DOMNode, FC, ComponentProps } from './types';
+import type { DOMNode, FC, ComponentProps, Cleanup } from './types';
 declare class ComponentContext {
     private _cleanup;
     parent: ComponentContext | null;
     children: any;
-    constructor(_cleanup: unknown, props: {
+    constructor(_cleanup: Cleanup, props: {
         children: any;
     });
     unmount(): void;

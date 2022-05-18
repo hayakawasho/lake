@@ -1,9 +1,6 @@
 import { assert } from './main'
 import type { DOMNode, FC, ComponentProps } from './internal/types'
-import {
-  createComponent,
-  DOM_COMPONENT_INSTANCE_PROPERTY,
-} from './internal/component'
+import { createComponent, DOM_COMPONENT_INSTANCE_PROPERTY } from './internal/component'
 import type { ComponentContext } from './internal/component'
 
 type ComponentType = ReturnType<typeof createComponent>
@@ -40,13 +37,10 @@ export function mount(node: DOMNode, props: ComponentProps<any>, name: string) {
 
 export function unmount(nodes: DOMNode[]) {
   return nodes
-    .filter(v => DOM_COMPONENT_INSTANCE_PROPERTY.has(v))
-    .forEach(el =>
-      (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as ComponentContext).unmount()
-    )
+    .filter(el => DOM_COMPONENT_INSTANCE_PROPERTY.has(el))
+    .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as ComponentContext).unmount())
 }
 
 export function component(componentWrapper: FC) {
-  return (el: DOMNode, props = {}) =>
-    createComponent(componentWrapper)(el, props)
+  return (el: DOMNode, props = {}) => createComponent(componentWrapper)(el, props)
 }

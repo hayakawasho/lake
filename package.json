@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -32,13 +32,13 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.22.1",
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.41",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.44",
     "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.7.0",
-    "svelte": "^3.47.0",
-    "svelte-check": "^2.7.0",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.5"
+    "svelte": "^3.48.0",
+    "svelte-check": "^2.7.1",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9"
   },
   "dependencies": {}
 }
