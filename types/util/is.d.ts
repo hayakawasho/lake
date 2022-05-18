@@ -1,4 +1,3 @@
-declare const isFunction: (value: unknown) => value is Function;
-declare const isObject: (value: unknown) => value is Record<any, any>;
-export { isFunction, isObject };
+declare const isFunc: (value: unknown) => value is Function;
+export { isFunc };
 //# sourceMappingURL=is.d.ts.map

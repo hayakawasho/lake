@@ -1,11 +1,11 @@
 export type DOMNode = HTMLElement | SVGElement
 
 export type FC = {
-  setup(el: DOMNode, props: {}): unknown
-  components?: {
-    [key: string]: FC
-  }
+  setup(el: DOMNode, props: Record<string, any>): unknown
+  components?: SubComponents
 }
+
+export type SubComponents = Record<string, FC>
 
 export type Context$ = {
   useDOMRef: <T>(...refKey: string[]) => {
@@ -13,3 +13,5 @@ export type Context$ = {
   }
   rootRef: DOMNode
 }
+
+export type ComponentProps<Prop> = Record<string, Prop>

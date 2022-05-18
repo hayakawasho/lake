@@ -1,70 +1,56 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
 };
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
-function assert(condition, message) {
+function assert(condition, msg) {
   if (!condition) {
-    throw new Error(message);
+    throw new Error(msg || `unexpected condition`);
   }
 }
 const q = (query, scope) => {
   return Array.from((scope != null ? scope : document).querySelectorAll(query));
 };
-const isFunction = (value) => typeof value === "function";
-const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
-function bindDOMNode2Component(node, component) {
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component);
+const isFunc = (value) => typeof value === "function";
+function noop() {
 }
-function createSubComponents(components = {}) {
+class ComponentContext {
+  constructor(_cleanup, props) {
+    __publicField(this, "parent", null);
+    __publicField(this, "children");
+    this._cleanup = _cleanup;
+    this.children = props.children;
+  }
+  unmount() {
+    const cleanup = this._cleanup || noop;
+    cleanup();
+  }
+}
+const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
+function connectDOM2Component(node, component2) {
+  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component2);
+}
+function createComponent(componentWrapper) {
+  const { components } = componentWrapper;
+  const children = createSubComponents(components != null ? components : {});
+  return (el, props) => {
+    const cleanup = componentWrapper.setup(el, props);
+    connectDOM2Component(el, new ComponentContext(cleanup, { children }));
+  };
+}
+function createSubComponents(components) {
   return Object.entries(components).reduce((acc, [key, value]) => {
     acc[key] = createComponent(value);
     return acc;
   }, {});
 }
-class Component {
-  constructor(_cleanup) {
-    this._cleanup = _cleanup;
-  }
-  unmount() {
-    return isFunction(this._cleanup) && this._cleanup();
-  }
-}
-function createComponent(componentWrapper) {
-  const { components } = componentWrapper;
-  components && createSubComponents(components);
-  return (_a) => {
-    var _b = _a, { el } = _b, props = __objRest(_b, ["el"]);
-    const cleanup = componentWrapper.setup(el, props);
-    bindDOMNode2Component(el, new Component(cleanup));
-  };
-}
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
-function defineComponent(options) {
-  return options;
+function defineComponent({ setup, components }) {
+  return {
+    setup,
+    components
+  };
 }
 function register(name, componentWrapper) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
@@ -76,15 +62,16 @@ function unregister(name) {
   REGISTERED_COMPONENTS_MAP.delete(name);
   return REGISTERED_COMPONENTS_MAP;
 }
-function mount(node, props = {}, componentName) {
-  const mountComponent = REGISTERED_COMPONENTS_MAP.get(componentName);
-  return mountComponent && mountComponent(__spreadValues({ el: node }, props));
+function mount(node, props, name) {
+  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
+  const component2 = REGISTERED_COMPONENTS_MAP.get(name);
+  return component2(node, props);
 }
 function unmount(nodes) {
-  return nodes.filter((node) => DOM_COMPONENT_INSTANCE_PROPERTY.has(node)).map((node) => {
-    DOM_COMPONENT_INSTANCE_PROPERTY.get(node).unmount();
-    return node;
-  });
+  return nodes.filter((v) => DOM_COMPONENT_INSTANCE_PROPERTY.has(v)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
+}
+function component(componentWrapper) {
+  return (el, props = {}) => createComponent(componentWrapper)(el, props);
 }
 let current_component;
 function get_current_component() {
@@ -135,6 +122,7 @@ function withSvelte(SvelteApp) {
       });
       return () => {
         app.$destroy();
+        context.clear();
       };
     }
   });
@@ -149,4 +137,4 @@ function useEvent(targetOrTargets, eventType, handler, options) {
     isArray ? targetOrTargets.forEach((el) => el.removeEventListener(eventType, handler, options)) : targetOrTargets.removeEventListener(eventType, handler, options);
   });
 }
-export { assert, defineComponent, getContext$, isFunction, mount, q, register, unmount, unregister, useEvent, withSvelte };
+export { assert, component, defineComponent, getContext$, isFunc, mount, q, register, unmount, unregister, useEvent, withSvelte };

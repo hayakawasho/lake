@@ -1,4 +1,4 @@
-import { q } from '../main'
+import { q } from '../util/selector'
 import type { DOMNode } from './types'
 
 type RefValue = Set<string>

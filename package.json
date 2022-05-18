@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "0.0.1",
+  "version": "0.2.2",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -31,6 +31,7 @@
     "serve": "vite preview"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.1",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.41",
     "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.7.0",
