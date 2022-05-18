@@ -1,17 +1,19 @@
 export type DOMNode = HTMLElement | SVGElement
 
+export type ComponentProps<Prop> = Record<string, Prop>
+
+export type Cleanup = void | (() => unknown)
+
 export type FC = {
-  setup(el: DOMNode, props: Record<string, any>): unknown
+  setup(el: DOMNode, props: ComponentProps<any>): Cleanup
   components?: SubComponents
 }
 
-export type SubComponents = Record<string, FC>
+export type SubComponents = ComponentProps<FC>
 
 export type Context$ = {
+  rootRef: DOMNode
   useDOMRef: <T>(...refKey: string[]) => {
     refs: T
   }
-  rootRef: DOMNode
 }
-
-export type ComponentProps<Prop> = Record<string, Prop>

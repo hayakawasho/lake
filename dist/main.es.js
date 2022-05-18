@@ -68,7 +68,7 @@ function mount(node, props, name) {
   return component2(node, props);
 }
 function unmount(nodes) {
-  return nodes.filter((v) => DOM_COMPONENT_INSTANCE_PROPERTY.has(v)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
+  return nodes.filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
 }
 function component(componentWrapper) {
   return (el, props = {}) => createComponent(componentWrapper)(el, props);
