@@ -1,9 +1,7 @@
 import { q } from '../util/selector'
 import type { DOMNode } from './types'
 
-type RefValue = Set<string>
-
-export function domRefs(ref: RefValue, scope: DOMNode) {
+export function domRefs(ref: Set<string>, scope: DOMNode) {
   const findRef = (query: string) => {
     const nodes = q(`[data-ref="${query}"]`, scope)
     return refOrRefs(nodes, query)

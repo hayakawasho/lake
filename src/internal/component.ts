@@ -1,44 +1,49 @@
-import type { DOMNode, FC, SubComponents, ComponentProps, Cleanup } from './types'
+import type { DOMNode, FC, Cleanup } from './types'
+import { q } from '../util/selector'
 
 function noop() {}
 
 class ComponentContext {
   parent: ComponentContext | null = null
-  children: any
+  #children: ComponentContext[] = []
 
-  constructor(private _cleanup: Cleanup, props: { children: any }) {
-    this.children = props.children
+  #cleanup: () => void
+
+  constructor(cleanup: Cleanup) {
+    this.#cleanup = cleanup || noop
   }
 
   unmount() {
-    const cleanup = this._cleanup || noop
-    cleanup()
+    this.#children.forEach(child => child.unmount())
+    this.#cleanup()
   }
-}
 
-export const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
-
-function connectDOM2Component(node: DOMNode, component: ComponentContext) {
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component)
+  addChild(child: ComponentContext) {
+    this.#children.push(child)
+    child.parent = this
+  }
 }
 
 export function createComponent(componentWrapper: FC) {
-  const { components } = componentWrapper
-  const children = createSubComponents(components ?? {})
+  const { setup: setupComponent, components } = componentWrapper
 
-  return (el: DOMNode, props: ComponentProps<any>) => {
-    const cleanup = componentWrapper.setup(el, props)
-    connectDOM2Component(el, new ComponentContext(cleanup, { children }))
+  return (el: DOMNode, props: Record<string, any>) => {
+    const context = new ComponentContext(setupComponent(el, props))
+
+    if (components) {
+      const children = createSubComponents(components)
+      children.forEach(child => context.addChild(child))
+    }
+
+    return context
   }
 }
 
-type ComponentType = ReturnType<typeof createComponent>
-
-function createSubComponents(components: SubComponents) {
-  return Object.entries(components).reduce<ComponentProps<ComponentType>>((acc, [key, value]) => {
-    acc[key] = createComponent(value)
+function createSubComponents(components: Record<string, FC>) {
+  return Object.entries(components).reduce<ComponentContext[]>((acc, [selector, value]) => {
+    q(selector).forEach(el => acc.push(createComponent(value)(el, {})))
     return acc
-  }, {})
+  }, [])
 }
 
-export type { ComponentContext, ComponentType }
+export type { ComponentContext }
