@@ -4,6 +4,25 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
+var __accessCheck = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet = (obj, member, getter) => {
+  __accessCheck(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet = (obj, member, value, setter) => {
+  __accessCheck(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+var _children, _cleanup;
 function assert(condition, msg) {
   if (!condition) {
     throw new Error(msg || `unexpected condition`);
@@ -16,36 +35,45 @@ const isFunc = (value) => typeof value === "function";
 function noop() {
 }
 class ComponentContext {
-  constructor(_cleanup, props) {
+  constructor(cleanup) {
     __publicField(this, "parent", null);
-    __publicField(this, "children");
-    this._cleanup = _cleanup;
-    this.children = props.children;
+    __privateAdd(this, _children, []);
+    __privateAdd(this, _cleanup, void 0);
+    __privateSet(this, _cleanup, cleanup || noop);
   }
   unmount() {
-    const cleanup = this._cleanup || noop;
-    cleanup();
+    __privateGet(this, _children).forEach((child) => child.unmount());
+    __privateGet(this, _cleanup).call(this);
+  }
+  addChild(child) {
+    __privateGet(this, _children).push(child);
+    child.parent = this;
   }
 }
-const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
-function connectDOM2Component(node, component2) {
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(node, component2);
-}
+_children = new WeakMap();
+_cleanup = new WeakMap();
 function createComponent(componentWrapper) {
-  const { components } = componentWrapper;
-  const children = createSubComponents(components != null ? components : {});
+  const { setup: setupComponent, components } = componentWrapper;
   return (el, props) => {
-    const cleanup = componentWrapper.setup(el, props);
-    connectDOM2Component(el, new ComponentContext(cleanup, { children }));
+    const context = new ComponentContext(setupComponent(el, props));
+    if (components) {
+      const children = createSubComponents(components);
+      children.forEach((child) => context.addChild(child));
+    }
+    return context;
   };
 }
 function createSubComponents(components) {
-  return Object.entries(components).reduce((acc, [key, value]) => {
-    acc[key] = createComponent(value);
+  return Object.entries(components).reduce((acc, [selector, value]) => {
+    q(selector).forEach((el) => acc.push(createComponent(value)(el, {})));
     return acc;
-  }, {});
+  }, []);
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
+const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
+function bindDOMToComponent(el, component) {
+  DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component);
+}
 function defineComponent({ setup, components }) {
   return {
     setup,
@@ -62,16 +90,13 @@ function unregister(name) {
   REGISTERED_COMPONENTS_MAP.delete(name);
   return REGISTERED_COMPONENTS_MAP;
 }
-function mount(node, props, name) {
+function mount(el, props, name) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
-  const component2 = REGISTERED_COMPONENTS_MAP.get(name);
-  return component2(node, props);
+  const component = REGISTERED_COMPONENTS_MAP.get(name);
+  bindDOMToComponent(el, component(el, props));
 }
-function unmount(nodes) {
-  return nodes.filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
-}
-function component(componentWrapper) {
-  return (el, props = {}) => createComponent(componentWrapper)(el, props);
+function unmount(selector, scope = document.body) {
+  q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
 }
 let current_component;
 function get_current_component() {
@@ -137,4 +162,4 @@ function useEvent(targetOrTargets, eventType, handler, options) {
     isArray ? targetOrTargets.forEach((el) => el.removeEventListener(eventType, handler, options)) : targetOrTargets.removeEventListener(eventType, handler, options);
   });
 }
-export { assert, component, defineComponent, getContext$, isFunc, mount, q, register, unmount, unregister, useEvent, withSvelte };
+export { assert, defineComponent, getContext$, isFunc, mount, q, register, unmount, unregister, useEvent, withSvelte };

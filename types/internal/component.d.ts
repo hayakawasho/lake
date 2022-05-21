@@ -1,15 +1,11 @@
-import type { DOMNode, FC, ComponentProps, Cleanup } from './types';
+import type { DOMNode, FC, Cleanup } from './types';
 declare class ComponentContext {
-    private _cleanup;
+    #private;
     parent: ComponentContext | null;
-    children: any;
-    constructor(_cleanup: Cleanup, props: {
-        children: any;
-    });
+    constructor(cleanup: Cleanup);
     unmount(): void;
+    addChild(child: ComponentContext): void;
 }
-export declare const DOM_COMPONENT_INSTANCE_PROPERTY: WeakMap<DOMNode, ComponentContext>;
-export declare function createComponent(componentWrapper: FC): (el: DOMNode, props: ComponentProps<any>) => void;
-declare type ComponentType = ReturnType<typeof createComponent>;
-export type { ComponentContext, ComponentType };
+export declare function createComponent(componentWrapper: FC): (el: DOMNode, props: Record<string, any>) => ComponentContext;
+export type { ComponentContext };
 //# sourceMappingURL=component.d.ts.map
