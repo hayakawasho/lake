@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import type { DOMNode } from './internal/types'
+import type { DOMNode } from '../internal/types'
 
 type Options = boolean | AddEventListenerOptions
 

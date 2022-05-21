@@ -1,8 +1,8 @@
 import type { SvelteComponent } from 'svelte'
 import { getContext } from 'svelte'
-import { defineComponent } from './core'
-import { domRefs } from './internal/domRefs'
-import type { Context$ } from './internal/types'
+import { defineComponent } from '../core'
+import { domRefs } from '../internal/domRefs'
+import type { Context$ } from '../internal/types'
 
 export function withSvelte(SvelteApp: typeof SvelteComponent) {
   return defineComponent({
