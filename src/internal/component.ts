@@ -5,7 +5,7 @@ function noop() {}
 
 class ComponentContext {
   parent: ComponentContext | null = null
-  #children: ComponentContext[] = []
+  children: ComponentContext[] = []
 
   #cleanup: () => void
 
@@ -14,36 +14,33 @@ class ComponentContext {
   }
 
   unmount() {
-    this.#children.forEach(child => child.unmount())
     this.#cleanup()
+    this.children.forEach(c => c.unmount())
   }
 
   addChild(child: ComponentContext) {
-    this.#children.push(child)
+    this.children.push(child)
     child.parent = this
   }
 }
 
-export function createComponent(componentWrapper: FC) {
-  const { setup: setupComponent, components } = componentWrapper
-
+export function createComponent({ setup, components }: FC) {
   return (el: DOMNode, props: Record<string, any>) => {
-    const context = new ComponentContext(setupComponent(el, props))
+    const context = new ComponentContext(setup(el, props))
 
     if (components) {
-      const children = createSubComponents(components)
-      children.forEach(child => context.addChild(child))
+      Object.entries(components).forEach(([selector, child]) => {
+        q(selector).forEach(i => {
+          const childComponentProps = child.props || {}
+          const c = createComponent(child)(i, childComponentProps)
+
+          context.addChild(c)
+        })
+      })
     }
 
     return context
   }
-}
-
-function createSubComponents(components: Record<string, FC>) {
-  return Object.entries(components).reduce<ComponentContext[]>((acc, [selector, value]) => {
-    q(selector).forEach(el => acc.push(createComponent(value)(el, {})))
-    return acc
-  }, [])
 }
 
 export type { ComponentContext }

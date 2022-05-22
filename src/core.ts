@@ -10,15 +10,12 @@ const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>()
 
 const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
 
-function bindDOMToComponent(el: DOMNode, component: ComponentContext) {
+function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext) {
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
 }
 
-export function defineComponent({ setup, components }: FC) {
-  return {
-    setup,
-    components,
-  }
+export function defineComponent(options: FC) {
+  return options
 }
 
 export function register(name: string, componentWrapper: FC) {
@@ -39,7 +36,7 @@ export function mount(el: DOMNode, props: Record<string, any>, name: string) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`)
   const component = REGISTERED_COMPONENTS_MAP.get(name) as ComponentType
 
-  bindDOMToComponent(el, component(el, props))
+  bindDOMNodeToComponent(el, component(el, props))
 }
 
 export function unmount(selector: string, scope = document.body) {

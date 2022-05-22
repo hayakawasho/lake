@@ -5,6 +5,7 @@ export interface FC {
     components?: {
         [selector: string]: FC;
     };
+    props?: Record<string, any>;
 }
 export interface Context$ {
     rootRef: DOMNode;
