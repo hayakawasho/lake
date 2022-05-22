@@ -22,7 +22,7 @@ var __privateSet = (obj, member, value, setter) => {
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var _children, _cleanup;
+var _cleanup;
 function assert(condition, msg) {
   if (!condition) {
     throw new Error(msg || `unexpected condition`);
@@ -37,48 +37,42 @@ function noop() {
 class ComponentContext {
   constructor(cleanup) {
     __publicField(this, "parent", null);
-    __privateAdd(this, _children, []);
+    __publicField(this, "children", []);
     __privateAdd(this, _cleanup, void 0);
     __privateSet(this, _cleanup, cleanup || noop);
   }
   unmount() {
-    __privateGet(this, _children).forEach((child) => child.unmount());
     __privateGet(this, _cleanup).call(this);
+    this.children.forEach((c) => c.unmount());
   }
   addChild(child) {
-    __privateGet(this, _children).push(child);
+    this.children.push(child);
     child.parent = this;
   }
 }
-_children = new WeakMap();
 _cleanup = new WeakMap();
-function createComponent(componentWrapper) {
-  const { setup: setupComponent, components } = componentWrapper;
+function createComponent({ setup, components }) {
   return (el, props) => {
-    const context = new ComponentContext(setupComponent(el, props));
+    const context = new ComponentContext(setup(el, props));
     if (components) {
-      const children = createSubComponents(components);
-      children.forEach((child) => context.addChild(child));
+      Object.entries(components).forEach(([selector, child]) => {
+        q(selector).forEach((i) => {
+          const childComponentProps = child.props || {};
+          const c = createComponent(child)(i, childComponentProps);
+          context.addChild(c);
+        });
+      });
     }
     return context;
   };
 }
-function createSubComponents(components) {
-  return Object.entries(components).reduce((acc, [selector, value]) => {
-    q(selector).forEach((el) => acc.push(createComponent(value)(el, {})));
-    return acc;
-  }, []);
-}
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
-function bindDOMToComponent(el, component) {
+function bindDOMNodeToComponent(el, component) {
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component);
 }
-function defineComponent({ setup, components }) {
-  return {
-    setup,
-    components
-  };
+function defineComponent(options) {
+  return options;
 }
 function register(name, componentWrapper) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
@@ -93,7 +87,7 @@ function unregister(name) {
 function mount(el, props, name) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
   const component = REGISTERED_COMPONENTS_MAP.get(name);
-  bindDOMToComponent(el, component(el, props));
+  bindDOMNodeToComponent(el, component(el, props));
 }
 function unmount(selector, scope = document.body) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
