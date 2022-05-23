@@ -1,7 +1,9 @@
 export declare type DOMNode = HTMLElement | SVGElement;
-export declare type Cleanup = void | (() => unknown);
+export declare type Cleanup = () => (() => void) | void;
 export interface FC {
-    setup(el: DOMNode, props: Record<string, any>): Cleanup;
+    setup(props: {
+        el: DOMNode;
+    } & Record<string, any>): Cleanup;
     components?: {
         [selector: string]: FC;
     };

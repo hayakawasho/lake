@@ -1,5 +1,20 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -16,24 +31,25 @@ const isFunc = (value) => typeof value === "function";
 function noop() {
 }
 class ComponentContext {
-  constructor(cleanupOrVoid) {
+  constructor(create) {
     __publicField(this, "onUnmount", []);
     __publicField(this, "unmount", () => {
       this.onUnmount.forEach((fn) => fn());
     });
-    const cleanup = cleanupOrVoid || noop;
+    const cleanup = create || noop;
     this.onUnmount.push(cleanup);
   }
   addChild(child) {
     this.onUnmount.push(child.unmount);
   }
 }
-function createComponent({ setup, components }) {
+function createComponent(componentWrapper) {
   return (el, props) => {
-    const mounted = setup(el, props);
+    const mergedProps = Object.assign({ el }, componentWrapper.props, props);
+    const mounted = componentWrapper.setup(mergedProps);
     const context = new ComponentContext(mounted);
-    if (components) {
-      Object.entries(components).forEach(([selector, child]) => {
+    if (componentWrapper.components) {
+      Object.entries(componentWrapper.components).forEach(([selector, child]) => {
         q(selector).forEach((i) => {
           const childComponentProps = child.props || {};
           const c = createComponent(child)(i, childComponentProps);
@@ -46,12 +62,11 @@ function createComponent({ setup, components }) {
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
-function bindDOMNodeToComponent(el, component) {
+function bindDOMNodeToComponent(el, component, componentName) {
+  assert(!DOM_COMPONENT_INSTANCE_PROPERTY.has(el), `the DOM of ${componentName} was already binding`);
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component);
 }
-function defineComponent(options) {
-  return options;
-}
+const defineComponent = (options) => options;
 function register(name, componentWrapper) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
   REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper));
@@ -65,7 +80,7 @@ function unregister(name) {
 function mount(el, props, name) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
   const component = REGISTERED_COMPONENTS_MAP.get(name);
-  bindDOMNodeToComponent(el, component(el, props));
+  bindDOMNodeToComponent(el, component(el, props), name);
 }
 function unmount(selector, scope = document.body) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
@@ -104,7 +119,8 @@ function domRefs(ref, scope) {
 }
 function withSvelte(SvelteApp) {
   return defineComponent({
-    setup(el, props) {
+    setup(_a) {
+      var _b = _a, { el } = _b, props = __objRest(_b, ["el"]);
       const context = /* @__PURE__ */ new Map();
       context.set("$", {
         rootRef: el,
