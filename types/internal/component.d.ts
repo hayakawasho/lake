@@ -1,11 +1,10 @@
 import type { DOMNode, FC, Cleanup } from './types';
+declare type LifecycleHandler = () => void;
 declare class ComponentContext {
-    #private;
-    parent: ComponentContext | null;
-    children: ComponentContext[];
+    onUnmount: LifecycleHandler[];
     constructor(cleanup: Cleanup);
-    unmount(): void;
-    addChild(child: ComponentContext): void;
+    unmount: () => void;
+    addChild: (child: ComponentContext) => void;
 }
 export declare function createComponent({ setup, components }: FC): (el: DOMNode, props: Record<string, any>) => ComponentContext;
 export type { ComponentContext };

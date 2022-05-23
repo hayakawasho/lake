@@ -1,26 +1,23 @@
 import type { DOMNode, FC, Cleanup } from './types'
 import { q } from '../util/selector'
+import { noop } from './utils'
 
-function noop() {}
+type LifecycleHandler = () => void
 
 class ComponentContext {
-  parent: ComponentContext | null = null
-  children: ComponentContext[] = []
-
-  #cleanup: () => void
+  onUnmount: LifecycleHandler[] = []
 
   constructor(cleanup: Cleanup) {
-    this.#cleanup = cleanup || noop
+    const unsubscribe = cleanup || noop
+    this.onUnmount.push(unsubscribe)
   }
 
-  unmount() {
-    this.#cleanup()
-    this.children.forEach(c => c.unmount())
+  unmount = () => {
+    this.onUnmount.forEach(fn => fn())
   }
 
-  addChild(child: ComponentContext) {
-    this.children.push(child)
-    child.parent = this
+  addChild = (child: ComponentContext) => {
+    this.onUnmount.push(child.unmount)
   }
 }
 
