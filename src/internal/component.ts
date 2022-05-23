@@ -28,12 +28,12 @@ export function createComponent(componentWrapper: FC) {
     const context = new ComponentContext(mounted)
 
     if (componentWrapper.components) {
-      Object.entries(componentWrapper.components).forEach(([selector, child]) => {
+      Object.entries(componentWrapper.components).forEach(([selector, subComponent]) => {
         q(selector).forEach(i => {
-          const childComponentProps = child.props || {}
-          const c = createComponent(child)(i, childComponentProps)
+          const subComponentProps = subComponent.props || {}
+          const child = createComponent(subComponent)(i, subComponentProps)
 
-          context.addChild(c)
+          context.addChild(child)
         })
       })
     }

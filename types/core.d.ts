@@ -1,6 +1,6 @@
 import type { ComponentContext } from './internal/component'
 import type { DOMNode, FC } from './internal/types'
-export declare const defineComponent: (options: FC) => FC
+export declare const defineComponent: <Props>(options: FC<Props>) => FC<Props>
 export declare function register(
   name: string,
   componentWrapper: FC

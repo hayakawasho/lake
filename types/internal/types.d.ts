@@ -1,11 +1,12 @@
 export declare type DOMNode = HTMLElement | SVGElement
-export declare type Cleanup = () => (() => void) | void
-export interface FC {
-  setup(el: DOMNode, props: Record<string, any>): Cleanup
+export declare type Cleanup = void | (() => void)
+declare type ComponentProps<Props> = Readonly<Props>
+export interface FC<Props = Record<string, any>> {
+  props?: ComponentProps<Props>
+  setup(el: DOMNode, props: ComponentProps<Props>): Cleanup
   components?: {
     [selector: string]: FC
   }
-  props?: Record<string, any>
 }
 export interface Context$ {
   rootRef: DOMNode
@@ -13,4 +14,5 @@ export interface Context$ {
     refs: T
   }
 }
+export {}
 //# sourceMappingURL=types.d.ts.map

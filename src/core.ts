@@ -10,7 +10,11 @@ const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>()
 
 const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
 
-function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext, componentName: string) {
+const bindDOMNodeToComponent = (
+  el: DOMNode,
+  component: ComponentContext,
+  componentName: string
+) => {
   assert(
     DOM_COMPONENT_INSTANCE_PROPERTY.has(el) === false,
     `The DOM of ${componentName} was already binding`
@@ -18,7 +22,7 @@ function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext, compon
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
 }
 
-export const defineComponent = (options: FC) => options
+export const defineComponent = <Props>(options: FC<Props>) => options
 
 export function register(name: string, componentWrapper: FC) {
   assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`)
