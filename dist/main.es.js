@@ -33,11 +33,11 @@ function createComponent(componentWrapper) {
     const mounted = componentWrapper.setup(el, mergedProps);
     const context = new ComponentContext(mounted);
     if (componentWrapper.components) {
-      Object.entries(componentWrapper.components).forEach(([selector, child]) => {
+      Object.entries(componentWrapper.components).forEach(([selector, subComponent]) => {
         q(selector).forEach((i) => {
-          const childComponentProps = child.props || {};
-          const c = createComponent(child)(i, childComponentProps);
-          context.addChild(c);
+          const subComponentProps = subComponent.props || {};
+          const child = createComponent(subComponent)(i, subComponentProps);
+          context.addChild(child);
         });
       });
     }
@@ -46,10 +46,10 @@ function createComponent(componentWrapper) {
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
-function bindDOMNodeToComponent(el, component, componentName) {
+const bindDOMNodeToComponent = (el, component, componentName) => {
   assert(DOM_COMPONENT_INSTANCE_PROPERTY.has(el) === false, `The DOM of ${componentName} was already binding`);
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component);
-}
+};
 const defineComponent = (options) => options;
 function register(name, componentWrapper) {
   assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`);
@@ -88,7 +88,7 @@ function domRefs(ref, scope) {
   const refOrRefs = (nodes, query) => {
     switch (nodes.length) {
       case 0:
-        throw new Error(`data-ref="${query}" does not exist`);
+        throw new Error(`[data-ref="${query}"] does not exist`);
       case 1:
         return nodes[0];
       default:
