@@ -7,9 +7,9 @@ type LifecycleHandler = () => void
 class ComponentContext {
   onUnmount: LifecycleHandler[] = []
 
-  constructor(cleanup: Cleanup) {
-    const unsubscribe = cleanup || noop
-    this.onUnmount.push(unsubscribe)
+  constructor(cleanupOrVoid: Cleanup) {
+    const cleanup = cleanupOrVoid || noop
+    this.onUnmount.push(cleanup)
   }
 
   unmount = () => {
