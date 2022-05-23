@@ -4,25 +4,6 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-var __accessCheck = (obj, member, msg) => {
-  if (!member.has(obj))
-    throw TypeError("Cannot " + msg);
-};
-var __privateGet = (obj, member, getter) => {
-  __accessCheck(obj, member, "read from private field");
-  return getter ? getter.call(obj) : member.get(obj);
-};
-var __privateAdd = (obj, member, value) => {
-  if (member.has(obj))
-    throw TypeError("Cannot add the same private member more than once");
-  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-};
-var __privateSet = (obj, member, value, setter) => {
-  __accessCheck(obj, member, "write to private field");
-  setter ? setter.call(obj, value) : member.set(obj, value);
-  return value;
-};
-var _cleanup;
 function assert(condition, msg) {
   if (!condition) {
     throw new Error(msg || `unexpected condition`);
@@ -36,21 +17,17 @@ function noop() {
 }
 class ComponentContext {
   constructor(cleanup) {
-    __publicField(this, "parent", null);
-    __publicField(this, "children", []);
-    __privateAdd(this, _cleanup, void 0);
-    __privateSet(this, _cleanup, cleanup || noop);
-  }
-  unmount() {
-    __privateGet(this, _cleanup).call(this);
-    this.children.forEach((c) => c.unmount());
-  }
-  addChild(child) {
-    this.children.push(child);
-    child.parent = this;
+    __publicField(this, "onUnmount", []);
+    __publicField(this, "unmount", () => {
+      this.onUnmount.forEach((fn) => fn());
+    });
+    __publicField(this, "addChild", (child) => {
+      this.onUnmount.push(child.unmount);
+    });
+    const unsubscribe = cleanup || noop;
+    this.onUnmount.push(unsubscribe);
   }
 }
-_cleanup = new WeakMap();
 function createComponent({ setup, components }) {
   return (el, props) => {
     const context = new ComponentContext(setup(el, props));
