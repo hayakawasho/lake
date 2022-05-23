@@ -2,12 +2,14 @@ export type DOMNode = HTMLElement | SVGElement
 
 export type Cleanup = void | (() => void)
 
-export interface FC {
-  setup(el: DOMNode, props: Record<string, any>): Cleanup
+type ComponentProps<Props> = Readonly<Props>
+
+export interface FC<Props = Record<string, any>> {
+  props?: ComponentProps<Props>
+  setup(el: DOMNode, props: ComponentProps<Props>): Cleanup
   components?: {
     [selector: string]: FC
   }
-  props?: Record<string, any>
 }
 
 export interface Context$ {
