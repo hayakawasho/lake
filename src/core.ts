@@ -41,7 +41,7 @@ export function mount(el: DOMNode, props: Record<string, any>, name: string) {
   bindDOMNodeToComponent(el, component(el, props), name)
 }
 
-export function unmount(selector: string, scope = document.body) {
+export function unmount(selector: string, scope?: DOMNode) {
   q(selector, scope)
     .filter(el => DOM_COMPONENT_INSTANCE_PROPERTY.has(el))
     .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as ComponentContext).unmount())
