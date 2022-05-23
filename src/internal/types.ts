@@ -1,6 +1,6 @@
 export type DOMNode = HTMLElement | SVGElement
 
-export type Cleanup = () => (() => void) | void
+export type Cleanup = void | (() => void)
 
 export interface FC {
   setup(el: DOMNode, props: Record<string, any>): Cleanup
