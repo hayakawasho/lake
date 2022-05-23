@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -22,7 +22,8 @@
   "homepage": "https://github.com/hayakawasho/lake#readme",
   "keywords": [
     "svelte",
-    "svelte component"
+    "component register",
+    "functional component"
   ],
   "scripts": {
     "dev": "vite",
