@@ -16,21 +16,22 @@ const isFunc = (value) => typeof value === "function";
 function noop() {
 }
 class ComponentContext {
-  constructor(cleanup) {
+  constructor(cleanupOrVoid) {
     __publicField(this, "onUnmount", []);
     __publicField(this, "unmount", () => {
       this.onUnmount.forEach((fn) => fn());
     });
-    __publicField(this, "addChild", (child) => {
-      this.onUnmount.push(child.unmount);
-    });
-    const unsubscribe = cleanup || noop;
-    this.onUnmount.push(unsubscribe);
+    const cleanup = cleanupOrVoid || noop;
+    this.onUnmount.push(cleanup);
+  }
+  addChild(child) {
+    this.onUnmount.push(child.unmount);
   }
 }
 function createComponent({ setup, components }) {
   return (el, props) => {
-    const context = new ComponentContext(setup(el, props));
+    const mounted = setup(el, props);
+    const context = new ComponentContext(mounted);
     if (components) {
       Object.entries(components).forEach(([selector, child]) => {
         q(selector).forEach((i) => {
