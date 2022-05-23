@@ -30,7 +30,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "watch": "vite build -w",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "prettier:write": "prettier --write ./src/**/*.ts",
+    "eslint": "eslint './src/**/*.ts' -c .eslintrc.json --fix",
+    "format": "yarn prettier:write && yarn eslint"
   },
   "devDependencies": {
     "@playwright/test": "1.22.1",
@@ -42,7 +45,6 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-svelte3": "^4.0.0",
     "husky": "^8.0.1",
     "lint-staged": "^12.4.1",
     "prettier": "2.6.2",
@@ -55,7 +57,7 @@
   "dependencies": {},
   "prepare": "husky install",
   "lint-staged": {
-    "*.{ts,svelte}": [
+    "*.{ts}": [
       "eslint --fix",
       "prettier --write"
     ]
