@@ -10,7 +10,7 @@ export function domRefs(ref: Set<string>, scope: DOMNode) {
   const refOrRefs = (nodes: DOMNode[], query: string) => {
     switch (nodes.length) {
       case 0:
-        throw new Error(`data-ref="${query}" does not exist`)
+        throw new Error(`[data-ref="${query}"] does not exist`)
       case 1:
         return nodes[0]
       default:
