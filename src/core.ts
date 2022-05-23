@@ -10,13 +10,15 @@ const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>()
 
 const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
 
-function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext) {
+function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext, componentName: string) {
+  assert(
+    !DOM_COMPONENT_INSTANCE_PROPERTY.has(el),
+    `the DOM of ${componentName} was already binding`
+  )
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
 }
 
-export function defineComponent(options: FC) {
-  return options
-}
+export const defineComponent = (options: FC) => options
 
 export function register(name: string, componentWrapper: FC) {
   assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`)
@@ -36,7 +38,7 @@ export function mount(el: DOMNode, props: Record<string, any>, name: string) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`)
   const component = REGISTERED_COMPONENTS_MAP.get(name) as ComponentType
 
-  bindDOMNodeToComponent(el, component(el, props))
+  bindDOMNodeToComponent(el, component(el, props), name)
 }
 
 export function unmount(selector: string, scope = document.body) {

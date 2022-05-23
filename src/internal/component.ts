@@ -7,8 +7,8 @@ type LifecycleHandler = () => void
 class ComponentContext {
   onUnmount: LifecycleHandler[] = []
 
-  constructor(cleanupOrVoid: Cleanup) {
-    const cleanup = cleanupOrVoid || noop
+  constructor(create: Cleanup) {
+    const cleanup = create || noop
     this.onUnmount.push(cleanup)
   }
 
@@ -21,13 +21,14 @@ class ComponentContext {
   }
 }
 
-export function createComponent({ setup, components }: FC) {
+export function createComponent(componentWrapper: FC) {
   return (el: DOMNode, props: Record<string, any>) => {
-    const mounted = setup(el, props)
+    const mergedProps = Object.assign({ el }, componentWrapper.props, props)
+    const mounted = componentWrapper.setup(mergedProps)
     const context = new ComponentContext(mounted)
 
-    if (components) {
-      Object.entries(components).forEach(([selector, child]) => {
+    if (componentWrapper.components) {
+      Object.entries(componentWrapper.components).forEach(([selector, child]) => {
         q(selector).forEach(i => {
           const childComponentProps = child.props || {}
           const c = createComponent(child)(i, childComponentProps)
