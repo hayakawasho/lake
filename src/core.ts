@@ -1,8 +1,8 @@
-import { assert } from './util/assert'
-import { q } from './util/selector'
-import type { DOMNode, FC } from './internal/types'
 import { createComponent } from './internal/component'
 import type { ComponentContext } from './internal/component'
+import type { DOMNode, FC } from './internal/types'
+import { assert } from './util/assert'
+import { q } from './util/selector'
 
 type ComponentType = ReturnType<typeof createComponent>
 
@@ -12,8 +12,8 @@ const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
 
 function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext, componentName: string) {
   assert(
-    !DOM_COMPONENT_INSTANCE_PROPERTY.has(el),
-    `the DOM of ${componentName} was already binding`
+    DOM_COMPONENT_INSTANCE_PROPERTY.has(el) === false,
+    `The DOM of ${componentName} was already binding`
   )
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
 }
@@ -21,7 +21,7 @@ function bindDOMNodeToComponent(el: DOMNode, component: ComponentContext, compon
 export const defineComponent = (options: FC) => options
 
 export function register(name: string, componentWrapper: FC) {
-  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`)
+  assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`)
   REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper))
 
   return REGISTERED_COMPONENTS_MAP

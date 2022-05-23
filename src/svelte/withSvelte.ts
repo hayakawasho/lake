@@ -6,7 +6,7 @@ import type { Context$ } from '../internal/types'
 
 export function withSvelte(SvelteApp: typeof SvelteComponent) {
   return defineComponent({
-    setup({ el, ...props }) {
+    setup(el, props) {
       const context = new Map<'$', Context$>()
 
       context.set('$', {
