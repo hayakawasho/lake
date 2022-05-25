@@ -11,10 +11,3 @@ export interface IComponent<Props = Record<string, any>> {
   props?: ComponentProps<Props>
   setup(el: DOMNode, props: ComponentProps<Props>): Cleanup
 }
-
-export interface Context$ {
-  rootRef: DOMNode
-  useDOMRef: <T>(...refKey: string[]) => {
-    refs: T
-  }
-}

@@ -101,7 +101,7 @@ function domRefs(ref, scope) {
   }, {});
   return childRef;
 }
-function withSvelte(SvelteApp) {
+function withSvelte(App) {
   return defineComponent({
     setup(el, props) {
       const context = /* @__PURE__ */ new Map();
@@ -111,14 +111,13 @@ function withSvelte(SvelteApp) {
           refs: domRefs(new Set(ref), el)
         })
       });
-      const app = new SvelteApp({
+      const app = new App({
         target: el,
         props,
         context
       });
       return () => {
         app.$destroy();
-        context.clear();
       };
     }
   });
