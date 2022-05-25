@@ -8,25 +8,22 @@ type ComponentType = ReturnType<typeof createComponent>
 
 const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>()
 
-const DOM_COMPONENT_INSTANCE_PROPERTY = new WeakMap<DOMNode, ComponentContext>()
+const DOM_COMPONENT_INSTANCE = new WeakMap<DOMNode, ComponentContext>()
 
 const bindDOMNodeToComponent = (
   el: DOMNode,
   component: ComponentContext,
   componentName: string
 ) => {
-  assert(
-    DOM_COMPONENT_INSTANCE_PROPERTY.has(el) === false,
-    `The DOM of ${componentName} was already binding`
-  )
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
+  assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${componentName} was already bind`)
+  DOM_COMPONENT_INSTANCE.set(el, component)
 }
 
 export const defineComponent = <Props>(options: IComponent<Props>) => options
 
-export function register(name: string, componentWrapper: IComponent) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`)
-  REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper))
+export function register(name: string, wrap: IComponent) {
+  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`)
+  REGISTERED_COMPONENTS_MAP.set(name, createComponent(wrap))
 
   return REGISTERED_COMPONENTS_MAP
 }
@@ -47,6 +44,6 @@ export function mount(el: DOMNode, props: Record<string, any>, name: string) {
 
 export function unmount(selector: string, scope?: DOMNode) {
   q(selector, scope)
-    .filter(el => DOM_COMPONENT_INSTANCE_PROPERTY.has(el))
-    .forEach(el => (DOM_COMPONENT_INSTANCE_PROPERTY.get(el) as ComponentContext).unmount())
+    .filter(el => DOM_COMPONENT_INSTANCE.has(el))
+    .forEach(el => (DOM_COMPONENT_INSTANCE.get(el) as ComponentContext).unmount())
 }

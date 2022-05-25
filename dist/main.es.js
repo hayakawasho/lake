@@ -27,33 +27,33 @@ class ComponentContext {
     this.onUnmount.push(child.unmount);
   }
 }
-function createComponent(componentWrapper) {
+function createComponent(wrap) {
   return (el, props) => {
-    const mergedProps = Object.assign(componentWrapper.props, props);
-    const mounted = componentWrapper.setup(el, mergedProps);
-    const context = new ComponentContext(mounted);
-    if (componentWrapper.components) {
-      Object.entries(componentWrapper.components).forEach(([selector, subComponent]) => {
+    const mergedProps = Object.assign(wrap.props, props);
+    const created = wrap.setup(el, mergedProps);
+    const ctx = new ComponentContext(created);
+    if (wrap.components) {
+      Object.entries(wrap.components).forEach(([selector, sub]) => {
         q(selector).forEach((i) => {
-          const subComponentProps = subComponent.props || {};
-          const child = createComponent(subComponent)(i, subComponentProps);
-          context.addChild(child);
+          const subComponentProps = sub.props || {};
+          const child = createComponent(sub)(i, subComponentProps);
+          ctx.addChild(child);
         });
       });
     }
-    return context;
+    return ctx;
   };
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
-const DOM_COMPONENT_INSTANCE_PROPERTY = /* @__PURE__ */ new WeakMap();
+const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, componentName) => {
-  assert(DOM_COMPONENT_INSTANCE_PROPERTY.has(el) === false, `The DOM of ${componentName} was already binding`);
-  DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component);
+  assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${componentName} was already bind`);
+  DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
-function register(name, componentWrapper) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`);
-  REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper));
+function register(name, wrap) {
+  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
+  REGISTERED_COMPONENTS_MAP.set(name, createComponent(wrap));
   return REGISTERED_COMPONENTS_MAP;
 }
 function unregister(name) {
@@ -67,7 +67,7 @@ function mount(el, props, name) {
   bindDOMNodeToComponent(el, component(el, props), name);
 }
 function unmount(selector, scope) {
-  q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE_PROPERTY.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE_PROPERTY.get(el).unmount());
+  q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
 let current_component;
 function get_current_component() {

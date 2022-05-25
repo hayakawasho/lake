@@ -2,6 +2,6 @@ import type { SvelteComponent } from 'svelte'
 import type { Context$ } from '../internal/types'
 export declare function withSvelte(
   SvelteApp: typeof SvelteComponent
-): import('../internal/types').FC<unknown>
+): import('../internal/types').IComponent<unknown>
 export declare function getContext$(): Context$
 //# sourceMappingURL=withSvelte.d.ts.map
