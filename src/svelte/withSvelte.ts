@@ -15,7 +15,6 @@ export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
     setup(el, props) {
       const context = new Map<'$', Context$>()
-
       context.set('$', {
         rootRef: el,
         useDOMRef: (...ref) => ({
