@@ -1,6 +1,6 @@
 import { createComponent } from './internal/component'
 import type { ComponentContext } from './internal/component'
-import type { DOMNode, FC } from './internal/types'
+import type { DOMNode, IComponent } from './internal/types'
 import { assert } from './util/assert'
 import { q } from './util/selector'
 
@@ -22,9 +22,9 @@ const bindDOMNodeToComponent = (
   DOM_COMPONENT_INSTANCE_PROPERTY.set(el, component)
 }
 
-export const defineComponent = <Props>(options: FC<Props>) => options
+export const defineComponent = <Props>(options: IComponent<Props>) => options
 
-export function register(name: string, componentWrapper: FC) {
+export function register(name: string, componentWrapper: IComponent) {
   assert(REGISTERED_COMPONENTS_MAP.has(name) === false, `${name} was already registered`)
   REGISTERED_COMPONENTS_MAP.set(name, createComponent(componentWrapper))
 

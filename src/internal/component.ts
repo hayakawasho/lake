@@ -1,6 +1,6 @@
 import { noop } from '../util/function'
 import { q } from '../util/selector'
-import type { DOMNode, FC, Cleanup } from './types'
+import type { DOMNode, IComponent, Cleanup } from './types'
 
 type LifecycleHandler = () => void
 
@@ -21,7 +21,7 @@ class ComponentContext {
   }
 }
 
-export function createComponent(componentWrapper: FC) {
+export function createComponent(componentWrapper: IComponent) {
   return (el: DOMNode, props: Record<string, any>) => {
     const mergedProps = Object.assign(componentWrapper.props, props)
     const mounted = componentWrapper.setup(el, mergedProps)

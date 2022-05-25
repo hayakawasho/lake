@@ -4,11 +4,11 @@ export type Cleanup = void | (() => void)
 
 type ComponentProps<Props> = Readonly<Props>
 
-export interface FC<Props = Record<string, any>> {
-  props?: ComponentProps<Props>
+export interface IComponent<Props = Record<string, any>> {
   components?: {
-    [selector: string]: FC
+    [selector: string]: IComponent
   }
+  props?: ComponentProps<Props>
   setup(el: DOMNode, props: ComponentProps<Props>): Cleanup
 }
 
