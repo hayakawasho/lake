@@ -24,7 +24,8 @@
     "svelte",
     "component register",
     "functional component",
-    "reactive"
+    "reactive",
+    "dom binding"
   ],
   "scripts": {
     "prepare": "husky install",
