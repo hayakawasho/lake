@@ -6,9 +6,9 @@ interface Context$ {
     refs: T
   }
 }
-export declare function withSvelte(
+declare const withSvelte: (
   App: typeof SvelteComponent
-): import('../internal/types').IComponent<unknown>
-export declare function getContext$(): Context$
-export {}
+) => import('../internal/types').IComponent<unknown>
+declare const getContext$: () => Context$
+export { withSvelte, getContext$ }
 //# sourceMappingURL=withSvelte.d.ts.map

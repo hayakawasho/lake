@@ -11,7 +11,7 @@ interface Context$ {
   }
 }
 
-export function withSvelte(App: typeof SvelteComponent) {
+const withSvelte = (App: typeof SvelteComponent) => {
   return defineComponent({
     setup(el, props) {
       const context = new Map<'$', Context$>()
@@ -36,6 +36,6 @@ export function withSvelte(App: typeof SvelteComponent) {
   })
 }
 
-export function getContext$() {
-  return getContext<Context$>('$')
-}
+const getContext$ = () => getContext<Context$>('$')
+
+export { withSvelte, getContext$ }

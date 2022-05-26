@@ -3,7 +3,7 @@ import { onDestroy } from 'svelte'
 type ElementEventListener<K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap> = (
   this: HTMLElement,
   ev: HTMLElementEventMap[K]
-) => any
+) => unknown
 
 const useEvent = <
   T extends HTMLElement = HTMLElement,

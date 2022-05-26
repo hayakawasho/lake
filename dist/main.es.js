@@ -115,7 +115,7 @@ function domRefs(ref, scope) {
   }, {});
   return childRef;
 }
-function withSvelte(App) {
+const withSvelte = (App) => {
   return defineComponent({
     setup(el, props) {
       const context = /* @__PURE__ */ new Map();
@@ -135,10 +135,8 @@ function withSvelte(App) {
       };
     }
   });
-}
-function getContext$() {
-  return getContext("$");
-}
+};
+const getContext$ = () => getContext("$");
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
   onDestroy(() => {
