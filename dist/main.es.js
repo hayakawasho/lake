@@ -1,5 +1,19 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -29,19 +43,19 @@ class ComponentContext {
 }
 function createComponent(wrap) {
   return (el, props) => {
-    const mergedProps = Object.assign(wrap.props, props);
+    const mergedProps = __spreadValues(__spreadValues({}, wrap.props), props);
     const created = wrap.setup(el, mergedProps);
-    const ctx = new ComponentContext(created);
+    const context = new ComponentContext(created);
     if (wrap.components) {
-      Object.entries(wrap.components).forEach(([selector, sub]) => {
+      Object.entries(wrap.components).forEach(([selector, subComponent]) => {
         q(selector).forEach((i) => {
-          const subComponentProps = sub.props || {};
-          const child = createComponent(sub)(i, subComponentProps);
-          ctx.addChild(child);
+          const subComponentProps = subComponent.props || {};
+          const child = createComponent(subComponent)(i, subComponentProps);
+          context.addChild(child);
         });
       });
     }
-    return ctx;
+    return context;
   };
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
@@ -83,9 +97,9 @@ Promise.resolve();
 function domRefs(ref, scope) {
   const findRef = (query) => {
     const nodes = q(`[data-ref="${query}"]`, scope);
-    return refOrRefs(nodes, query);
+    return reducer(nodes, query);
   };
-  const refOrRefs = (nodes, query) => {
+  const reducer = (nodes, query) => {
     switch (nodes.length) {
       case 0:
         throw new Error(`[data-ref="${query}"] does not exist`);
