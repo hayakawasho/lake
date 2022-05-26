@@ -139,11 +139,10 @@ function withSvelte(App) {
 function getContext$() {
   return getContext("$");
 }
-function useEvent(targetOrTargets, eventType, handler, options) {
-  const isArray = Array.isArray(targetOrTargets);
-  isArray ? targetOrTargets.forEach((el) => el.addEventListener(eventType, handler, options)) : targetOrTargets.addEventListener(eventType, handler, options);
+const useEvent = (target, eventType, listener) => {
+  target.addEventListener(eventType, listener);
   onDestroy(() => {
-    isArray ? targetOrTargets.forEach((el) => el.removeEventListener(eventType, handler, options)) : targetOrTargets.removeEventListener(eventType, handler, options);
+    target.removeEventListener(eventType, listener);
   });
-}
+};
 export { assert, defineComponent, getContext$, mount, q, register, unmount, unregister, useEvent, withSvelte };

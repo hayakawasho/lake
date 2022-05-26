@@ -1,5 +1,12 @@
-import type { DOMNode } from '../internal/types';
-declare type Options = boolean | AddEventListenerOptions;
-export declare function useEvent<U extends keyof HTMLElementEventMap = keyof HTMLElementEventMap>(targetOrTargets: DOMNode | DOMNode[], eventType: U, handler: EventListenerOrEventListenerObject, options?: Options): void;
-export {};
+declare type ElementEventListener<K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap> =
+  (this: HTMLElement, ev: HTMLElementEventMap[K]) => any
+declare const useEvent: <
+  T extends HTMLElement = HTMLElement,
+  K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
+>(
+  target: T,
+  eventType: K,
+  listener: ElementEventListener<K>
+) => void
+export { useEvent }
 //# sourceMappingURL=useEvent.d.ts.map
