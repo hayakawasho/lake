@@ -23,11 +23,11 @@ function assert(condition, msg) {
     throw new Error(msg || `unexpected condition`);
   }
 }
-const q = (query, scope) => {
+function q(query, scope) {
   return Array.from((scope != null ? scope : document).querySelectorAll(query));
-};
-const noop = () => {
-};
+}
+function noop() {
+}
 class ComponentContext {
   constructor(create) {
     __publicField(this, "onUnmount", []);
@@ -115,15 +115,13 @@ function domRefs(ref, scope) {
   }, {});
   return childRef;
 }
-const withSvelte = (App) => {
+function withSvelte(App) {
   return defineComponent({
     setup(el, props) {
       const context = /* @__PURE__ */ new Map();
       context.set("$", {
         rootRef: el,
-        useDOMRef: (...ref) => ({
-          refs: domRefs(new Set(ref), el)
-        })
+        useDOMRef: (...ref) => ({ refs: domRefs(new Set(ref), el) })
       });
       const app = new App({
         target: el,
@@ -135,7 +133,7 @@ const withSvelte = (App) => {
       };
     }
   });
-};
+}
 const getContext$ = () => getContext("$");
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);

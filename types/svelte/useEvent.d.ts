@@ -1,6 +1,6 @@
 declare type ElementEventListener<K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap> =
   (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown
-declare const useEvent: <
+export declare const useEvent: <
   T extends HTMLElement = HTMLElement,
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 >(
@@ -8,5 +8,5 @@ declare const useEvent: <
   eventType: K,
   listener: ElementEventListener<K>
 ) => void
-export { useEvent }
+export {}
 //# sourceMappingURL=useEvent.d.ts.map

@@ -5,7 +5,7 @@ type ElementEventListener<K extends keyof HTMLElementEventMap = keyof HTMLElemen
   ev: HTMLElementEventMap[K]
 ) => unknown
 
-const useEvent = <
+export const useEvent = <
   T extends HTMLElement = HTMLElement,
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 >(
@@ -19,5 +19,3 @@ const useEvent = <
     target.removeEventListener(eventType, listener)
   })
 }
-
-export { useEvent }

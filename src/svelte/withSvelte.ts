@@ -6,21 +6,17 @@ import type { DOMNode } from '../internal/types'
 
 interface Context$ {
   rootRef: DOMNode
-  useDOMRef: <T>(...refKey: string[]) => {
-    refs: T
-  }
+  useDOMRef: <T>(...refKey: string[]) => { refs: T }
 }
 
-const withSvelte = (App: typeof SvelteComponent) => {
+export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
     setup(el, props) {
       const context = new Map<'$', Context$>()
 
       context.set('$', {
         rootRef: el,
-        useDOMRef: (...ref) => ({
-          refs: domRefs(new Set(ref), el),
-        }),
+        useDOMRef: (...ref) => ({ refs: domRefs(new Set(ref), el) }),
       })
 
       const app = new App({
@@ -36,6 +32,4 @@ const withSvelte = (App: typeof SvelteComponent) => {
   })
 }
 
-const getContext$ = () => getContext<Context$>('$')
-
-export { withSvelte, getContext$ }
+export const getContext$ = () => getContext<Context$>('$')

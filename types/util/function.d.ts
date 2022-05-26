@@ -1,2 +1,2 @@
-export declare const noop: () => void
+export declare function noop(): void
 //# sourceMappingURL=function.d.ts.map

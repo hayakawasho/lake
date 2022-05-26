@@ -23,9 +23,11 @@ class ComponentContext {
 
 export function createComponent(wrap: IComponent) {
   return (el: DOMNode, props: Record<string, any>) => {
-    const mergedProps = { ...wrap.props, ...props }
+    const mergedProps = {
+      ...wrap.props,
+      ...props,
+    }
     const created = wrap.setup(el, mergedProps)
-
     const context = new ComponentContext(created)
 
     if (wrap.components) {
