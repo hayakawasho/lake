@@ -23,9 +23,10 @@ class ComponentContext {
 
 export function createComponent(wrap: IComponent) {
   return (el: DOMNode, props: Record<string, any>) => {
-    const mergedProps = Object.assign(wrap.props, props)
+    const mergedProps = { ...wrap.props, ...props }
     const created = wrap.setup(el, mergedProps)
-    const ctx = new ComponentContext(created)
+
+    const context = new ComponentContext(created)
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
@@ -33,12 +34,12 @@ export function createComponent(wrap: IComponent) {
           const subComponentProps = subComponent.props || {}
           const child = createComponent(subComponent)(i, subComponentProps)
 
-          ctx.addChild(child)
+          context.addChild(child)
         })
       })
     }
 
-    return ctx
+    return context
   }
 }
 
