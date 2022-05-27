@@ -1,13 +1,16 @@
-import { mount, register, q } from '../src/main'
+import { mount, register, q as __ } from '../src/main'
 import Index from './IndexPage'
 
-const initApp = () => {
+document.addEventListener('DOMContentLoaded', () => {
   register('Index', Index)
+  mount(document.body, {}, 'Index')
 
-  q('[data-component]').forEach(el => {
-    const componentName = el.dataset.component as string
-    mount(el, {}, componentName)
-  })
-}
+  /**
+   * other how to mount component
+   */
 
-document.addEventListener('DOMContentLoaded', initApp)
+  // q('[data-component]').forEach(el => {
+  //   const componentName = el.dataset.component as string
+  //   mount(el, {}, componentName)
+  // })
+})
