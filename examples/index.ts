@@ -3,10 +3,12 @@ import Index from './IndexPage'
 
 document.addEventListener('DOMContentLoaded', () => {
   register('Index', Index)
+
+  // A mount component
   mount(document.body, {}, 'Index')
 
   /**
-   * other how to mount component
+   * Other how to mount component
    */
 
   // q('[data-component]').forEach(el => {
