@@ -16,7 +16,9 @@ export function withSvelte(App: typeof SvelteComponent) {
 
       context.set('$', {
         rootRef: el,
-        useDOMRef: (...ref) => ({ refs: domRefs(new Set(ref), el) }),
+        useDOMRef: (...ref) => ({
+          refs: domRefs(new Set(ref), el),
+        }),
       })
 
       const app = new App({

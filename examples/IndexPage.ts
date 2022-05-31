@@ -1,13 +1,13 @@
-import { defineComponent, withSvelte } from '../src/main'
+import { defineComponent, withSvelte, withSolid } from '../src/main'
 // @ts-ignore
 import Counter from './Counter.svelte'
 // @ts-ignore
-import Form from './Form.svelte'
+import Form from './Form.tsx'
 
 export default defineComponent({
   components: {
     '.js-counter': withSvelte(Counter),
-    '.js-form': withSvelte(Form),
+    '.js-form': withSolid(Form),
   },
 
   setup() {
