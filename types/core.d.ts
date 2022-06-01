@@ -1,9 +1,9 @@
 import type { ComponentContext } from './internal/component'
-import type { DOMNode, FC } from './internal/types'
-export declare const defineComponent: <Props>(options: FC<Props>) => FC<Props>
+import type { DOMNode, IComponent } from './internal/types'
+export declare const defineComponent: <Props>(options: IComponent<Props>) => IComponent<Props>
 export declare function register(
   name: string,
-  componentWrapper: FC
+  wrap: IComponent
 ): Map<string, (el: DOMNode, props: Record<string, any>) => ComponentContext>
 export declare function unregister(
   name: string

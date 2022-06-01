@@ -1,11 +1,11 @@
 import { noop } from '../util/function'
 import { q } from '../util/selector'
-import type { DOMNode, FC, Cleanup } from './types'
+import type { DOMNode, IComponent, Cleanup } from './types'
 
 type LifecycleHandler = () => void
 
 class ComponentContext {
-  onUnmount: LifecycleHandler[] = []
+  private onUnmount: LifecycleHandler[] = []
 
   constructor(create: Cleanup) {
     const cleanup = create || noop
@@ -21,14 +21,17 @@ class ComponentContext {
   }
 }
 
-export function createComponent(componentWrapper: FC) {
+export function createComponent(wrap: IComponent) {
   return (el: DOMNode, props: Record<string, any>) => {
-    const mergedProps = Object.assign(componentWrapper.props, props)
-    const mounted = componentWrapper.setup(el, mergedProps)
-    const context = new ComponentContext(mounted)
+    const mergedProps = {
+      ...wrap.props,
+      ...props,
+    }
+    const created = wrap.setup(el, mergedProps)
+    const context = new ComponentContext(created)
 
-    if (componentWrapper.components) {
-      Object.entries(componentWrapper.components).forEach(([selector, subComponent]) => {
+    if (wrap.components) {
+      Object.entries(wrap.components).forEach(([selector, subComponent]) => {
         q(selector).forEach(i => {
           const subComponentProps = subComponent.props || {}
           const child = createComponent(subComponent)(i, subComponentProps)

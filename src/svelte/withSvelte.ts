@@ -2,9 +2,14 @@ import type { SvelteComponent } from 'svelte'
 import { getContext } from 'svelte'
 import { defineComponent } from '../core'
 import { domRefs } from '../internal/domRefs'
-import type { Context$ } from '../internal/types'
+import type { DOMNode } from '../internal/types'
 
-export function withSvelte(SvelteApp: typeof SvelteComponent) {
+interface Context$ {
+  rootRef: DOMNode
+  useDOMRef: <T>(...refKey: string[]) => { refs: T }
+}
+
+export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
     setup(el, props) {
       const context = new Map<'$', Context$>()
@@ -16,7 +21,7 @@ export function withSvelte(SvelteApp: typeof SvelteComponent) {
         }),
       })
 
-      const app = new SvelteApp({
+      const app = new App({
         target: el,
         props,
         context,
@@ -24,12 +29,9 @@ export function withSvelte(SvelteApp: typeof SvelteComponent) {
 
       return () => {
         app.$destroy()
-        context.clear()
       }
     },
   })
 }
 
-export function getContext$() {
-  return getContext<Context$>('$')
-}
+export const getContext$ = () => getContext<Context$>('$')

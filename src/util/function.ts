@@ -1,1 +1,1 @@
-export const noop = () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+export function noop() {} // eslint-disable-line @typescript-eslint/no-empty-function

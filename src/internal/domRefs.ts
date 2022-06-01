@@ -4,10 +4,10 @@ import type { DOMNode } from './types'
 export function domRefs(ref: Set<string>, scope: DOMNode) {
   const findRef = (query: string) => {
     const nodes = q(`[data-ref="${query}"]`, scope)
-    return refOrRefs(nodes, query)
+    return reducer(nodes, query)
   }
 
-  const refOrRefs = (nodes: DOMNode[], query: string) => {
+  const reducer = (nodes: DOMNode[], query: string) => {
     switch (nodes.length) {
       case 0:
         throw new Error(`[data-ref="${query}"] does not exist`)
