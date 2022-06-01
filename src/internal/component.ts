@@ -22,17 +22,17 @@ class ComponentContext {
 }
 
 export function createComponent(wrap: IComponent) {
-  return (el: DOMNode, props: Record<string, any>) => {
+  return (root: DOMNode, props: Record<string, any>) => {
     const mergedProps = {
       ...wrap.props,
       ...props,
     }
-    const created = wrap.setup(el, mergedProps)
+    const created = wrap.setup(root, mergedProps)
     const context = new ComponentContext(created)
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector).forEach(i => {
+        q(selector, root).forEach(i => {
           const subComponentProps = subComponent.props || {}
           const child = createComponent(subComponent)(i, subComponentProps)
 

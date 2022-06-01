@@ -7,6 +7,6 @@ declare class ComponentContext {
 }
 export declare function createComponent(
   wrap: IComponent
-): (el: DOMNode, props: Record<string, any>) => ComponentContext
+): (root: DOMNode, props: Record<string, any>) => ComponentContext
 export type { ComponentContext }
 //# sourceMappingURL=component.d.ts.map

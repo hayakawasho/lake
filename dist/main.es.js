@@ -42,13 +42,13 @@ class ComponentContext {
   }
 }
 function createComponent$1(wrap) {
-  return (el, props) => {
+  return (root, props) => {
     const mergedProps = __spreadValues(__spreadValues({}, wrap.props), props);
-    const created = wrap.setup(el, mergedProps);
+    const created = wrap.setup(root, mergedProps);
     const context = new ComponentContext(created);
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector).forEach((i) => {
+        q(selector, root).forEach((i) => {
           const subComponentProps = subComponent.props || {};
           const child = createComponent$1(subComponent)(i, subComponentProps);
           context.addChild(child);
