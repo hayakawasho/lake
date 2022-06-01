@@ -642,9 +642,9 @@ function cleanChildren(parent, current, marker, replacement) {
 function withSolid(App) {
   return defineComponent({
     setup(el, props) {
-      const unsubscribe = render(() => createComponent(App, props), el);
+      const dispose = render(() => createComponent(App, props), el);
       return () => {
-        unsubscribe();
+        dispose();
       };
     }
   });
