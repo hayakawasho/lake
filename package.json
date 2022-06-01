@@ -23,7 +23,6 @@
   "keywords": [
     "component register",
     "functional component",
-    "reactive",
     "dom binding",
     "svelte",
     "solid"
