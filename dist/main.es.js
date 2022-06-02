@@ -1,4 +1,6 @@
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -14,6 +16,7 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -29,34 +32,38 @@ function q(query, scope) {
 function noop() {
 }
 class ComponentContext {
-  constructor(create) {
+  constructor(create, element) {
     __publicField(this, "onUnmount", []);
+    __publicField(this, "parent", null);
     __publicField(this, "unmount", () => {
       this.onUnmount.forEach((fn) => fn());
     });
+    this.element = element;
     const cleanup = create || noop;
     this.onUnmount.push(cleanup);
   }
   addChild(child) {
     this.onUnmount.push(child.unmount);
+    child.parent = this;
   }
 }
 function createComponent$1(wrap) {
   return (root, props) => {
-    const mergedProps = __spreadValues(__spreadValues({}, wrap.props), props);
-    const created = wrap.setup(root, mergedProps);
-    const context = new ComponentContext(created);
+    const newProps = __spreadValues(__spreadValues({}, wrap.props), props);
+    const created = wrap.setup(root, newProps);
+    const context = new ComponentContext(created, root);
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach((i) => {
-          const subComponentProps = subComponent.props || {};
-          const child = createComponent$1(subComponent)(i, subComponentProps);
-          context.addChild(child);
-        });
+        q(selector, root).forEach((i) => createSubComponent(i, subComponent, context));
       });
     }
     return context;
   };
+}
+function createSubComponent(el, child, parent) {
+  const newProps = __spreadProps(__spreadValues({}, child.props), { parent });
+  const context = createComponent$1(child)(el, newProps);
+  parent.addChild(context);
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
