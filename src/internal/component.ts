@@ -34,7 +34,7 @@ export function createComponent(wrap: IComponent) {
         q(selector, root).forEach(i => {
           const child = createSubComponent(i, subComponent, context);
           context.addChild(child);
-        }
+        });
       });
     }
 
