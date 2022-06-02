@@ -1,14 +1,14 @@
-import type { SvelteComponent } from 'svelte'
-import type { DOMNode } from '../internal/types'
+import type { SvelteComponent } from 'svelte';
+import type { DOMNode } from '../internal/types';
 interface Context$ {
-  rootRef: DOMNode
+  rootRef: DOMNode;
   useDOMRef: <T>(...refKey: string[]) => {
-    refs: T
-  }
+    refs: T;
+  };
 }
 export declare function withSvelte(
   App: typeof SvelteComponent
-): import('../internal/types').IComponent<unknown>
-export declare const getContext$: () => Context$
-export {}
+): import('../internal/types').IComponent<unknown>;
+export declare const getContext$: () => Context$;
+export {};
 //# sourceMappingURL=withSvelte.d.ts.map
