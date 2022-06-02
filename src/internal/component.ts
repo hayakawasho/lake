@@ -6,8 +6,9 @@ type LifecycleHandler = () => void
 
 class ComponentContext {
   private onUnmount: LifecycleHandler[] = []
+  parent: ComponentContext | null = null
 
-  constructor(create: Cleanup) {
+  constructor(create: Cleanup, public element: DOMNode | Document) {
     const cleanup = create || noop
     this.onUnmount.push(cleanup)
   }
@@ -18,31 +19,31 @@ class ComponentContext {
 
   addChild(child: ComponentContext) {
     this.onUnmount.push(child.unmount)
+    child.parent = this
   }
 }
 
 export function createComponent(wrap: IComponent) {
   return (root: DOMNode, props: Record<string, any>) => {
-    const mergedProps = {
-      ...wrap.props,
-      ...props,
-    }
-    const created = wrap.setup(root, mergedProps)
-    const context = new ComponentContext(created)
+    const newProps = { ...wrap.props, ...props }
+    const created = wrap.setup(root, newProps)
+    const context = new ComponentContext(created, root)
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach(i => {
-          const subComponentProps = subComponent.props || {}
-          const child = createComponent(subComponent)(i, subComponentProps)
-
-          context.addChild(child)
-        })
+        q(selector, root).forEach(i => createSubComponent(i, subComponent, context))
       })
     }
 
     return context
   }
+}
+
+function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
+  const newProps = { ...child.props, parent }
+  const context = createComponent(child)(el, newProps)
+
+  parent.addChild(context)
 }
 
 export type { ComponentContext }
