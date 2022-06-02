@@ -31,7 +31,10 @@ export function createComponent(wrap: IComponent) {
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach(i => createSubComponent(i, subComponent, context));
+        q(selector, root).forEach(i => {
+          const child = createSubComponent(i, subComponent, context));
+          context.addChild(child);
+        }
       });
     }
 
@@ -41,9 +44,7 @@ export function createComponent(wrap: IComponent) {
 
 function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
   const newProps = { ...child.props, parent };
-  const context = createComponent(child)(el, newProps);
-
-  parent.addChild(context);
+  return createComponent(child)(el, newProps);
 }
 
 export type { ComponentContext };
