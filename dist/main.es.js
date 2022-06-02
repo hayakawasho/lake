@@ -54,16 +54,19 @@ function createComponent$1(wrap) {
     const context = new ComponentContext(created, root);
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach((i) => createSubComponent(i, subComponent, context));
+        q(selector, root).forEach((i) => {
+          const child = createSubComponent(i, subComponent, context);
+          context.addChild(child);
+        });
       });
     }
     return context;
   };
 }
 function createSubComponent(el, child, parent) {
-  const newProps = __spreadProps(__spreadValues({}, child.props), { parent });
-  const context = createComponent$1(child)(el, newProps);
-  parent.addChild(context);
+  return createComponent$1(child)(el, __spreadProps(__spreadValues({}, child.props), {
+    parent
+  }));
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();

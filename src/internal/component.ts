@@ -43,8 +43,10 @@ export function createComponent(wrap: IComponent) {
 }
 
 function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
-  const newProps = { ...child.props, parent };
-  return createComponent(child)(el, newProps);
+  return createComponent(child)(el, {
+    ...child.props,
+    parent,
+  });
 }
 
 export type { ComponentContext };
