@@ -32,7 +32,7 @@ export function createComponent(wrap: IComponent) {
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
         q(selector, root).forEach(i => {
-          const child = createSubComponent(i, subComponent, context));
+          const child = createSubComponent(i, subComponent, context);
           context.addChild(child);
         }
       });
