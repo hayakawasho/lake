@@ -7,10 +7,13 @@ type LifecycleHandler = () => void;
 class ComponentContext {
   private onUnmount: LifecycleHandler[] = [];
   parent: ComponentContext | null = null;
+  id: string;
 
-  constructor(create: Cleanup, public element: DOMNode | Document) {
+  constructor(create: Cleanup, public element: DOMNode) {
     const cleanup = create || noop;
     this.onUnmount.push(cleanup);
+
+    this.id = element.id;
   }
 
   unmount = () => {
