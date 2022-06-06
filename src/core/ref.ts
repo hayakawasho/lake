@@ -1,21 +1,19 @@
 class Ref<T> {
-  private _rawValue: {
-    value: T;
-  };
+  #rawValue: T;
 
   constructor(value: T) {
-    this._rawValue = { value };
+    this.#rawValue = value;
   }
 
-  wrap(newVal: T) {
-    this._rawValue = { value: newVal };
+  set value(newVal: T) {
+    this.#rawValue = newVal;
   }
 
-  unwrap() {
-    return this._rawValue.value;
+  get value() {
+    return this.#rawValue;
   }
 }
 
-export const ref = <T = any>(value: T) => new Ref(value);
+export const ref = <T = any>(val: T) => new Ref(val);
 
 export type { Ref };

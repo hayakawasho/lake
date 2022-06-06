@@ -12,10 +12,10 @@ export default defineComponent({
     return {
       isOpen,
       onOpen() {
-        isOpen.wrap(true);
+        isOpen.value = true;
       },
       onClose() {
-        isOpen.wrap(false);
+        isOpen.value = false;
       },
     };
   },

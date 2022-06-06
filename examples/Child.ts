@@ -10,7 +10,7 @@ export default defineComponent<{
     const { onOpen, onClose, isOpen } = props;
 
     const onToggle = () => {
-      isOpen.unwrap() ? onClose() : onOpen();
+      isOpen.value ? onClose() : onOpen();
     };
 
     onMounted(() => {

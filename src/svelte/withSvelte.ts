@@ -1,6 +1,6 @@
 import type { SvelteComponent } from 'svelte';
 import { getContext } from 'svelte';
-import { defineComponent } from '../core';
+import { defineComponent } from '../core/core';
 import { domRefs } from '../internal/domRefs';
 import type { DOMNode } from '../internal/types';
 
