@@ -1,10 +1,17 @@
 import { defineComponent, onMounted } from '../src/main';
+import type { Ref } from '../src/main';
 
-export default defineComponent<any>({
+export default defineComponent<{
+  isOpen: Ref<boolean>;
+  onOpen: () => void;
+  onClose: () => void;
+}>({
   setup(el, props) {
-    const { onOpen, onClose, isOpen } = props.parent.provides;
+    const { onOpen, onClose, isOpen } = props;
 
-    const onToggle = () => (isOpen ? onOpen() : onClose());
+    const onToggle = () => {
+      isOpen.unwrap() ? onClose() : onOpen();
+    };
 
     onMounted(() => {
       el.addEventListener('click', onToggle);

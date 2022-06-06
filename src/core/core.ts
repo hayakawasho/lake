@@ -1,8 +1,8 @@
-import { createComponent } from './internal/component';
-import type { ComponentContext } from './internal/component';
-import type { DOMNode, IComponent } from './internal/types';
-import { assert } from './util/assert';
-import { q } from './util/selector';
+import { createComponent } from '../internal/component';
+import type { ComponentContext } from '../internal/component';
+import type { DOMNode, IComponent } from '../internal/types';
+import { assert } from '../util/assert';
+import { q } from '../util/selector';
 
 type ComponentType = ReturnType<typeof createComponent>;
 
@@ -37,9 +37,11 @@ export function unregister(name: string) {
 
 export function mount(el: DOMNode, props: Record<string, any>, name: string) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
-  const component = REGISTERED_COMPONENTS_MAP.get(name) as ComponentType;
+  const component = (REGISTERED_COMPONENTS_MAP.get(name) as ComponentType)(el, props);
 
-  bindDOMNodeToComponent(el, component(el, props), name);
+  bindDOMNodeToComponent(el, component, name);
+
+  component.mount();
 }
 
 export function unmount(selector: string, scope?: DOMNode) {

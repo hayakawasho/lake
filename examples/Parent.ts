@@ -1,4 +1,4 @@
-import { defineComponent } from '../src/main';
+import { defineComponent, ref } from '../src/main';
 import Child from './Child';
 
 export default defineComponent({
@@ -7,15 +7,15 @@ export default defineComponent({
   },
 
   setup() {
-    let isOpen = false;
+    const isOpen = ref(false);
 
     return {
       isOpen,
       onOpen() {
-        isOpen = true;
+        isOpen.wrap(true);
       },
       onClose() {
-        isOpen = false;
+        isOpen.wrap(false);
       },
     };
   },
