@@ -42,9 +42,7 @@ function assert(condition, msg) {
     throw new Error(msg || `unexpected condition`);
   }
 }
-function q(query, scope) {
-  return Array.from((scope != null ? scope : document).querySelectorAll(query));
-}
+const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
 class Ref {
   constructor(value) {
     __privateAdd(this, _rawValue, void 0);
@@ -75,17 +73,17 @@ class ComponentContext {
     __publicField(this, "parent", null);
     __publicField(this, "uid");
     __publicField(this, "provides");
-    __publicField(this, "mount", () => {
-      this.onMounted.forEach((fn) => fn());
-    });
-    __publicField(this, "unmount", () => {
-      this.onUnmounted.forEach((fn) => fn());
-    });
     this.element = element;
     setOwner(this);
     this.provides = create(element, props) || {};
     unsetOwner();
     this.uid = element.id;
+  }
+  mount() {
+    this.onMounted.forEach((fn) => fn());
+  }
+  unmount() {
+    this.onUnmounted.forEach((fn) => fn());
   }
   addChild(child) {
     this.onMounted.push(...child.onMounted);
@@ -115,22 +113,22 @@ function createSubComponent(el, child, parent) {
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, componentName) => {
-  assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${componentName} was already bind`);
+  assert(!DOM_COMPONENT_INSTANCE.has(el), `the DOM of ${componentName} was already bind.`);
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
 function register(name, wrap) {
-  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered`);
+  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered.`);
   REGISTERED_COMPONENTS_MAP.set(name, createComponent$1(wrap));
   return REGISTERED_COMPONENTS_MAP;
 }
 function unregister(name) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered`);
+  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered.`);
   REGISTERED_COMPONENTS_MAP.delete(name);
   return REGISTERED_COMPONENTS_MAP;
 }
 function mount(el, props, name) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
+  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered.`);
   const component = REGISTERED_COMPONENTS_MAP.get(name)(el, props);
   bindDOMNodeToComponent(el, component, name);
   component.mount();
