@@ -21,6 +21,25 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
+var __accessCheck = (obj, member, msg) => {
+  if (!member.has(obj))
+    throw TypeError("Cannot " + msg);
+};
+var __privateGet = (obj, member, getter) => {
+  __accessCheck(obj, member, "read from private field");
+  return getter ? getter.call(obj) : member.get(obj);
+};
+var __privateAdd = (obj, member, value) => {
+  if (member.has(obj))
+    throw TypeError("Cannot add the same private member more than once");
+  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+};
+var __privateSet = (obj, member, value, setter) => {
+  __accessCheck(obj, member, "write to private field");
+  setter ? setter.call(obj, value) : member.set(obj, value);
+  return value;
+};
+var _rawValue;
 function assert(condition, msg) {
   if (!condition) {
     throw new Error(msg || `unexpected condition`);
@@ -29,29 +48,59 @@ function assert(condition, msg) {
 function q(query, scope) {
   return Array.from((scope != null ? scope : document).querySelectorAll(query));
 }
-function noop() {
+class Ref {
+  constructor(value) {
+    __privateAdd(this, _rawValue, void 0);
+    __privateSet(this, _rawValue, value);
+  }
+  set value(newVal) {
+    __privateSet(this, _rawValue, newVal);
+  }
+  get value() {
+    return __privateGet(this, _rawValue);
+  }
 }
+_rawValue = new WeakMap();
+const ref = (val) => new Ref(val);
+let Owner$1 = null;
+const setOwner = (context) => Owner$1 = context;
+const unsetOwner = () => Owner$1 = null;
+const getOwner = (hookname) => {
+  assert(Owner$1, `the ${hookname} lifecycle hook can only be used during execution of setup()`);
+  return Owner$1;
+};
+const onMounted = (fn) => getOwner("onMounted").onMounted.push(fn);
+const onUnmounted = (fn) => getOwner("onUnmounted").onUnmounted.push(fn);
 class ComponentContext {
-  constructor(create, element) {
-    __publicField(this, "onUnmount", []);
+  constructor(create, element, props) {
+    __publicField(this, "onMounted", []);
+    __publicField(this, "onUnmounted", []);
     __publicField(this, "parent", null);
+    __publicField(this, "uid");
+    __publicField(this, "provides");
+    __publicField(this, "mount", () => {
+      this.onMounted.forEach((fn) => fn());
+    });
     __publicField(this, "unmount", () => {
-      this.onUnmount.forEach((fn) => fn());
+      this.onUnmounted.forEach((fn) => fn());
     });
     this.element = element;
-    const cleanup = create || noop;
-    this.onUnmount.push(cleanup);
+    setOwner(this);
+    const created = create(element, props);
+    unsetOwner();
+    this.provides = created || {};
+    this.uid = element.id;
   }
   addChild(child) {
-    this.onUnmount.push(child.unmount);
+    this.onMounted.push(child.mount);
+    this.onUnmounted.push(child.unmount);
     child.parent = this;
   }
 }
 function createComponent$1(wrap) {
   return (root, props) => {
     const newProps = __spreadValues(__spreadValues({}, wrap.props), props);
-    const created = wrap.setup(root, newProps);
-    const context = new ComponentContext(created, root);
+    const context = new ComponentContext(wrap.setup, root, newProps);
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
         q(selector, root).forEach((i) => {
@@ -64,9 +113,10 @@ function createComponent$1(wrap) {
   };
 }
 function createSubComponent(el, child, parent) {
-  return createComponent$1(child)(el, __spreadProps(__spreadValues({}, child.props), {
+  const props = __spreadProps(__spreadValues(__spreadValues({}, child.props), parent.provides), {
     parent
-  }));
+  });
+  return createComponent$1(child)(el, props);
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
@@ -87,8 +137,9 @@ function unregister(name) {
 }
 function mount(el, props, name) {
   assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered`);
-  const component = REGISTERED_COMPONENTS_MAP.get(name);
-  bindDOMNodeToComponent(el, component(el, props), name);
+  const component = REGISTERED_COMPONENTS_MAP.get(name)(el, props);
+  bindDOMNodeToComponent(el, component, name);
+  component.mount();
 }
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
@@ -104,7 +155,7 @@ function getContext(key) {
   return get_current_component().$$.context.get(key);
 }
 Promise.resolve();
-function domRefs(ref, scope) {
+function domRefs(ref2, scope) {
   const findRef = (query) => {
     const nodes = q(`[data-ref="${query}"]`, scope);
     return reducer(nodes, query);
@@ -119,7 +170,7 @@ function domRefs(ref, scope) {
         return nodes;
     }
   };
-  const childRef = [...ref].reduce((acc, cur) => {
+  const childRef = [...ref2].reduce((acc, cur) => {
     acc[cur] = findRef(cur);
     return acc;
   }, {});
@@ -131,8 +182,8 @@ function withSvelte(App) {
       const context = /* @__PURE__ */ new Map();
       context.set("$", {
         rootRef: el,
-        useDOMRef: (...ref) => ({
-          refs: domRefs(new Set(ref), el)
+        useDOMRef: (...ref2) => ({
+          refs: domRefs(new Set(ref2), el)
         })
       });
       const app = new App({
@@ -140,9 +191,9 @@ function withSvelte(App) {
         props,
         context
       });
-      return () => {
+      onUnmounted(() => {
         app.$destroy();
-      };
+      });
     }
   });
 }
@@ -653,10 +704,10 @@ function withSolid(App) {
   return defineComponent({
     setup(el, props) {
       const dispose = render(() => createComponent(App, props), el);
-      return () => {
+      onUnmounted(() => {
         dispose();
-      };
+      });
     }
   });
 }
-export { assert, defineComponent, getContext$, mount, q, register, unmount, unregister, useEvent, withSolid, withSvelte };
+export { assert, defineComponent, getContext$, mount, onMounted, onUnmounted, q, ref, register, unmount, unregister, useEvent, withSolid, withSvelte };

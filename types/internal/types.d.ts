@@ -6,7 +6,7 @@ export interface IComponent<Props = Record<string, any>> {
     [selector: string]: IComponent;
   };
   props?: ComponentProps<Props>;
-  setup(el: DOMNode, props: ComponentProps<Props>): Cleanup;
+  setup(el: DOMNode, props: ComponentProps<Props>): Record<string, any> | void;
 }
 export {};
 //# sourceMappingURL=types.d.ts.map

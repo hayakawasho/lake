@@ -12,15 +12,9 @@ class ComponentContext {
   readonly uid: string;
   readonly provides: Record<string, any>;
 
-  constructor(
-    create: IComponent['setup'],
-    public element: DOMNode,
-    context: {
-      props: Record<string, any>;
-    }
-  ) {
+  constructor(create: IComponent['setup'], public element: DOMNode, props: Record<string, any>) {
     setOwner(this);
-    const created = create(element, context.props);
+    const created = create(element, props);
     unsetOwner();
 
     this.provides = created || {};
@@ -50,9 +44,7 @@ export function createComponent(wrap: IComponent) {
       ...props,
     };
 
-    const context = new ComponentContext(wrap.setup, root, {
-      props: newProps,
-    });
+    const context = new ComponentContext(wrap.setup, root, newProps);
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
