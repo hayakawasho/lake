@@ -4,7 +4,7 @@ export { q } from './util/selector';
 export type { Ref } from './core/ref';
 export { ref } from './core/ref';
 export { defineComponent, register, unregister, mount, unmount } from './core/core';
-export { onMounted } from './core/lifecycle';
+export { onMounted, onUnmounted } from './core/component';
 
 export { withSvelte, getContext$ } from './svelte/withSvelte';
 export { useEvent } from './svelte/useEvent';

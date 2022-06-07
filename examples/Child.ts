@@ -1,4 +1,4 @@
-import { defineComponent, onMounted } from '../src/main';
+import { defineComponent, onMounted, onUnmounted } from '../src/main';
 import type { Ref } from '../src/main';
 
 export default defineComponent<{
@@ -13,12 +13,10 @@ export default defineComponent<{
       isOpen.value ? onClose() : onOpen();
     };
 
-    onMounted(() => {
-      el.addEventListener('click', onToggle);
+    el.addEventListener('click', onToggle);
 
-      return () => {
-        el.removeEventListener('click', onToggle);
-      };
+    onUnmounted(() => {
+      el.removeEventListener('click', onToggle);
     });
   },
 });

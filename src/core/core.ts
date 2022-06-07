@@ -1,8 +1,8 @@
-import { createComponent } from '../internal/component';
-import type { ComponentContext } from '../internal/component';
 import type { DOMNode, IComponent } from '../internal/types';
 import { assert } from '../util/assert';
 import { q } from '../util/selector';
+import type { ComponentContext } from './component';
+import { createComponent } from './component';
 
 type ComponentType = ReturnType<typeof createComponent>;
 
