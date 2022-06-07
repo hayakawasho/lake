@@ -9,6 +9,7 @@ const enum LifecycleHooks {
 let Owner: ComponentContext | null = null;
 
 export const setOwner = (context: ComponentContext) => (Owner = context);
+
 export const unsetOwner = () => (Owner = null);
 
 const getOwner = (name: LifecycleHooks) => {

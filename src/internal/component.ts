@@ -5,12 +5,13 @@ import type { DOMNode, IComponent } from './types';
 type LifecycleHandler = () => void;
 
 class ComponentContext {
-  onMounted: LifecycleHandler[] = [];
-  onUnmounted: LifecycleHandler[] = [];
-
-  parent: ComponentContext | null = null;
   readonly uid: string;
   readonly provides: Record<string, any>;
+
+  parent: ComponentContext | null = null;
+
+  onMounted: LifecycleHandler[] = [];
+  onUnmounted: LifecycleHandler[] = [];
 
   constructor(create: IComponent['setup'], public element: DOMNode, props: Record<string, any>) {
     setOwner(this);
@@ -20,13 +21,13 @@ class ComponentContext {
     this.uid = element.id;
   }
 
-  mount = () => {
+  mount() {
     this.onMounted.forEach(fn => fn());
-  };
+  }
 
-  unmount = () => {
+  unmount() {
     this.onUnmounted.forEach(fn => fn());
-  };
+  }
 
   addChild(child: ComponentContext) {
     this.onMounted.push(...child.onMounted);
