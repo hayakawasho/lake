@@ -65,8 +65,8 @@ const ref = (val) => new Ref(val);
 let Owner$1 = null;
 const setOwner = (context) => Owner$1 = context;
 const unsetOwner = () => Owner$1 = null;
-const getOwner = (hookname) => {
-  assert(Owner$1, `the ${hookname} lifecycle hook can only be used during execution of setup()`);
+const getOwner = (name) => {
+  assert(Owner$1, `the ${name} lifecycle called outside "setup()" will never be run.`);
   return Owner$1;
 };
 const onMounted = (fn) => getOwner("onMounted").onMounted.push(fn);
