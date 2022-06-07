@@ -4,20 +4,21 @@ import type { DOMNode, IComponent } from '../internal/types';
 import { assert } from '../util/assert';
 import { q } from '../util/selector';
 
-type ComponentType = ReturnType<typeof createComponent>;
-
-const REGISTERED_COMPONENTS_MAP = new Map<string, ComponentType>();
+const REGISTERED_COMPONENTS_MAP = new Map<
+  string,
+  ReturnType<typeof createComponent>
+>();
 
 const DOM_COMPONENT_INSTANCE = new WeakMap<DOMNode, ComponentContext>();
 
 const bindDOMNodeToComponent = (
   el: DOMNode,
   component: ComponentContext,
-  componentName: string
+  name: string
 ) => {
   assert(
     !DOM_COMPONENT_INSTANCE.has(el),
-    `the DOM of ${componentName} was already bind.`
+    `The DOM of ${name} was already bind.`
   );
   DOM_COMPONENT_INSTANCE.set(el, component);
 };

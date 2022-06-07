@@ -1,6 +1,6 @@
 export type DOMNode = HTMLElement | SVGElement;
 
-// export type Cleanup = void | (() => void);
+// type Cleanup = void | (() => void);
 
 type ComponentProps<Props> = Readonly<Props>;
 

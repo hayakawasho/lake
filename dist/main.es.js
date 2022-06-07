@@ -61,11 +61,15 @@ let Owner$1 = null;
 const setOwner = (context) => Owner$1 = context;
 const unsetOwner = () => Owner$1 = null;
 const getOwner = (name) => {
-  assert(Owner$1, `the ${name} lifecycle called outside "setup()" will never be run.`);
+  assert(Owner$1, `"${name}" called outside setup() will never be run.`);
   return Owner$1;
 };
-const onMounted = (fn) => getOwner("onMounted").onMounted.push(fn);
-const onUnmounted = (fn) => getOwner("onUnmounted").onUnmounted.push(fn);
+function onMounted(fn) {
+  getOwner("onMounted").onMounted.push(fn);
+}
+function onUnmounted(fn) {
+  getOwner("onUnmounted").onUnmounted.push(fn);
+}
 class ComponentContext {
   constructor(create, element, props) {
     __publicField(this, "onMounted", []);
@@ -96,9 +100,9 @@ function createComponent$1(wrap) {
     const newProps = __spreadValues(__spreadValues({}, wrap.props), props);
     const context = new ComponentContext(wrap.setup, root, newProps);
     if (wrap.components) {
-      Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach((i) => {
-          const child = createSubComponent(i, subComponent, context);
+      Object.entries(wrap.components).forEach(([selector, sub]) => {
+        q(selector, root).forEach((el) => {
+          const child = createSubComponent(el, sub, context);
           context.addChild(child);
         });
       });
@@ -112,8 +116,8 @@ function createSubComponent(el, child, parent) {
 }
 const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
-const bindDOMNodeToComponent = (el, component, componentName) => {
-  assert(!DOM_COMPONENT_INSTANCE.has(el), `the DOM of ${componentName} was already bind.`);
+const bindDOMNodeToComponent = (el, component, name) => {
+  assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${name} was already bind.`);
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
