@@ -1,6 +1,7 @@
 import type { SvelteComponent } from 'svelte';
 import { getContext } from 'svelte';
-import { defineComponent } from '../core';
+import { defineComponent } from '../core/core';
+import { onUnmounted } from '../core/lifecycle';
 import { domRefs } from '../internal/domRefs';
 import type { DOMNode } from '../internal/types';
 
@@ -27,9 +28,9 @@ export function withSvelte(App: typeof SvelteComponent) {
         context,
       });
 
-      return () => {
+      onUnmounted(() => {
         app.$destroy();
-      };
+      });
     },
   });
 }

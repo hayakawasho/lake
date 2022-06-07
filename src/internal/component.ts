@@ -1,24 +1,41 @@
-import { noop } from '../util/function';
+import { setOwner, unsetOwner } from '../core/lifecycle';
 import { q } from '../util/selector';
-import type { DOMNode, IComponent, Cleanup } from './types';
+import type { DOMNode, IComponent } from './types';
 
 type LifecycleHandler = () => void;
 
 class ComponentContext {
-  private onUnmount: LifecycleHandler[] = [];
-  parent: ComponentContext | null = null;
+  onMounted: LifecycleHandler[] = [];
+  onUnmounted: LifecycleHandler[] = [];
 
-  constructor(create: Cleanup, public element: DOMNode | Document) {
-    const cleanup = create || noop;
-    this.onUnmount.push(cleanup);
+  parent: ComponentContext | null = null;
+  readonly uid: string;
+  readonly provides: Record<string, any>;
+
+  constructor(
+    create: IComponent['setup'],
+    public element: DOMNode,
+    props: Record<string, any>
+  ) {
+    setOwner(this);
+    this.provides = create(element, props) || {};
+    unsetOwner();
+
+    this.uid = element.id;
   }
 
-  unmount = () => {
-    this.onUnmount.forEach(fn => fn());
-  };
+  mount() {
+    this.onMounted.forEach(fn => fn());
+  }
+
+  unmount() {
+    this.onUnmounted.forEach(fn => fn());
+  }
 
   addChild(child: ComponentContext) {
-    this.onUnmount.push(child.unmount);
+    this.onMounted.push(...child.onMounted);
+    this.onUnmounted.push(...child.onUnmounted);
+
     child.parent = this;
   }
 }
@@ -26,13 +43,12 @@ class ComponentContext {
 export function createComponent(wrap: IComponent) {
   return (root: DOMNode, props: Record<string, any>) => {
     const newProps = { ...wrap.props, ...props };
-    const created = wrap.setup(root, newProps);
-    const context = new ComponentContext(created, root);
+    const context = new ComponentContext(wrap.setup, root, newProps);
 
     if (wrap.components) {
-      Object.entries(wrap.components).forEach(([selector, subComponent]) => {
-        q(selector, root).forEach(i => {
-          const child = createSubComponent(i, subComponent, context);
+      Object.entries(wrap.components).forEach(([selector, sub]) => {
+        q(selector, root).forEach(el => {
+          const child = createSubComponent(el, sub, context);
           context.addChild(child);
         });
       });
@@ -42,11 +58,13 @@ export function createComponent(wrap: IComponent) {
   };
 }
 
-function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
-  return createComponent(child)(el, {
-    ...child.props,
-    parent,
-  });
+function createSubComponent(
+  el: DOMNode,
+  child: IComponent,
+  parent: ComponentContext
+) {
+  const props = { ...child.props, ...parent.provides };
+  return createComponent(child)(el, props);
 }
 
 export type { ComponentContext };

@@ -1,10 +1,19 @@
-import type { DOMNode, IComponent, Cleanup } from './types';
+import type { DOMNode, IComponent } from './types';
+declare type LifecycleHandler = () => void;
 declare class ComponentContext {
-  element: DOMNode | Document;
-  private onUnmount;
+  element: DOMNode;
+  onMounted: LifecycleHandler[];
+  onUnmounted: LifecycleHandler[];
   parent: ComponentContext | null;
-  constructor(create: Cleanup, element: DOMNode | Document);
-  unmount: () => void;
+  readonly uid: string;
+  readonly provides: Record<string, any>;
+  constructor(
+    create: IComponent['setup'],
+    element: DOMNode,
+    props: Record<string, any>
+  );
+  mount(): void;
+  unmount(): void;
   addChild(child: ComponentContext): void;
 }
 export declare function createComponent(
