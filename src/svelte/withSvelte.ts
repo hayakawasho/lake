@@ -1,7 +1,7 @@
 import type { SvelteComponent } from 'svelte';
 import { getContext } from 'svelte';
-import { onUnmounted } from '../core/component';
 import { defineComponent } from '../core/core';
+import { onUnmounted } from '../core/lifecycle';
 import { domRefs } from '../internal/domRefs';
 import type { DOMNode } from '../internal/types';
 

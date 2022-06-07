@@ -1,18 +1,8 @@
-// import { noop } from '../util/function';
-import type { DOMNode, IComponent } from '../internal/types';
+import { setOwner, unsetOwner } from '../core/lifecycle';
 import { q } from '../util/selector';
+import type { DOMNode, IComponent } from './types';
 
 type LifecycleHandler = () => void;
-
-let Owner: ComponentContext | null = null;
-
-const setOwner = (context: ComponentContext) => (Owner = context);
-
-const unsetOwner = () => (Owner = null);
-
-export const onMounted = (fn: () => void) => Owner?.onMounted.push(fn);
-
-export const onUnmounted = (fn: () => void) => Owner?.onUnmounted.push(fn);
 
 class ComponentContext {
   onMounted: LifecycleHandler[] = [];
@@ -22,14 +12,18 @@ class ComponentContext {
   readonly uid: string;
   readonly provides: Record<string, any>;
 
-  constructor(create: any, public element: DOMNode, props: Record<string, any>) {
+  constructor(
+    create: IComponent['setup'],
+    public element: DOMNode,
+    context: {
+      props: Record<string, any>;
+    }
+  ) {
     setOwner(this);
-
-    const created = create(element, props);
-    this.provides = created || {};
-
+    const created = create(element, context.props);
     unsetOwner();
 
+    this.provides = created || {};
     this.uid = element.id;
   }
 
@@ -56,7 +50,9 @@ export function createComponent(wrap: IComponent) {
       ...props,
     };
 
-    const context = new ComponentContext(wrap.setup, root, newProps);
+    const context = new ComponentContext(wrap.setup, root, {
+      props: newProps,
+    });
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, subComponent]) => {
