@@ -4,7 +4,7 @@ import type { DOMNode, IComponent } from '../internal/types';
 import { assert } from '../util/assert';
 import { q } from '../util/selector';
 
-const REGISTERED_COMPONENTS_MAP = new Map<
+const REGISTERED_COMPONENTS = new Map<
   string,
   ReturnType<typeof createComponent>
 >();
@@ -26,25 +26,22 @@ const bindDOMNodeToComponent = (
 export const defineComponent = <Props>(options: IComponent<Props>) => options;
 
 export function register(name: string, wrap: IComponent) {
-  assert(
-    !REGISTERED_COMPONENTS_MAP.has(name),
-    `${name} was already registered.`
-  );
-  REGISTERED_COMPONENTS_MAP.set(name, createComponent(wrap));
+  assert(!REGISTERED_COMPONENTS.has(name), `${name} was already registered.`);
+  REGISTERED_COMPONENTS.set(name, createComponent(wrap));
 
-  return REGISTERED_COMPONENTS_MAP;
+  return REGISTERED_COMPONENTS;
 }
 
 export function unregister(name: string) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered.`);
-  REGISTERED_COMPONENTS_MAP.delete(name);
+  assert(REGISTERED_COMPONENTS.has(name), `${name} does not registered.`);
+  REGISTERED_COMPONENTS.delete(name);
 
-  return REGISTERED_COMPONENTS_MAP;
+  return REGISTERED_COMPONENTS;
 }
 
 export function mount(el: DOMNode, props: Record<string, any>, name: string) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered.`);
-  const component = REGISTERED_COMPONENTS_MAP.get(name)!(el, props);
+  assert(REGISTERED_COMPONENTS.has(name), `${name} was never registered.`);
+  const component = REGISTERED_COMPONENTS.get(name)!(el, props);
 
   bindDOMNodeToComponent(el, component, name);
   component.mount();
