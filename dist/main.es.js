@@ -114,7 +114,7 @@ function createSubComponent(el, child, parent) {
   const props = __spreadValues(__spreadValues({}, child.props), parent.provides);
   return createComponent$1(child)(el, props);
 }
-const REGISTERED_COMPONENTS_MAP = /* @__PURE__ */ new Map();
+const REGISTERED_COMPONENTS = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, name) => {
   assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${name} was already bind.`);
@@ -122,18 +122,18 @@ const bindDOMNodeToComponent = (el, component, name) => {
 };
 const defineComponent = (options) => options;
 function register(name, wrap) {
-  assert(!REGISTERED_COMPONENTS_MAP.has(name), `${name} was already registered.`);
-  REGISTERED_COMPONENTS_MAP.set(name, createComponent$1(wrap));
-  return REGISTERED_COMPONENTS_MAP;
+  assert(!REGISTERED_COMPONENTS.has(name), `${name} was already registered.`);
+  REGISTERED_COMPONENTS.set(name, createComponent$1(wrap));
+  return REGISTERED_COMPONENTS;
 }
 function unregister(name) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} does not registered.`);
-  REGISTERED_COMPONENTS_MAP.delete(name);
-  return REGISTERED_COMPONENTS_MAP;
+  assert(REGISTERED_COMPONENTS.has(name), `${name} does not registered.`);
+  REGISTERED_COMPONENTS.delete(name);
+  return REGISTERED_COMPONENTS;
 }
 function mount(el, props, name) {
-  assert(REGISTERED_COMPONENTS_MAP.has(name), `${name} was never registered.`);
-  const component = REGISTERED_COMPONENTS_MAP.get(name)(el, props);
+  assert(REGISTERED_COMPONENTS.has(name), `${name} was never registered.`);
+  const component = REGISTERED_COMPONENTS.get(name)(el, props);
   bindDOMNodeToComponent(el, component, name);
   component.mount();
 }
