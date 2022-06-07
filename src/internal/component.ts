@@ -14,10 +14,9 @@ class ComponentContext {
 
   constructor(create: IComponent['setup'], public element: DOMNode, props: Record<string, any>) {
     setOwner(this);
-    const created = create(element, props);
+    this.provides = create(element, props) || {};
     unsetOwner();
 
-    this.provides = created || {};
     this.uid = element.id;
   }
 
@@ -30,8 +29,8 @@ class ComponentContext {
   };
 
   addChild(child: ComponentContext) {
-    this.onMounted.push(child.mount);
-    this.onUnmounted.push(child.unmount);
+    this.onMounted.push(...child.onMounted);
+    this.onUnmounted.push(...child.onUnmounted);
 
     child.parent = this;
   }
@@ -56,11 +55,7 @@ export function createComponent(wrap: IComponent) {
 }
 
 function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
-  const props = {
-    ...child.props,
-    ...parent.provides,
-    parent,
-  };
+  const props = { ...child.props, ...parent.provides };
   return createComponent(child)(el, props);
 }
 

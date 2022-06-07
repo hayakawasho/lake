@@ -13,7 +13,9 @@ export default defineComponent<{
       isOpen.value ? onClose() : onOpen();
     };
 
-    el.addEventListener('click', onToggle);
+    onMounted(() => {
+      el.addEventListener('click', onToggle);
+    });
 
     onUnmounted(() => {
       el.removeEventListener('click', onToggle);

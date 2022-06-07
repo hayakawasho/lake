@@ -1,5 +1,4 @@
 export declare type DOMNode = HTMLElement | SVGElement;
-export declare type Cleanup = void | (() => void);
 declare type ComponentProps<Props> = Readonly<Props>;
 export interface IComponent<Props = Record<string, any>> {
   components?: {

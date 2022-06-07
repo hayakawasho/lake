@@ -12,7 +12,9 @@ export default defineComponent({
     '.js-parent': Parent,
   },
 
+  props: {},
+
   setup() {
-    /** noop */
+    // noop
   },
 });
