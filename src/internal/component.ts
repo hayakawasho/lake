@@ -5,15 +5,18 @@ import type { DOMNode, IComponent } from './types';
 type LifecycleHandler = () => void;
 
 class ComponentContext {
-  readonly uid: string;
-  readonly provides: Record<string, any>;
-
-  parent: ComponentContext | null = null;
-
   onMounted: LifecycleHandler[] = [];
   onUnmounted: LifecycleHandler[] = [];
 
-  constructor(create: IComponent['setup'], public element: DOMNode, props: Record<string, any>) {
+  parent: ComponentContext | null = null;
+  readonly uid: string;
+  readonly provides: Record<string, any>;
+
+  constructor(
+    create: IComponent['setup'],
+    public element: DOMNode,
+    props: Record<string, any>
+  ) {
     setOwner(this);
     this.provides = create(element, props) || {};
     unsetOwner();
@@ -55,7 +58,11 @@ export function createComponent(wrap: IComponent) {
   };
 }
 
-function createSubComponent(el: DOMNode, child: IComponent, parent: ComponentContext) {
+function createSubComponent(
+  el: DOMNode,
+  child: IComponent,
+  parent: ComponentContext
+) {
   const props = { ...child.props, ...parent.provides };
   return createComponent(child)(el, props);
 }
