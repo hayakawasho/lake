@@ -39,11 +39,7 @@ class ComponentContext {
 
 export function createComponent(wrap: IComponent) {
   return (root: DOMNode, props: Record<string, any>) => {
-    const newProps = {
-      ...wrap.props,
-      ...props,
-    };
-
+    const newProps = { ...wrap.props, ...props };
     const context = new ComponentContext(wrap.setup, root, newProps);
 
     if (wrap.components) {
