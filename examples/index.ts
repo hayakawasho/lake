@@ -1,4 +1,4 @@
-import { mount, unmount, register, q as __ } from '../src/main';
+import { mount, unmount, register, q as __ } from '../lib/main';
 import Index from './IndexPage';
 
 document.addEventListener('DOMContentLoaded', () => {

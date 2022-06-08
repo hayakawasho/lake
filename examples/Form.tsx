@@ -1,6 +1,6 @@
 import { onCleanup, onMount } from 'solid-js';
 
-export default function () {
+export default () => {
   onMount(() => {
     console.log('onMount');
   });
@@ -14,4 +14,4 @@ export default function () {
       <button type="submit">POST</button>
     </form>
   );
-}
+};

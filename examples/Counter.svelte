@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext$, useEvent } from '../src/main'
+  import { getContext$, useEvent } from '../lib/main'
 
   type Refs = {
     increment: HTMLButtonElement
