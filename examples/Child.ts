@@ -1,5 +1,5 @@
-import { defineComponent, onMounted, onUnmounted } from '../src/main';
-import type { Ref } from '../src/main';
+import { defineComponent, onMounted, onUnmounted } from '../app/src/main';
+import type { Ref } from '../app/src/main';
 
 export default defineComponent<{
   isOpen: Ref<boolean>;
@@ -8,10 +8,7 @@ export default defineComponent<{
 }>({
   setup(el, props) {
     const { onOpen, onClose, isOpen } = props;
-
-    const onToggle = () => {
-      isOpen.value ? onClose() : onOpen();
-    };
+    const onToggle = () => (isOpen.value ? onClose() : onOpen());
 
     onMounted(() => {
       el.addEventListener('click', onToggle);

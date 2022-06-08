@@ -1,4 +1,4 @@
-import { defineComponent, withSvelte, withSolid } from '../src/main';
+import { defineComponent, withSvelte } from '../lib/main';
 // @ts-ignore
 import Counter from './Counter.svelte';
 // @ts-ignore
@@ -8,7 +8,7 @@ import Parent from './Parent';
 export default defineComponent({
   components: {
     '.js-counter': withSvelte(Counter),
-    '.js-form': withSolid(Form),
+    // '.js-form': withSolid(Form),
     '.js-parent': Parent,
   },
 

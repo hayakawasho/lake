@@ -1,4 +1,4 @@
-import { defineComponent, ref } from '../src/main';
+import { defineComponent, ref } from '../lib/main';
 import Child from './Child';
 
 export default defineComponent({
