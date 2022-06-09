@@ -1,3 +1,4 @@
+import { domRefs } from '../internal/domRefs';
 import { setOwner, unsetOwner } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
 import { q } from '../util/selector';
@@ -5,12 +6,12 @@ import { q } from '../util/selector';
 type LifecycleHandler = () => void;
 
 class ComponentContext {
-  readonly onMounted: LifecycleHandler[] = [];
-  readonly onUnmounted: LifecycleHandler[] = [];
+  onMounted: LifecycleHandler[] = [];
+  onUnmounted: LifecycleHandler[] = [];
 
   parent: ComponentContext | null = null;
   readonly uid: string;
-  readonly provides: Record<string, any>;
+  readonly provides: Readonly<Record<string, unknown>>;
 
   constructor(
     create: IComponent['setup'],
@@ -18,7 +19,15 @@ class ComponentContext {
     props: Record<string, any>
   ) {
     setOwner(this);
-    const created = create(element, props);
+    const created = create(element, props, {
+      mixin: {
+        useDOMRef: (...ref) => {
+          return {
+            refs: domRefs(new Set(ref), element),
+          };
+        },
+      },
+    });
     unsetOwner();
 
     this.provides = created || {};

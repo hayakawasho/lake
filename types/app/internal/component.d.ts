@@ -2,11 +2,11 @@ import type { RefElement, IComponent } from '../types';
 declare type LifecycleHandler = () => void;
 declare class ComponentContext {
   element: RefElement;
-  readonly onMounted: LifecycleHandler[];
-  readonly onUnmounted: LifecycleHandler[];
+  onMounted: LifecycleHandler[];
+  onUnmounted: LifecycleHandler[];
   parent: ComponentContext | null;
   readonly uid: string;
-  readonly provides: Record<string, any>;
+  readonly provides: Readonly<Record<string, unknown>>;
   constructor(
     create: IComponent['setup'],
     element: RefElement,

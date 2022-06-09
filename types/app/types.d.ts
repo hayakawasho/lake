@@ -1,5 +1,5 @@
 export declare type RefElement = HTMLElement | SVGElement;
-declare type ComponentProps<Props> = Readonly<Props>;
+export declare type ComponentProps<Props> = Readonly<Props>;
 export interface IComponent<Props = Record<string, unknown>> {
   components?: {
     [selector: string]: IComponent;
@@ -7,8 +7,14 @@ export interface IComponent<Props = Record<string, unknown>> {
   props?: ComponentProps<Props>;
   setup(
     el: RefElement,
-    props: ComponentProps<Props>
+    props: ComponentProps<Props>,
+    context: {
+      mixin: {
+        useDOMRef: <T>(...refKey: string[]) => {
+          refs: T;
+        };
+      };
+    }
   ): void | Record<string, unknown>;
 }
-export {};
 //# sourceMappingURL=types.d.ts.map

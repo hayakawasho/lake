@@ -1,6 +1,6 @@
 export type RefElement = HTMLElement | SVGElement;
 
-type ComponentProps<Props> = Readonly<Props>;
+export type ComponentProps<Props> = Readonly<Props>;
 
 export interface IComponent<Props = Record<string, unknown>> {
   components?: {
@@ -9,6 +9,11 @@ export interface IComponent<Props = Record<string, unknown>> {
   props?: ComponentProps<Props>;
   setup(
     el: RefElement,
-    props: ComponentProps<Props>
+    props: ComponentProps<Props>,
+    context: {
+      mixin: {
+        useDOMRef: <T>(...refKey: string[]) => { refs: T };
+      };
+    }
   ): void | Record<string, unknown>;
 }

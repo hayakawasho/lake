@@ -1,7 +1,6 @@
 import type { SvelteComponent } from 'svelte';
 import type { RefElement } from '../app/types';
 import { defineComponent, onUnmounted } from '../main';
-import { domRefs } from './domRefs';
 
 export type Context$ = {
   rootRef: RefElement;
@@ -10,14 +9,13 @@ export type Context$ = {
 
 export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
-    setup(el, props) {
+    setup(el, props, { mixin }) {
       const context = new Map<'$', Context$>();
+      const { useDOMRef } = mixin;
 
       context.set('$', {
         rootRef: el,
-        useDOMRef: (...ref) => ({
-          refs: domRefs(new Set(ref), el),
-        }),
+        useDOMRef,
       });
 
       const app = new App({

@@ -14,7 +14,7 @@ class Ref<T> {
   }
 }
 
-const ref = <T = unknown>(val: T) => new Ref(val);
+const ref = <T = any>(val: T) => new Ref(val);
 
 class ReadonlyRef<T> {
   #ref: Ref<T>;
@@ -28,7 +28,7 @@ class ReadonlyRef<T> {
   }
 }
 
-const readonly = <T = unknown>(ref: Ref<T>) => new ReadonlyRef(ref);
+const readonly = <T = any>(ref: Ref<T>) => new ReadonlyRef(ref);
 
 export { ref, readonly };
 export type { Ref, ReadonlyRef };
