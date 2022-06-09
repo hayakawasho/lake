@@ -1,6 +1,6 @@
 import type { ComponentContext } from './internal/component';
 import { createComponent } from './internal/component';
-import type { DOMNode, IComponent } from './internal/types';
+import type { RefElement, IComponent } from './types';
 import { assert } from './util/assert';
 import { q } from './util/selector';
 
@@ -9,10 +9,10 @@ const REGISTERED_COMPONENTS = new Map<
   ReturnType<typeof createComponent>
 >();
 
-const DOM_COMPONENT_INSTANCE = new WeakMap<DOMNode, ComponentContext>();
+const DOM_COMPONENT_INSTANCE = new WeakMap<RefElement, ComponentContext>();
 
 const bindDOMNodeToComponent = (
-  el: DOMNode,
+  el: RefElement,
   component: ComponentContext,
   name: string
 ) => {
@@ -39,7 +39,11 @@ export function unregister(name: string) {
   return REGISTERED_COMPONENTS;
 }
 
-export function mount(el: DOMNode, props: Record<string, any>, name: string) {
+export function mount(
+  el: RefElement,
+  props: Record<string, any>,
+  name: string
+) {
   assert(REGISTERED_COMPONENTS.has(name), `${name} was never registered.`);
   const component = REGISTERED_COMPONENTS.get(name)!(el, props);
 
@@ -47,7 +51,7 @@ export function mount(el: DOMNode, props: Record<string, any>, name: string) {
   component.mount();
 }
 
-export function unmount(selector: string, scope?: DOMNode) {
+export function unmount(selector: string, scope?: RefElement) {
   q(selector, scope)
     .filter(el => DOM_COMPONENT_INSTANCE.has(el))
     .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());

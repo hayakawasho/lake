@@ -1,6 +1,6 @@
 import { setOwner, unsetOwner } from '../lifecycle';
+import type { RefElement, IComponent } from '../types';
 import { q } from '../util/selector';
-import type { DOMNode, IComponent } from './types';
 
 type LifecycleHandler = () => void;
 
@@ -14,7 +14,7 @@ class ComponentContext {
 
   constructor(
     create: IComponent['setup'],
-    public element: DOMNode,
+    public element: RefElement,
     props: Record<string, any>
   ) {
     setOwner(this);
@@ -42,7 +42,7 @@ class ComponentContext {
 }
 
 export function createComponent(wrap: IComponent) {
-  return (root: DOMNode, props: Record<string, any>) => {
+  return (root: RefElement, props: Record<string, any>) => {
     const newProps = {
       ...wrap.props,
       ...props,
@@ -63,7 +63,7 @@ export function createComponent(wrap: IComponent) {
 }
 
 function createSubComponent(
-  el: DOMNode,
+  el: RefElement,
   child: IComponent,
   parent: ComponentContext
 ) {

@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted } from '../main';
+import { onUnmounted } from '../main';
 
 type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
@@ -12,9 +12,7 @@ export const useEvent = <
   eventType: K,
   listener: ElementEventListener<K>
 ) => {
-  onMounted(() => {
-    target.addEventListener(eventType, listener);
-  });
+  target.addEventListener(eventType, listener);
 
   onUnmounted(() => {
     target.removeEventListener(eventType, listener);

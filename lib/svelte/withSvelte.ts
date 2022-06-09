@@ -1,10 +1,10 @@
 import type { SvelteComponent } from 'svelte';
-import type { DOMNode } from '../app/internal/types';
+import type { RefElement } from '../app/types';
 import { defineComponent, onUnmounted } from '../main';
 import { domRefs } from './domRefs';
 
 export type Context$ = {
-  rootRef: DOMNode;
+  rootRef: RefElement;
   useDOMRef: <T>(...refKey: string[]) => { refs: T };
 };
 
