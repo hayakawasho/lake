@@ -15,9 +15,7 @@
     "declarationDir": "./types",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "noImplicitReturns": true
   },
   "include": ["lib"]
 }

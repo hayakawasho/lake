@@ -24,8 +24,7 @@
     "component register",
     "functional component",
     "dom binding",
-    "svelte",
-    "solid"
+    "svelte"
   ],
   "scripts": {
     "prepare": "husky install",
@@ -50,13 +49,11 @@
     "husky": "8.0.1",
     "lint-staged": "13.0.0",
     "prettier": "2.6.2",
-    "solid-js": "1.4.3",
     "svelte": "3.48.0",
     "svelte-check": "2.7.2",
     "svelte-preprocess": "4.10.7",
     "typescript": "4.7.3",
-    "vite": "2.9.10",
-    "vite-plugin-solid": "2.2.6"
+    "vite": "2.9.10"
   },
   "dependencies": {},
   "prepare": "husky install",
