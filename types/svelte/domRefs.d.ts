@@ -1,3 +1,3 @@
-import type { DOMNode } from '../src/internal/types';
-export declare function domRefs(ref: Set<string>, scope: DOMNode): any;
+import type { RefElement } from '../app/types';
+export declare function domRefs(ref: Set<string>, scope: RefElement): any;
 //# sourceMappingURL=domRefs.d.ts.map

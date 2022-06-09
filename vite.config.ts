@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import preprocess from 'svelte-preprocess';
-import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
   build: {
@@ -16,6 +15,5 @@ export default defineConfig({
     svelte({
       preprocess: preprocess(),
     }),
-    solidPlugin(),
   ],
 });

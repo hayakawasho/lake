@@ -36,10 +36,10 @@ var __privateSet = (obj, member, value, setter) => {
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var _rawValue;
-function assert(condition, msg) {
+var _rawValue, _ref;
+function assert(condition, message) {
   if (!condition) {
-    throw new Error(msg || `unexpected condition`);
+    throw new Error(message || `unexpected condition`);
   }
 }
 const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
@@ -59,6 +59,17 @@ class Ref {
 }
 _rawValue = new WeakMap();
 const ref = (val) => new Ref(val);
+class ReadonlyRef {
+  constructor(value) {
+    __privateAdd(this, _ref, void 0);
+    __privateSet(this, _ref, value);
+  }
+  get value() {
+    return __privateGet(this, _ref).value;
+  }
+}
+_ref = new WeakMap();
+const readonly = (ref2) => new ReadonlyRef(ref2);
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
@@ -143,6 +154,12 @@ function mount(el, props, name) {
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
+const useEvent = (target, eventType, listener) => {
+  target.addEventListener(eventType, listener);
+  onUnmounted(() => {
+    target.removeEventListener(eventType, listener);
+  });
+};
 function domRefs(ref2, scope) {
   const findRef = (query) => {
     const nodes = q(`[data-ref="${query}"]`, scope);
@@ -185,18 +202,4 @@ function withSvelte(App) {
     }
   });
 }
-let current_component;
-function get_current_component() {
-  throw new Error("Function called outside component initialization");
-}
-function onDestroy(fn) {
-  get_current_component().$$.on_destroy.push(fn);
-}
-Promise.resolve();
-const useEvent = (target, eventType, listener) => {
-  target.addEventListener(eventType, listener);
-  onDestroy(() => {
-    target.removeEventListener(eventType, listener);
-  });
-};
-export { assert, defineComponent, mount, noop, onMounted, onUnmounted, q, ref, register, unmount, unregister, useEvent, withSvelte };
+export { assert, defineComponent, mount, noop, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useEvent, withSvelte };

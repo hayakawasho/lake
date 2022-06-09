@@ -1,15 +1,18 @@
-export { assert } from './src/util/assert';
-export { q } from './src/util/selector';
-export { noop } from './src/util/function';
-export type { Ref } from './src/ref';
-export { ref } from './src/ref';
+export { assert } from './app/util/assert';
+export { q } from './app/util/selector';
+export { noop } from './app/util/function';
+export type { RefElement } from './app/types';
+export type { Ref, ReadonlyRef } from './app/ref';
+export { ref, readonly } from './app/ref';
 export {
   defineComponent,
   register,
   unregister,
   mount,
   unmount,
-} from './src/core';
-export { onMounted, onUnmounted } from './src/lifecycle';
-export * from './svelte';
+} from './app/core';
+export { onMounted, onUnmounted } from './app/lifecycle';
+export { useEvent } from './app/useEvent';
+export type { Context$ } from './svelte/withSvelte';
+export { withSvelte } from './svelte/withSvelte';
 //# sourceMappingURL=main.d.ts.map
