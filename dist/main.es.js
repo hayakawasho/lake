@@ -70,6 +70,27 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
+function domRefs(ref2, scope) {
+  const findRef = (query) => {
+    const nodes = q(`[data-ref="${query}"]`, scope);
+    return reducer(nodes, query);
+  };
+  const reducer = (nodes, query) => {
+    switch (nodes.length) {
+      case 0:
+        throw new Error(`[data-ref="${query}"] does not exist`);
+      case 1:
+        return nodes[0];
+      default:
+        return nodes;
+    }
+  };
+  const childRef = [...ref2].reduce((acc, cur) => {
+    acc[cur] = findRef(cur);
+    return acc;
+  }, {});
+  return childRef;
+}
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
@@ -92,7 +113,15 @@ class ComponentContext {
     __publicField(this, "provides");
     this.element = element;
     setOwner(this);
-    const created = create(element, props);
+    const created = create(element, props, {
+      mixin: {
+        useDOMRef: (...ref2) => {
+          return {
+            refs: domRefs(new Set(ref2), element)
+          };
+        }
+      }
+    });
     unsetOwner();
     this.provides = created || {};
     this.uid = element.id;
@@ -160,36 +189,14 @@ const useEvent = (target, eventType, listener) => {
     target.removeEventListener(eventType, listener);
   });
 };
-function domRefs(ref2, scope) {
-  const findRef = (query) => {
-    const nodes = q(`[data-ref="${query}"]`, scope);
-    return reducer(nodes, query);
-  };
-  const reducer = (nodes, query) => {
-    switch (nodes.length) {
-      case 0:
-        throw new Error(`[data-ref="${query}"] does not exist`);
-      case 1:
-        return nodes[0];
-      default:
-        return nodes;
-    }
-  };
-  const childRef = [...ref2].reduce((acc, cur) => {
-    acc[cur] = findRef(cur);
-    return acc;
-  }, {});
-  return childRef;
-}
 function withSvelte(App) {
   return defineComponent({
-    setup(el, props) {
+    setup(el, props, { mixin }) {
       const context = /* @__PURE__ */ new Map();
+      const { useDOMRef } = mixin;
       context.set("$", {
         rootRef: el,
-        useDOMRef: (...ref2) => ({
-          refs: domRefs(new Set(ref2), el)
-        })
+        useDOMRef
       });
       const app = new App({
         target: el,

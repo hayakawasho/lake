@@ -16,13 +16,13 @@
 
   $: refs.count.textContent = count + ''
 
-  useEvent(refs.increment, 'click', evt => {
-    evt.preventDefault()
+  useEvent(refs.increment, 'click', e => {
+    e.preventDefault()
     count++
   })
 
-  useEvent(refs.decrement, 'click', evt => {
-    evt.preventDefault()
+  useEvent(refs.decrement, 'click', e => {
+    e.preventDefault()
     count--
   })
 </script>
