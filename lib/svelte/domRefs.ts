@@ -1,5 +1,5 @@
+import type { DOMNode } from '../app/internal/types';
 import { q } from '../main';
-import type { DOMNode } from '../src/internal/types';
 
 export function domRefs(ref: Set<string>, scope: DOMNode) {
   const findRef = (query: string) => {

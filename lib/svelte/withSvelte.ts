@@ -1,6 +1,6 @@
 import type { SvelteComponent } from 'svelte';
+import type { DOMNode } from '../app/internal/types';
 import { defineComponent, onUnmounted } from '../main';
-import type { DOMNode } from '../src/internal/types';
 import { domRefs } from './domRefs';
 
 export type Context$ = {

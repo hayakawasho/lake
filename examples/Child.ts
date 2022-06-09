@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onUnmounted } from '../lib/main';
+import { defineComponent, useEvent } from '../lib/main';
 import type { ReadonlyRef } from '../lib/main';
 
 export default defineComponent<{
@@ -8,16 +8,10 @@ export default defineComponent<{
 }>({
   setup(el, props) {
     const { onOpen, onClose, isOpen } = props;
-    const onToggle = () => {
+
+    useEvent(el as HTMLElement, 'click', e => {
+      e.preventDefault();
       isOpen.value ? onClose() : onOpen();
-    };
-
-    onMounted(() => {
-      el.addEventListener('click', onToggle);
-    });
-
-    onUnmounted(() => {
-      el.removeEventListener('click', onToggle);
     });
   },
 });
