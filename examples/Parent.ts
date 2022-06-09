@@ -1,4 +1,4 @@
-import { defineComponent, ref } from '../lib/main';
+import { defineComponent, ref, readonly } from '../lib/main';
 import Child from './Child';
 
 export default defineComponent({
@@ -10,7 +10,7 @@ export default defineComponent({
     const isOpen = ref(false);
 
     return {
-      isOpen,
+      isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;
       },

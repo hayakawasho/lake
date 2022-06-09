@@ -14,6 +14,23 @@ class Ref<T> {
   }
 }
 
-export const ref = <T = any>(val: T) => new Ref(val);
+const ref = <T = any>(val: T) => new Ref(val);
 
-export type { Ref };
+class ReadonlyRef<T> {
+  #ref: Ref<T>;
+
+  constructor(value: Ref<T>) {
+    this.#ref = value;
+  }
+
+  get value() {
+    return this.#ref.value;
+  }
+}
+
+const readonly = <T = any>(ref: Ref<T>) => {
+  return new ReadonlyRef(ref);
+};
+
+export { ref, readonly };
+export type { Ref, ReadonlyRef };

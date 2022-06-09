@@ -2,8 +2,8 @@ export { assert } from './src/util/assert';
 export { q } from './src/util/selector';
 export { noop } from './src/util/function';
 
-export type { Ref } from './src/ref';
-export { ref } from './src/ref';
+export type { Ref, ReadonlyRef } from './src/ref';
+export { ref, readonly } from './src/ref';
 export {
   defineComponent,
   register,
