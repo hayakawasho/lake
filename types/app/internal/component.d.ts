@@ -1,4 +1,5 @@
 import type { RefElement, IComponent } from '../types';
+export declare const getOwner: (hookname: string) => ComponentContext;
 declare type LifecycleHandler = () => void;
 declare class ComponentContext {
   element: RefElement;

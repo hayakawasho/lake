@@ -70,40 +70,13 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
-function domRefs(ref2, scope) {
-  const findRef = (query) => {
-    const nodes = q(`[data-ref="${query}"]`, scope);
-    return reducer(nodes, query);
-  };
-  const reducer = (nodes, query) => {
-    switch (nodes.length) {
-      case 0:
-        throw new Error(`[data-ref="${query}"] does not exist`);
-      case 1:
-        return nodes[0];
-      default:
-        return nodes;
-    }
-  };
-  const childRef = [...ref2].reduce((acc, cur) => {
-    acc[cur] = findRef(cur);
-    return acc;
-  }, {});
-  return childRef;
-}
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
-const getOwner = (name) => {
-  assert(Owner, `"${name}" called outside setup() will never be run.`);
+const getOwner = (hookname) => {
+  assert(Owner, `"${hookname}" called outside setup() will never be run.`);
   return Owner;
 };
-function onMounted(fn) {
-  getOwner("onMounted").onMounted.push(fn);
-}
-function onUnmounted(fn) {
-  getOwner("onUnmounted").onUnmounted.push(fn);
-}
 class ComponentContext {
   constructor(create, element, props) {
     __publicField(this, "onMounted", []);
@@ -113,15 +86,7 @@ class ComponentContext {
     __publicField(this, "provides");
     this.element = element;
     setOwner(this);
-    const created = create(element, props, {
-      mixin: {
-        useDOMRef: (...ref2) => {
-          return {
-            refs: domRefs(new Set(ref2), element)
-          };
-        }
-      }
-    });
+    const created = create(element, props);
     unsetOwner();
     this.provides = created || {};
     this.uid = element.id;
@@ -183,21 +148,56 @@ function mount(el, props, name) {
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
+function onMounted(fn) {
+  getOwner("onMounted").onMounted.push(fn);
+}
+function onUnmounted(fn) {
+  getOwner("onUnmounted").onUnmounted.push(fn);
+}
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
   onUnmounted(() => {
     target.removeEventListener(eventType, listener);
   });
 };
+function domRefs(ref2, scope) {
+  const findRef = (query) => {
+    const nodes = q(`[data-ref="${query}"]`, scope);
+    return reducer(nodes, query);
+  };
+  const reducer = (nodes, query) => {
+    switch (nodes.length) {
+      case 0:
+        throw new Error(`[data-ref="${query}"] does not exist`);
+      case 1:
+        return nodes[0];
+      default:
+        return nodes;
+    }
+  };
+  const childRef = [...ref2].reduce((acc, cur) => {
+    acc[cur] = findRef(cur);
+    return acc;
+  }, {});
+  return childRef;
+}
+function useDOMRef(...refKey) {
+  const context = getOwner("domRef");
+  return {
+    refs: domRefs(new Set(refKey), context.element)
+  };
+}
 function withSvelte(App) {
   return defineComponent({
-    setup(el, props, { mixin }) {
-      const context = /* @__PURE__ */ new Map();
-      const { useDOMRef } = mixin;
-      context.set("$", {
-        rootRef: el,
-        useDOMRef
-      });
+    setup(el, props) {
+      const context = /* @__PURE__ */ new Map([
+        [
+          "$",
+          {
+            rootRef: el
+          }
+        ]
+      ]);
       const app = new App({
         target: el,
         props,
@@ -209,4 +209,4 @@ function withSvelte(App) {
     }
   });
 }
-export { assert, defineComponent, mount, noop, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useEvent, withSvelte };
+export { assert, defineComponent, mount, noop, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, withSvelte };
