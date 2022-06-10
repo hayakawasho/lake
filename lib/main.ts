@@ -14,6 +14,7 @@ export {
 } from './app/core';
 export { onMounted, onUnmounted } from './app/lifecycle';
 export { useEvent } from './app/useEvent';
+export { useDOMRef } from './app/useDOMRef';
 
 export type { Context$ } from './svelte/withSvelte';
 export { withSvelte } from './svelte/withSvelte';
