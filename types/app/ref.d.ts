@@ -1,8 +1,8 @@
 declare class Ref<T> {
   #private;
   constructor(value: T);
-  set value(newVal: T);
   get value(): T;
+  set value(newVal: T);
 }
 declare const ref: <T = any>(val: T) => Ref<T>;
 declare class ReadonlyRef<T> {

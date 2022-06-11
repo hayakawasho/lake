@@ -37,24 +37,17 @@ var __privateSet = (obj, member, value, setter) => {
   return value;
 };
 var _rawValue, _ref;
-function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message || `unexpected condition`);
-  }
-}
 const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
-const noop = () => {
-};
 class Ref {
   constructor(value) {
     __privateAdd(this, _rawValue, void 0);
     __privateSet(this, _rawValue, value);
   }
-  set value(newVal) {
-    __privateSet(this, _rawValue, newVal);
-  }
   get value() {
     return __privateGet(this, _rawValue);
+  }
+  set value(newVal) {
+    __privateSet(this, _rawValue, newVal);
   }
 }
 _rawValue = new WeakMap();
@@ -70,13 +63,23 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message || `unexpected condition`);
+  }
+}
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
-const getOwner = (hookname) => {
-  assert(Owner, `"${hookname}" called outside setup() will never be run.`);
+const getOwner = (hookName) => {
+  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
   return Owner;
 };
+var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
+  LifecycleHooks2["MOUNTED"] = "onMounted";
+  LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
+  return LifecycleHooks2;
+})(LifecycleHooks || {});
 class ComponentContext {
   constructor(create, element, props) {
     __publicField(this, "onMounted", []);
@@ -125,7 +128,10 @@ function createSubComponent(el, child, parent) {
 const REGISTERED_COMPONENTS = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, name) => {
-  assert(!DOM_COMPONENT_INSTANCE.has(el), `The DOM of ${name} was already bind.`);
+  if (DOM_COMPONENT_INSTANCE.has(el)) {
+    console.error(`The DOM of ${name} was already bind.`);
+    return;
+  }
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
@@ -148,12 +154,14 @@ function mount(el, props, name) {
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
-function onMounted(fn) {
-  getOwner("onMounted").onMounted.push(fn);
+function createLifecycleHook(lifecycleType) {
+  return (hookHandler) => {
+    const context = getOwner(lifecycleType);
+    context[lifecycleType].push(hookHandler);
+  };
 }
-function onUnmounted(fn) {
-  getOwner("onUnmounted").onUnmounted.push(fn);
-}
+const onMounted = createLifecycleHook(LifecycleHooks.MOUNTED);
+const onUnmounted = createLifecycleHook(LifecycleHooks.MOUNTED);
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
   onUnmounted(() => {
@@ -168,7 +176,8 @@ function domRefs(ref2, scope) {
   const reducer = (nodes, query) => {
     switch (nodes.length) {
       case 0:
-        throw new Error(`[data-ref="${query}"] does not exist`);
+        console.warn(`[data-ref="${query}"] does not exist.`);
+        return null;
       case 1:
         return nodes[0];
       default:
@@ -209,4 +218,4 @@ function withSvelte(App) {
     }
   });
 }
-export { assert, defineComponent, mount, noop, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, withSvelte };
+export { defineComponent, mount, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, withSvelte };
