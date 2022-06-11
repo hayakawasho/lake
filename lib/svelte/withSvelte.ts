@@ -4,19 +4,19 @@ import { defineComponent, onUnmounted } from '../main';
 
 export type Context$ = {
   rootRef: RefElement;
-  useDOMRef: <T>(...refKey: string[]) => { refs: T };
 };
 
 export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
-    setup(el, props, { mixin }) {
-      const context = new Map<'$', Context$>();
-      const { useDOMRef } = mixin;
-
-      context.set('$', {
-        rootRef: el,
-        useDOMRef,
-      });
+    setup(el, props) {
+      const context = new Map<'$', Context$>([
+        [
+          '$',
+          {
+            rootRef: el,
+          },
+        ],
+      ]);
 
       const app = new App({
         target: el,

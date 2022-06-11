@@ -5,12 +5,12 @@ class Ref<T> {
     this.#rawValue = value;
   }
 
-  set value(newVal: T) {
-    this.#rawValue = newVal;
-  }
-
   get value() {
     return this.#rawValue;
+  }
+
+  set value(newVal: T) {
+    this.#rawValue = newVal;
   }
 }
 

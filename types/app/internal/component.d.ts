@@ -1,9 +1,14 @@
 import type { RefElement, IComponent } from '../types';
-declare type LifecycleHandler = () => void;
+export declare const getOwner: (hookName: string) => ComponentContext;
+export declare const enum LifecycleHooks {
+  MOUNTED = 'onMounted',
+  UNMOUNTED = 'onUnmounted',
+}
+export declare type LifecycleHandler = () => void;
 declare class ComponentContext {
   element: RefElement;
-  onMounted: LifecycleHandler[];
-  onUnmounted: LifecycleHandler[];
+  [LifecycleHooks.MOUNTED]: LifecycleHandler[];
+  [LifecycleHooks.UNMOUNTED]: LifecycleHandler[];
   parent: ComponentContext | null;
   readonly uid: string;
   readonly provides: Readonly<Record<string, unknown>>;

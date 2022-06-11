@@ -1,13 +1,28 @@
-import { domRefs } from '../internal/domRefs';
-import { setOwner, unsetOwner } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
+import { assert } from '../util/assert';
 import { q } from '../util/selector';
 
-type LifecycleHandler = () => void;
+let Owner: ComponentContext | null = null;
+
+const setOwner = (context: ComponentContext) => (Owner = context);
+
+const unsetOwner = () => (Owner = null);
+
+export const getOwner = (hookName: string) => {
+  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
+  return Owner;
+};
+
+export const enum LifecycleHooks {
+  MOUNTED = 'onMounted',
+  UNMOUNTED = 'onUnmounted',
+}
+
+export type LifecycleHandler = () => void;
 
 class ComponentContext {
-  onMounted: LifecycleHandler[] = [];
-  onUnmounted: LifecycleHandler[] = [];
+  [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
+  [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
   parent: ComponentContext | null = null;
   readonly uid: string;
@@ -19,15 +34,7 @@ class ComponentContext {
     props: Record<string, any>
   ) {
     setOwner(this);
-    const created = create(element, props, {
-      mixin: {
-        useDOMRef: (...ref) => {
-          return {
-            refs: domRefs(new Set(ref), element),
-          };
-        },
-      },
-    });
+    const created = create(element, props);
     unsetOwner();
 
     this.provides = created || {};

@@ -7,14 +7,7 @@ export interface IComponent<Props = Record<string, unknown>> {
   props?: ComponentProps<Props>;
   setup(
     el: RefElement,
-    props: ComponentProps<Props>,
-    context: {
-      mixin: {
-        useDOMRef: <T>(...refKey: string[]) => {
-          refs: T;
-        };
-      };
-    }
+    props: ComponentProps<Props>
   ): void | Record<string, unknown>;
 }
 //# sourceMappingURL=types.d.ts.map

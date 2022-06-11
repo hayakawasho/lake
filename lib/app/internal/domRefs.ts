@@ -10,7 +10,8 @@ export function domRefs(ref: Set<string>, scope: RefElement) {
   const reducer = (nodes: RefElement[], query: string) => {
     switch (nodes.length) {
       case 0:
-        throw new Error(`[data-ref="${query}"] does not exist`);
+        console.warn(`[data-ref="${query}"] does not exist.`);
+        return null;
       case 1:
         return nodes[0];
       default:
