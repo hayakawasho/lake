@@ -8,16 +8,21 @@ const setOwner = (context: ComponentContext) => (Owner = context);
 
 const unsetOwner = () => (Owner = null);
 
-export const getOwner = (hookname: string) => {
-  assert(Owner, `"${hookname}" called outside setup() will never be run.`);
+export const getOwner = (hookName: string) => {
+  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
   return Owner;
 };
 
-type LifecycleHandler = () => void;
+export const enum LifecycleHooks {
+  MOUNTED = 'onMounted',
+  UNMOUNTED = 'onUnmounted',
+}
+
+export type LifecycleHandler = () => void;
 
 class ComponentContext {
-  onMounted: LifecycleHandler[] = [];
-  onUnmounted: LifecycleHandler[] = [];
+  [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
+  [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
   parent: ComponentContext | null = null;
   readonly uid: string;

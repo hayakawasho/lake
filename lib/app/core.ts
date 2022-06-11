@@ -16,12 +16,15 @@ const bindDOMNodeToComponent = (
   component: ComponentContext,
   name: string
 ) => {
-  assert(
-    !DOM_COMPONENT_INSTANCE.has(el),
-    `The DOM of ${name} was already bind.`
-  );
+  if (DOM_COMPONENT_INSTANCE.has(el)) {
+    console.error(`The DOM of ${name} was already bind.`);
+    return;
+  }
+
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
+
+//----------------------------------------------------------------
 
 export const defineComponent = <Props>(options: IComponent<Props>) => options;
 

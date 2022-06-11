@@ -1,5 +1,5 @@
-import { getOwner } from './internal/component';
-import { domRefs } from './internal/domRefs';
+import { getOwner } from '../internal/component';
+import { domRefs } from '../internal/domRefs';
 
 export function useDOMRef<T>(...refKey: string[]): {
   refs: T;
