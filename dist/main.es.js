@@ -154,14 +154,14 @@ function mount(el, props, name) {
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
-function createLifecycleHook(lifecycleType) {
-  return (hookHandler) => {
+const createHook = (lifecycleType) => {
+  return (hook) => {
     const context = getOwner(lifecycleType);
-    context[lifecycleType].push(hookHandler);
+    context[lifecycleType].push(hook);
   };
-}
-const onMounted = createLifecycleHook(LifecycleHooks.MOUNTED);
-const onUnmounted = createLifecycleHook(LifecycleHooks.MOUNTED);
+};
+const onMounted = createHook(LifecycleHooks.MOUNTED);
+const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
   onUnmounted(() => {

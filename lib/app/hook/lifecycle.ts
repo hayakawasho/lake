@@ -1,13 +1,13 @@
 import { getOwner, LifecycleHooks } from '../internal/component';
 import type { LifecycleHandler } from '../internal/component';
 
-function createLifecycleHook(lifecycleType: LifecycleHooks) {
-  return (hookHandler: LifecycleHandler) => {
+const createHook = (lifecycleType: LifecycleHooks) => {
+  return (hook: LifecycleHandler) => {
     const context = getOwner(lifecycleType);
-    context[lifecycleType].push(hookHandler);
+    context[lifecycleType].push(hook);
   };
-}
+};
 
-export const onMounted = createLifecycleHook(LifecycleHooks.MOUNTED);
+export const onMounted = createHook(LifecycleHooks.MOUNTED);
 
-export const onUnmounted = createLifecycleHook(LifecycleHooks.MOUNTED);
+export const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);
