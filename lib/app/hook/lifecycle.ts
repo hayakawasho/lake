@@ -1,5 +1,11 @@
-import { getOwner, LifecycleHooks } from '../internal/component';
-import type { LifecycleHandler } from '../internal/component';
+import { getOwner } from '../internal/component';
+
+export type LifecycleHandler = () => void;
+
+export const enum LifecycleHooks {
+  MOUNTED = 'onMounted',
+  UNMOUNTED = 'onUnmounted',
+}
 
 const createHook = (lifecycleType: LifecycleHooks) => {
   return (hook: LifecycleHandler) => {
