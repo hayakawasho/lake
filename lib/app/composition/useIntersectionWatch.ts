@@ -1,5 +1,5 @@
+import { onUnmounted } from '../lifecycle';
 import type { RefElement } from '../types';
-import { onUnmounted } from './lifecycle';
 
 export const useIntersectionWatch = (
   targetOrTargets: RefElement | RefElement[],

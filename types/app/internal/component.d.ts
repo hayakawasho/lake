@@ -1,5 +1,5 @@
-import { LifecycleHooks } from '../composition/lifecycle';
-import type { LifecycleHandler } from '../composition/lifecycle';
+import { LifecycleHooks } from '../lifecycle';
+import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
 export declare const getOwner: (hookName: string) => ComponentContext;
 declare class ComponentContext {

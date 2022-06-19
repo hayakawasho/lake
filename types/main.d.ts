@@ -9,7 +9,7 @@ export {
   mount,
   unmount,
 } from './app/core';
-export { onMounted, onUnmounted } from './app/composition/lifecycle';
+export { onMounted, onUnmounted } from './app/lifecycle';
 export { useEvent } from './app/composition/useEvent';
 export { useDOMRef } from './app/composition/useDOMRef';
 export { useIntersectionWatch } from './app/composition/useIntersectionWatch';
