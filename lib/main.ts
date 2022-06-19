@@ -13,6 +13,7 @@ export {
 export { onMounted, onUnmounted } from './app/hook/lifecycle';
 export { useEvent } from './app/hook/useEvent';
 export { useDOMRef } from './app/hook/useDOMRef';
+export { useIntersectionWatch } from './app/hook/useIntersectionWatch';
 
 export type { Context$ } from './svelte/withSvelte';
 export { withSvelte } from './svelte/withSvelte';
