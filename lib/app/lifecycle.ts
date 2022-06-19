@@ -1,4 +1,4 @@
-import { getOwner } from '../internal/component';
+import { getOwner } from './internal/component';
 
 export type LifecycleHandler = () => void;
 
