@@ -1,5 +1,5 @@
-import { LifecycleHooks } from '../hook/lifecycle';
-import type { LifecycleHandler } from '../hook/lifecycle';
+import { LifecycleHooks } from '../composition/lifecycle';
+import type { LifecycleHandler } from '../composition/lifecycle';
 import type { RefElement, IComponent } from '../types';
 import { assert } from '../util/assert';
 import { q } from '../util/selector';
