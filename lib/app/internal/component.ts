@@ -1,3 +1,5 @@
+import { LifecycleHooks } from '../composition/lifecycle';
+import type { LifecycleHandler } from '../composition/lifecycle';
 import type { RefElement, IComponent } from '../types';
 import { assert } from '../util/assert';
 import { q } from '../util/selector';
@@ -13,19 +15,14 @@ export const getOwner = (hookName: string) => {
   return Owner;
 };
 
-export const enum LifecycleHooks {
-  MOUNTED = 'onMounted',
-  UNMOUNTED = 'onUnmounted',
-}
-
-export type LifecycleHandler = () => void;
+let uid = 0;
 
 class ComponentContext {
   [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
   [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
   parent: ComponentContext | null = null;
-  readonly uid: string;
+  readonly uid: string | number;
   readonly provides: Readonly<Record<string, unknown>>;
 
   constructor(
@@ -38,7 +35,7 @@ class ComponentContext {
     unsetOwner();
 
     this.provides = created || {};
-    this.uid = element.id;
+    this.uid = element.id || uid++;
   }
 
   mount() {

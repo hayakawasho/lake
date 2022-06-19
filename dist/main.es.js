@@ -36,7 +36,7 @@ var __privateSet = (obj, member, value, setter) => {
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var _rawValue, _ref;
+var _rawValue, _ref, _a, _b;
 const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
 class Ref {
   constructor(value) {
@@ -63,6 +63,19 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
+var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
+  LifecycleHooks2["MOUNTED"] = "onMounted";
+  LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
+  return LifecycleHooks2;
+})(LifecycleHooks || {});
+const createHook = (lifecycleType) => {
+  return (hook) => {
+    const context = getOwner(lifecycleType);
+    context[lifecycleType].push(hook);
+  };
+};
+const onMounted = createHook("onMounted");
+const onUnmounted = createHook("onUnmounted");
 function assert(condition, message) {
   if (!condition) {
     throw new Error(message || `unexpected condition`);
@@ -75,15 +88,11 @@ const getOwner = (hookName) => {
   assert(Owner, `"${hookName}" called outside setup() will never be run.`);
   return Owner;
 };
-var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
-  LifecycleHooks2["MOUNTED"] = "onMounted";
-  LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
-  return LifecycleHooks2;
-})(LifecycleHooks || {});
+let uid = 0;
 class ComponentContext {
   constructor(create, element, props) {
-    __publicField(this, "onMounted", []);
-    __publicField(this, "onUnmounted", []);
+    __publicField(this, _a, []);
+    __publicField(this, _b, []);
     __publicField(this, "parent", null);
     __publicField(this, "uid");
     __publicField(this, "provides");
@@ -92,7 +101,7 @@ class ComponentContext {
     const created = create(element, props);
     unsetOwner();
     this.provides = created || {};
-    this.uid = element.id;
+    this.uid = element.id || uid++;
   }
   mount() {
     this.onMounted.forEach((fn) => fn());
@@ -106,6 +115,7 @@ class ComponentContext {
     child.parent = this;
   }
 }
+_a = LifecycleHooks.MOUNTED, _b = LifecycleHooks.UNMOUNTED;
 function createComponent(wrap) {
   return (root, props) => {
     const newProps = __spreadValues(__spreadValues({}, wrap.props), props);
@@ -154,14 +164,6 @@ function mount(el, props, name) {
 function unmount(selector, scope) {
   q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
 }
-const createHook = (lifecycleType) => {
-  return (hook) => {
-    const context = getOwner(lifecycleType);
-    context[lifecycleType].push(hook);
-  };
-};
-const onMounted = createHook(LifecycleHooks.MOUNTED);
-const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
   onUnmounted(() => {
@@ -196,6 +198,26 @@ function useDOMRef(...refKey) {
     refs: domRefs(new Set(refKey), context.element)
   };
 }
+const useIntersectionWatch = (targetOrTargets, cb, opts = {
+  rootMargin: "0px",
+  threshold: 0.1
+}) => {
+  const io = new IntersectionObserver(cb, opts);
+  if (Array.isArray(targetOrTargets)) {
+    targetOrTargets.forEach((el) => io.observe(el));
+  } else {
+    io.observe(targetOrTargets);
+  }
+  onUnmounted(() => {
+    io.disconnect();
+  });
+  const unwatch = (el) => {
+    io.unobserve(el);
+  };
+  return {
+    unwatch
+  };
+};
 function withSvelte(App) {
   return defineComponent({
     setup(el, props) {
@@ -218,4 +240,4 @@ function withSvelte(App) {
     }
   });
 }
-export { defineComponent, mount, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, withSvelte };
+export { defineComponent, mount, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, useIntersectionWatch, withSvelte };

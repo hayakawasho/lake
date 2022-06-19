@@ -10,9 +10,10 @@ export {
   mount,
   unmount,
 } from './app/core';
-export { onMounted, onUnmounted } from './app/hook/lifecycle';
-export { useEvent } from './app/hook/useEvent';
-export { useDOMRef } from './app/hook/useDOMRef';
+export { onMounted, onUnmounted } from './app/composition/lifecycle';
+export { useEvent } from './app/composition/useEvent';
+export { useDOMRef } from './app/composition/useDOMRef';
+export { useIntersectionWatch } from './app/composition/useIntersectionWatch';
 
 export type { Context$ } from './svelte/withSvelte';
 export { withSvelte } from './svelte/withSvelte';
