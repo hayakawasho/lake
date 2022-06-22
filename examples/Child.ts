@@ -10,11 +10,12 @@ type Props = {
 export default defineComponent<Props>({
   setup(el, props) {
     const { isOpen, onOpen, onClose } = props;
-    const onToggle = () => (isOpen.value ? onClose() : onOpen());
+    const onToggle = () =>
+      isOpen.value
+        ? ((el.textContent = 'OPEN'), onClose())
+        : ((el.textContent = 'CLOSE'), onOpen());
 
-    onMounted(() => {
-      el.addEventListener('click', onToggle);
-    });
+    el.addEventListener('click', onToggle);
 
     onUnmounted(() => {
       el.removeEventListener('click', onToggle);

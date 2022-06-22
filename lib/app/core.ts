@@ -17,8 +17,7 @@ const bindDOMNodeToComponent = (
   name: string
 ) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
-    console.error(`The DOM of ${name} was already bind.`);
-    return;
+    console.warn(`The DOM of ${name} was already bind.`);
   }
 
   DOM_COMPONENT_INSTANCE.set(el, component);
