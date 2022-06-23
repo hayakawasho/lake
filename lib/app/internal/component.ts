@@ -1,19 +1,12 @@
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
-import { assert } from '../util/assert';
 import { q } from '../util/selector';
 
-let Owner: ComponentContext | null = null;
+export let Owner: ComponentContext | null = null;
 
 const setOwner = (context: ComponentContext) => (Owner = context);
-
 const unsetOwner = () => (Owner = null);
-
-export const getOwner = (hookName: string) => {
-  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
-  return Owner;
-};
 
 let uid = 0;
 
@@ -21,20 +14,11 @@ class ComponentContext {
   [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
   [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
-  parent: ComponentContext | null = null;
   readonly uid: string | number;
-  readonly provides: Readonly<Record<string, unknown>>;
 
-  constructor(
-    create: IComponent['setup'],
-    public element: RefElement,
-    props: Record<string, any>
-  ) {
-    setOwner(this);
-    const created = create(element, props);
-    unsetOwner();
+  parent: ComponentContext | null = null;
 
-    this.provides = created || {};
+  constructor(public element: RefElement) {
     this.uid = element.id || uid++;
   }
 
@@ -56,20 +40,27 @@ class ComponentContext {
 
 export function createComponent(wrap: IComponent) {
   return (root: RefElement, props: Record<string, any>) => {
-    const newProps = {
+    const context = new ComponentContext(root);
+
+    setOwner(context);
+
+    const created = wrap.setup(root, {
       ...wrap.props,
       ...props,
-    };
-    const context = new ComponentContext(wrap.setup, root, newProps);
+    });
+
+    const provides = created || {};
 
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, sub]) => {
         q(selector, root).forEach(el => {
-          const child = createSubComponent(el, sub, context);
+          const child = createSubComponent(el, sub, provides);
           context.addChild(child);
         });
       });
     }
+
+    unsetOwner();
 
     return context;
   };
@@ -78,11 +69,11 @@ export function createComponent(wrap: IComponent) {
 function createSubComponent(
   el: RefElement,
   child: IComponent,
-  parent: ComponentContext
+  provides: Readonly<Record<string, unknown>>
 ) {
   const props = {
     ...child.props,
-    ...parent.provides,
+    ...provides,
   };
   return createComponent(child)(el, props);
 }
