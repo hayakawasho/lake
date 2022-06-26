@@ -11,7 +11,7 @@ const setOwner = (context: ComponentContext) => (Owner = context);
 const unsetOwner = () => (Owner = null);
 
 export const getOwner = (hookName: string) => {
-  assert(Owner, hookName);
+  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
   return Owner;
 };
 

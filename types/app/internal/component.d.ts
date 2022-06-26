@@ -6,17 +6,14 @@ declare class ComponentContext {
   element: RefElement;
   [LifecycleHooks.MOUNTED]: LifecycleHandler[];
   [LifecycleHooks.UNMOUNTED]: LifecycleHandler[];
-  parent: ComponentContext | null;
   readonly uid: string | number;
-  readonly provides: Readonly<Record<string, unknown>>;
-  constructor(
-    create: IComponent['setup'],
-    element: RefElement,
-    props: Record<string, any>
-  );
-  mount(): void;
-  unmount(): void;
+  parent: ComponentContext | null;
+  children: ComponentContext[];
+  constructor(element: RefElement);
+  mount: () => void;
+  unmount: () => void;
   addChild(child: ComponentContext): void;
+  removeChild(child: ComponentContext): void;
 }
 export declare function createComponent(
   wrap: IComponent
