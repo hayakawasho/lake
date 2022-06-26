@@ -81,6 +81,8 @@ function assert(condition, message) {
     throw new Error(message || `unexpected condition`);
   }
 }
+const warn = (message) => console.warn(message);
+const allRun = (fns) => fns.forEach((fn) => fn());
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
@@ -90,74 +92,85 @@ const getOwner = (hookName) => {
 };
 let uid = 0;
 class ComponentContext {
-  constructor(create, element, props) {
+  constructor(element) {
     __publicField(this, _a, []);
     __publicField(this, _b, []);
-    __publicField(this, "parent", null);
     __publicField(this, "uid");
-    __publicField(this, "provides");
+    __publicField(this, "parent", null);
+    __publicField(this, "children", []);
+    __publicField(this, "mount", () => {
+      allRun([
+        ...this[LifecycleHooks.MOUNTED],
+        ...this.children.flatMap((child) => child.mount)
+      ]);
+    });
+    __publicField(this, "unmount", () => {
+      allRun([
+        ...this[LifecycleHooks.UNMOUNTED],
+        ...this.children.flatMap((child) => child.unmount)
+      ]);
+    });
     this.element = element;
-    setOwner(this);
-    const created = create(element, props);
-    unsetOwner();
-    this.provides = created || {};
     this.uid = element.id || uid++;
   }
-  mount() {
-    this.onMounted.forEach((fn) => fn());
-  }
-  unmount() {
-    this.onUnmounted.forEach((fn) => fn());
-  }
   addChild(child) {
-    this.onMounted.push(...child.onMounted);
-    this.onUnmounted.push(...child.onUnmounted);
+    this.children.push(child);
     child.parent = this;
+  }
+  removeChild(child) {
+    const index = this.children.indexOf(child);
+    if (index === -1) {
+      return;
+    }
+    this.children.splice(index, 1);
+    child.parent = null;
   }
 }
 _a = LifecycleHooks.MOUNTED, _b = LifecycleHooks.UNMOUNTED;
 function createComponent(wrap) {
   return (root, props) => {
-    const newProps = __spreadValues(__spreadValues({}, wrap.props), props);
-    const context = new ComponentContext(wrap.setup, root, newProps);
+    const context = new ComponentContext(root);
+    setOwner(context);
+    const created = wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
+    const provides = created || {};
     if (wrap.components) {
       Object.entries(wrap.components).forEach(([selector, sub]) => {
         q(selector, root).forEach((el) => {
-          const child = createSubComponent(el, sub, context);
+          const child = createSubComponent(el, sub, provides);
           context.addChild(child);
         });
       });
     }
+    unsetOwner();
     return context;
   };
 }
-function createSubComponent(el, child, parent) {
-  const props = __spreadValues(__spreadValues({}, child.props), parent.provides);
+function createSubComponent(el, child, parentProvides) {
+  const props = __spreadValues(__spreadValues({}, child.props), parentProvides);
   return createComponent(child)(el, props);
 }
-const REGISTERED_COMPONENTS = /* @__PURE__ */ new Map();
+const COMPONENT_REGISTRY_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, name) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
-    console.error(`The DOM of ${name} was already bind.`);
-    return;
+    warn(`The DOM of ${name} was already bind.`);
   }
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
 function register(name, wrap) {
-  assert(!REGISTERED_COMPONENTS.has(name), `${name} was already registered.`);
-  REGISTERED_COMPONENTS.set(name, createComponent(wrap));
-  return REGISTERED_COMPONENTS;
+  assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
+  COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
+  return COMPONENT_REGISTRY_MAP;
 }
 function unregister(name) {
-  assert(REGISTERED_COMPONENTS.has(name), `${name} does not registered.`);
-  REGISTERED_COMPONENTS.delete(name);
-  return REGISTERED_COMPONENTS;
+  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
+  COMPONENT_REGISTRY_MAP.delete(name);
+  return COMPONENT_REGISTRY_MAP;
 }
 function mount(el, props, name) {
-  assert(REGISTERED_COMPONENTS.has(name), `${name} was never registered.`);
-  const component = REGISTERED_COMPONENTS.get(name)(el, props);
+  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
+  const component = COMPONENT_REGISTRY_MAP.get(name)(el, props);
   bindDOMNodeToComponent(el, component, name);
   component.mount();
 }
@@ -178,7 +191,7 @@ function domRefs(ref2, scope) {
   const reducer = (nodes, query) => {
     switch (nodes.length) {
       case 0:
-        console.warn(`[data-ref="${query}"] does not exist.`);
+        warn(`[data-ref="${query}"] does not exist.`);
         return null;
       case 1:
         return nodes[0];

@@ -12,9 +12,7 @@ export default defineComponent<Props>({
     const { isOpen, onOpen, onClose } = props;
     const onToggle = () => (isOpen.value ? onClose() : onOpen());
 
-    onMounted(() => {
-      el.addEventListener('click', onToggle);
-    });
+    el.addEventListener('click', onToggle);
 
     onUnmounted(() => {
       el.removeEventListener('click', onToggle);

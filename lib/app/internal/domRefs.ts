@@ -1,4 +1,5 @@
 import type { RefElement } from '../types';
+import { warn } from '../util/function';
 import { q } from '../util/selector';
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
@@ -10,7 +11,7 @@ export function domRefs(ref: Set<string>, scope: RefElement) {
   const reducer = (nodes: RefElement[], query: string) => {
     switch (nodes.length) {
       case 0:
-        console.warn(`[data-ref="${query}"] does not exist.`);
+        warn(`[data-ref="${query}"] does not exist.`);
         return null;
       case 1:
         return nodes[0];
