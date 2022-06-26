@@ -1,6 +1,7 @@
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
+import { assert } from '../util/assert';
 import { allRun } from '../util/function';
 import { q } from '../util/selector';
 
@@ -8,6 +9,11 @@ export let Owner: ComponentContext | null = null;
 
 const setOwner = (context: ComponentContext) => (Owner = context);
 const unsetOwner = () => (Owner = null);
+
+export const getOwner = (hookName: string) => {
+  assert(Owner, hookName);
+  return Owner;
+};
 
 let uid = 0;
 
@@ -23,16 +29,16 @@ class ComponentContext {
     this.uid = element.id || uid++;
   }
 
-  mount() {
-    allRun([...this.children.flatMap(child => child.mount), ...this.onMounted]);
-  }
+  mount = () => {
+    allRun([...this.onMounted, ...this.children.flatMap(child => child.mount)]);
+  };
 
-  unmount() {
+  unmount = () => {
     allRun([
-      ...this.children.flatMap(child => child.unmount),
       ...this.onUnmounted,
+      ...this.children.flatMap(child => child.unmount),
     ]);
-  }
+  };
 
   addChild(child: ComponentContext) {
     this.children.push(child);
