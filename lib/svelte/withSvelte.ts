@@ -1,5 +1,5 @@
 import type { SvelteComponent } from 'svelte';
-import type { RefElement } from '../app/types';
+import type { RefElement } from '../core/types';
 import { defineComponent, onUnmounted } from '../main';
 
 export type Context$ = {
