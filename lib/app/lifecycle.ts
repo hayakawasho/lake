@@ -15,5 +15,4 @@ const createHook = (lifecycleType: LifecycleHooks) => {
 };
 
 export const onMounted = createHook(LifecycleHooks.MOUNTED);
-
 export const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);

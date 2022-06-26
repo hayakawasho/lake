@@ -5,7 +5,7 @@ import { assert } from '../util/assert';
 import { allRun } from '../util/function';
 import { q } from '../util/selector';
 
-export let Owner: ComponentContext | null = null;
+let Owner: ComponentContext | null = null;
 
 const setOwner = (context: ComponentContext) => (Owner = context);
 const unsetOwner = () => (Owner = null);
@@ -30,12 +30,15 @@ class ComponentContext {
   }
 
   mount = () => {
-    allRun([...this.onMounted, ...this.children.flatMap(child => child.mount)]);
+    allRun([
+      ...this[LifecycleHooks.MOUNTED],
+      ...this.children.flatMap(child => child.mount),
+    ]);
   };
 
   unmount = () => {
     allRun([
-      ...this.onUnmounted,
+      ...this[LifecycleHooks.UNMOUNTED],
       ...this.children.flatMap(child => child.unmount),
     ]);
   };
@@ -94,6 +97,7 @@ function createSubComponent(
     ...child.props,
     ...parentProvides,
   };
+
   return createComponent(child)(el, props);
 }
 
