@@ -1,6 +1,7 @@
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
+import { allRun } from '../util/function';
 import { q } from '../util/selector';
 
 export let Owner: ComponentContext | null = null;
@@ -15,26 +16,38 @@ class ComponentContext {
   [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
   readonly uid: string | number;
-
   parent: ComponentContext | null = null;
+  children: ComponentContext[] = [];
 
   constructor(public element: RefElement) {
     this.uid = element.id || uid++;
   }
 
   mount() {
-    this.onMounted.forEach(fn => fn());
+    allRun([...this.children.flatMap(child => child.mount), ...this.onMounted]);
   }
 
   unmount() {
-    this.onUnmounted.forEach(fn => fn());
+    allRun([
+      ...this.children.flatMap(child => child.unmount),
+      ...this.onUnmounted,
+    ]);
   }
 
   addChild(child: ComponentContext) {
-    this.onMounted.push(...child.onMounted);
-    this.onUnmounted.push(...child.onUnmounted);
-
+    this.children.push(child);
     child.parent = this;
+  }
+
+  removeChild(child: ComponentContext) {
+    const index = this.children.indexOf(child);
+
+    if (index === -1) {
+      return;
+    }
+
+    this.children.splice(index, 1);
+    child.parent = null;
   }
 }
 
@@ -69,11 +82,11 @@ export function createComponent(wrap: IComponent) {
 function createSubComponent(
   el: RefElement,
   child: IComponent,
-  provides: Readonly<Record<string, unknown>>
+  parentProvides: Readonly<Record<string, unknown>>
 ) {
   const props = {
     ...child.props,
-    ...provides,
+    ...parentProvides,
   };
   return createComponent(child)(el, props);
 }

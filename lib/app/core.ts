@@ -2,9 +2,10 @@ import type { ComponentContext } from './internal/component';
 import { createComponent } from './internal/component';
 import type { RefElement, IComponent } from './types';
 import { assert } from './util/assert';
+import { warn } from './util/function';
 import { q } from './util/selector';
 
-const REGISTERED_COMPONENTS = new Map<
+const COMPONENT_REGISTRY_MAP = new Map<
   string,
   ReturnType<typeof createComponent>
 >();
@@ -17,28 +18,25 @@ const bindDOMNodeToComponent = (
   name: string
 ) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
-    console.warn(`The DOM of ${name} was already bind.`);
+    warn(`The DOM of ${name} was already bind.`);
   }
-
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
-
-//----------------------------------------------------------------
 
 export const defineComponent = <Props>(options: IComponent<Props>) => options;
 
 export function register(name: string, wrap: IComponent) {
-  assert(!REGISTERED_COMPONENTS.has(name), `${name} was already registered.`);
-  REGISTERED_COMPONENTS.set(name, createComponent(wrap));
+  assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
+  COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
 
-  return REGISTERED_COMPONENTS;
+  return COMPONENT_REGISTRY_MAP;
 }
 
 export function unregister(name: string) {
-  assert(REGISTERED_COMPONENTS.has(name), `${name} does not registered.`);
-  REGISTERED_COMPONENTS.delete(name);
+  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
+  COMPONENT_REGISTRY_MAP.delete(name);
 
-  return REGISTERED_COMPONENTS;
+  return COMPONENT_REGISTRY_MAP;
 }
 
 export function mount(
@@ -46,8 +44,8 @@ export function mount(
   props: Record<string, any>,
   name: string
 ) {
-  assert(REGISTERED_COMPONENTS.has(name), `${name} was never registered.`);
-  const component = REGISTERED_COMPONENTS.get(name)!(el, props);
+  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
+  const component = COMPONENT_REGISTRY_MAP.get(name)!(el, props);
 
   bindDOMNodeToComponent(el, component, name);
   component.mount();
