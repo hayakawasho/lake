@@ -1,6 +1,6 @@
+import { warn } from '../../util/function';
+import { q } from '../../util/selector';
 import type { RefElement } from '../types';
-import { warn } from '../util/function';
-import { q } from '../util/selector';
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
   const findRef = (query: string) => {

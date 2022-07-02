@@ -1,9 +1,9 @@
+import { assert } from '../../util/assert';
+import { allRun } from '../../util/function';
+import { q } from '../../util/selector';
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
-import { assert } from '../util/assert';
-import { allRun } from '../util/function';
-import { q } from '../util/selector';
 
 let Owner: ComponentContext | null = null;
 
@@ -49,7 +49,7 @@ class ComponentContext {
   }
 
   removeChild(child: ComponentContext) {
-    const index = this.children.indexOf(child);
+    const index = this.children.findIndex(context => context === child);
 
     if (index === -1) {
       return;

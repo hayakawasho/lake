@@ -63,6 +63,13 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message || `unexpected condition`);
+  }
+}
+const warn = (message) => console.warn(message);
+const allRun = (fns) => fns.forEach((fn) => fn());
 var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
   LifecycleHooks2["MOUNTED"] = "onMounted";
   LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
@@ -76,13 +83,6 @@ const createHook = (lifecycleType) => {
 };
 const onMounted = createHook("onMounted");
 const onUnmounted = createHook("onUnmounted");
-function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message || `unexpected condition`);
-  }
-}
-const warn = (message) => console.warn(message);
-const allRun = (fns) => fns.forEach((fn) => fn());
 let Owner = null;
 const setOwner = (context) => Owner = context;
 const unsetOwner = () => Owner = null;
@@ -118,7 +118,7 @@ class ComponentContext {
     child.parent = this;
   }
   removeChild(child) {
-    const index = this.children.indexOf(child);
+    const index = this.children.findIndex((context) => context === child);
     if (index === -1) {
       return;
     }

@@ -1,20 +1,20 @@
-export { q } from './app/util/selector';
+export { q } from './util/selector';
 
-export type { RefElement } from './app/types';
-export type { Ref, ReadonlyRef } from './app/ref';
-export { ref, readonly } from './app/ref';
+export type { RefElement } from './core/types';
+export type { Ref, ReadonlyRef } from './core/ref';
+export { ref, readonly } from './core/ref';
 export {
   defineComponent,
   register,
   unregister,
   mount,
   unmount,
-} from './app/core';
-export { onMounted, onUnmounted } from './app/lifecycle';
+} from './core/core';
+export { onMounted, onUnmounted } from './core/lifecycle';
 
-export { useEvent } from './app/composition/useEvent';
-export { useDOMRef } from './app/composition/useDOMRef';
-export { useIntersectionWatch } from './app/composition/useIntersectionWatch';
+export { useEvent } from './core/composition/useEvent';
+export { useDOMRef } from './core/composition/useDOMRef';
+export { useIntersectionWatch } from './core/composition/useIntersectionWatch';
 
 export type { Context$ } from './svelte/withSvelte';
 export { withSvelte } from './svelte/withSvelte';

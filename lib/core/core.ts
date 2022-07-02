@@ -1,9 +1,9 @@
+import { assert } from '../util/assert';
+import { warn } from '../util/function';
+import { q } from '../util/selector';
 import type { ComponentContext } from './internal/component';
 import { createComponent } from './internal/component';
 import type { RefElement, IComponent } from './types';
-import { assert } from './util/assert';
-import { warn } from './util/function';
-import { q } from './util/selector';
 
 const COMPONENT_REGISTRY_MAP = new Map<
   string,
@@ -20,6 +20,7 @@ const bindDOMNodeToComponent = (
   if (DOM_COMPONENT_INSTANCE.has(el)) {
     warn(`The DOM of ${name} was already bind.`);
   }
+
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 
