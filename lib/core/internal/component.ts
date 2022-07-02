@@ -49,7 +49,7 @@ class ComponentContext {
   }
 
   removeChild(child: ComponentContext) {
-    const index = this.children.findIndex(ctx => ctx === child);
+    const index = this.children.findIndex(context => context === child);
 
     if (index === -1) {
       return;

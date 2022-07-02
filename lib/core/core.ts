@@ -20,6 +20,7 @@ const bindDOMNodeToComponent = (
   if (DOM_COMPONENT_INSTANCE.has(el)) {
     warn(`The DOM of ${name} was already bind.`);
   }
+
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 
