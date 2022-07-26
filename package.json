@@ -37,7 +37,7 @@
     "format": "yarn prettier:write && yarn eslint"
   },
   "devDependencies": {
-    "@playwright/test": "1.24.0",
+    "@playwright/test": "1.24.1",
     "@sveltejs/vite-plugin-svelte": "1.0.1",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
