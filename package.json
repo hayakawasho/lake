@@ -39,8 +39,8 @@
   "devDependencies": {
     "@playwright/test": "1.29.1",
     "@sveltejs/vite-plugin-svelte": "2.0.2",
-    "@typescript-eslint/eslint-plugin": "5.46.0",
-    "@typescript-eslint/parser": "5.46.0",
+    "@typescript-eslint/eslint-plugin": "5.48.0",
+    "@typescript-eslint/parser": "5.48.0",
     "eslint": "8.31.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "3.5.2",
