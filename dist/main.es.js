@@ -181,10 +181,10 @@ function createApp() {
     }
   };
 }
-const useEvent = (target, eventType, listener) => {
-  target.addEventListener(eventType, listener);
+const useEvent = (target, eventType, listener, optionsOrUseCapture) => {
+  target.addEventListener(eventType, listener, optionsOrUseCapture);
   onUnmounted(() => {
-    target.removeEventListener(eventType, listener);
+    target.removeEventListener(eventType, listener, optionsOrUseCapture);
   });
 };
 function domRefs(ref2, scope) {
