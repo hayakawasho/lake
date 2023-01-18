@@ -17,11 +17,11 @@ export const useEvent = <
   target: T,
   eventType: K,
   listener: ElementEventListener<K>,
-  options?: Options
+  optionsOrUseCapture?: Options | boolean
 ) => {
-  target.addEventListener(eventType, listener, options);
+  target.addEventListener(eventType, listener, optionsOrUseCapture);
 
   onUnmounted(() => {
-    target.removeEventListener(eventType, listener);
+    target.removeEventListener(eventType, listener, optionsOrUseCapture);
   });
 };

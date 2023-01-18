@@ -13,7 +13,7 @@ export declare const useEvent: <
   target: T,
   eventType: K,
   listener: ElementEventListener<K>,
-  options?: Options
+  optionsOrUseCapture?: Options | boolean
 ) => void;
 export {};
 //# sourceMappingURL=useEvent.d.ts.map
