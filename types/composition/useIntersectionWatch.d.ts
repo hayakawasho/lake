@@ -1,4 +1,4 @@
-import type { RefElement } from '../types';
+import type { RefElement } from '../core/types';
 export declare const useIntersectionWatch: (
   targetOrTargets: RefElement | RefElement[],
   cb: IntersectionObserverCallback,

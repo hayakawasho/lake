@@ -158,24 +158,28 @@ const bindDOMNodeToComponent = (el, component, name) => {
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 const defineComponent = (options) => options;
-function register(name, wrap) {
-  assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
-  COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
-  return COMPONENT_REGISTRY_MAP;
-}
-function unregister(name) {
-  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
-  COMPONENT_REGISTRY_MAP.delete(name);
-  return COMPONENT_REGISTRY_MAP;
-}
-function mount(el, props, name) {
-  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
-  const component = COMPONENT_REGISTRY_MAP.get(name)(el, props);
-  bindDOMNodeToComponent(el, component, name);
-  component.mount();
-}
-function unmount(selector, scope) {
-  q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
+function createApp() {
+  return {
+    register(name, wrap) {
+      assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
+      COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
+      return COMPONENT_REGISTRY_MAP;
+    },
+    unregister(name) {
+      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
+      COMPONENT_REGISTRY_MAP.delete(name);
+      return COMPONENT_REGISTRY_MAP;
+    },
+    mount(el, props, name) {
+      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
+      const component = COMPONENT_REGISTRY_MAP.get(name)(el, props);
+      bindDOMNodeToComponent(el, component, name);
+      component.mount();
+    },
+    unmount(selector, scope) {
+      q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
+    }
+  };
 }
 const useEvent = (target, eventType, listener) => {
   target.addEventListener(eventType, listener);
@@ -253,4 +257,4 @@ function withSvelte(App) {
     }
   });
 }
-export { defineComponent, mount, onMounted, onUnmounted, q, readonly, ref, register, unmount, unregister, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
+export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };

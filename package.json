@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "0.7.3",
+  "version": "0.8.1",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -29,11 +29,11 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "NODE_ENV=production tsc && vite build",
     "watch": "vite build -w",
     "serve": "vite preview",
-    "prettier:write": "prettier --write ./src/**/*.{ts,tsx}",
-    "eslint": "eslint './src/**/*.{ts,tsx}' -c .eslintrc.json --fix",
+    "prettier:write": "prettier --write ./lib/**/*.ts",
+    "eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
     "format": "yarn prettier:write && yarn eslint"
   },
   "devDependencies": {
