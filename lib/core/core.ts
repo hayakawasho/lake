@@ -26,34 +26,37 @@ const bindDOMNodeToComponent = (
 
 export const defineComponent = <Props>(options: IComponent<Props>) => options;
 
-export function register(name: string, wrap: IComponent) {
-  assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
-  COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
+export function createApp() {
+  return {
+    register(name: string, wrap: IComponent) {
+      assert(
+        !COMPONENT_REGISTRY_MAP.has(name),
+        `${name} was already registered.`
+      );
 
-  return COMPONENT_REGISTRY_MAP;
-}
+      COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
 
-export function unregister(name: string) {
-  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
-  COMPONENT_REGISTRY_MAP.delete(name);
+      return COMPONENT_REGISTRY_MAP;
+    },
+    unregister(name: string) {
+      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
 
-  return COMPONENT_REGISTRY_MAP;
-}
+      COMPONENT_REGISTRY_MAP.delete(name);
 
-export function mount(
-  el: RefElement,
-  props: Record<string, any>,
-  name: string
-) {
-  assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
-  const component = COMPONENT_REGISTRY_MAP.get(name)!(el, props);
+      return COMPONENT_REGISTRY_MAP;
+    },
+    mount(el: RefElement, props: Record<string, any>, name: string) {
+      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
 
-  bindDOMNodeToComponent(el, component, name);
-  component.mount();
-}
+      const component = COMPONENT_REGISTRY_MAP.get(name)!(el, props);
 
-export function unmount(selector: string, scope?: RefElement) {
-  q(selector, scope)
-    .filter(el => DOM_COMPONENT_INSTANCE.has(el))
-    .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());
+      bindDOMNodeToComponent(el, component, name);
+      component.mount();
+    },
+    unmount(selector: string, scope?: RefElement) {
+      q(selector, scope)
+        .filter(el => DOM_COMPONENT_INSTANCE.has(el))
+        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());
+    },
+  };
 }
