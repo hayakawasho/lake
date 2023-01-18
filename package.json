@@ -29,7 +29,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "NODE_ENV=production tsc && vite build",
     "watch": "vite build -w",
     "serve": "vite preview",
     "prettier:write": "prettier --write ./lib/**/*.ts",
