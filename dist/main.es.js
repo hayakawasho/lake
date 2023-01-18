@@ -181,8 +181,8 @@ function createApp() {
     }
   };
 }
-const useEvent = (target, eventType, listener) => {
-  target.addEventListener(eventType, listener);
+const useEvent = (target, eventType, listener, options) => {
+  target.addEventListener(eventType, listener, options);
   onUnmounted(() => {
     target.removeEventListener(eventType, listener);
   });
