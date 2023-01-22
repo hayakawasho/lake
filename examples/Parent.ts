@@ -1,18 +1,15 @@
-import {
-  defineComponent,
-  ref,
-  readonly,
-  createChildComponent,
-} from '../lib/main';
+import { defineComponent, ref, readonly } from '../lib/main';
 import Child from './Child';
 
 export default defineComponent({
-  setup() {
-    const { addChild } = createChildComponent();
+  components: {
+    '.js-child': Child,
+  },
 
+  setup() {
     const isOpen = ref(false);
 
-    addChild('.js-child', Child, {
+    return {
       isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;
@@ -20,6 +17,6 @@ export default defineComponent({
       onClose() {
         isOpen.value = false;
       },
-    });
+    };
   },
 });
