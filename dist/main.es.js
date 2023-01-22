@@ -131,23 +131,10 @@ function createComponent(wrap) {
   return (root, props) => {
     const context = new ComponentContext(root);
     setOwner(context);
-    const created = wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
-    const provides = created || {};
-    if (wrap.components) {
-      Object.entries(wrap.components).forEach(([selector, sub]) => {
-        q(selector, root).forEach((el) => {
-          const child = createSubComponent(el, sub, provides);
-          context.addChild(child);
-        });
-      });
-    }
+    wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
     unsetOwner();
     return context;
   };
-}
-function createSubComponent(el, child, parentProvides) {
-  const props = __spreadValues(__spreadValues({}, child.props), parentProvides);
-  return createComponent(child)(el, props);
 }
 const COMPONENT_REGISTRY_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
@@ -178,6 +165,21 @@ function createApp() {
     },
     unmount(selector, scope) {
       q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
+    }
+  };
+}
+function createChildComponent() {
+  const context = getOwner("createChildComponent");
+  return {
+    addChild(selector, child, props) {
+      return q(selector, context.element).map((el) => {
+        const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
+        context.addChild(component);
+        return component;
+      });
+    },
+    removeChild(child) {
+      context.removeChild(child);
     }
   };
 }
@@ -257,4 +259,4 @@ function withSvelte(App) {
     }
   });
 }
-export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
+export { createApp, createChildComponent, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
