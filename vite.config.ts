@@ -4,6 +4,9 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import preprocess from 'svelte-preprocess';
 
 export default defineConfig({
+  server: {
+    port: 9999,
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),

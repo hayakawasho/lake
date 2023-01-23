@@ -1,7 +1,9 @@
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
-export declare const getOwner: (hookName: string) => ComponentContext;
+export declare const getCurrentComponent: (
+  hookName: string
+) => ComponentContext;
 declare class ComponentContext {
   element: RefElement;
   [LifecycleHooks.MOUNTED]: LifecycleHandler[];
@@ -12,8 +14,8 @@ declare class ComponentContext {
   constructor(element: RefElement);
   mount: () => void;
   unmount: () => void;
-  addChild(child: ComponentContext): void;
-  removeChild(child: ComponentContext): void;
+  addChild: (child: ComponentContext) => void;
+  removeChild: (child: ComponentContext) => void;
 }
 export declare function createComponent(
   wrap: IComponent

@@ -1,4 +1,4 @@
-import { getOwner } from './internal/component';
+import { getCurrentComponent } from './internal/component';
 
 export type LifecycleHandler = () => void;
 
@@ -9,7 +9,7 @@ export const enum LifecycleHooks {
 
 const createHook = (lifecycleType: LifecycleHooks) => {
   return (hook: LifecycleHandler) => {
-    const context = getOwner(lifecycleType);
+    const context = getCurrentComponent(lifecycleType);
     context[lifecycleType].push(hook);
   };
 };

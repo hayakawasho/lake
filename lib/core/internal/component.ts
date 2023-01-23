@@ -4,14 +4,18 @@ import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
 
-let Owner: ComponentContext | null = null;
+let currentComponent: ComponentContext | null = null;
 
-const setOwner = (context: ComponentContext) => (Owner = context);
-const unsetOwner = () => (Owner = null);
+const setCurrentComponent = (context: ComponentContext | null) =>
+  (currentComponent = context);
 
-export const getOwner = (hookName: string) => {
-  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
-  return Owner;
+export const getCurrentComponent = (hookName: string) => {
+  assert(
+    currentComponent,
+    `"${hookName}" called outside setup() will never be run.`
+  );
+
+  return currentComponent;
 };
 
 let uid = 0;
@@ -21,6 +25,7 @@ class ComponentContext {
   [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
   readonly uid: string | number;
+
   parent: ComponentContext | null = null;
   children: ComponentContext[] = [];
 
@@ -42,12 +47,12 @@ class ComponentContext {
     ]);
   };
 
-  addChild(child: ComponentContext) {
+  addChild = (child: ComponentContext) => {
     this.children.push(child);
     child.parent = this;
-  }
+  };
 
-  removeChild(child: ComponentContext) {
+  removeChild = (child: ComponentContext) => {
     const index = this.children.findIndex(context => context === child);
 
     if (index === -1) {
@@ -56,21 +61,21 @@ class ComponentContext {
 
     this.children.splice(index, 1);
     child.parent = null;
-  }
+  };
 }
 
 export function createComponent(wrap: IComponent) {
-  return (root: RefElement, props: Record<string, any>) => {
-    const context = new ComponentContext(root);
+  const parentContext = currentComponent;
 
-    setOwner(context);
+  return (root: RefElement, props: Record<string, any>) => {
+    const context = setCurrentComponent(new ComponentContext(root))!;
 
     wrap.setup(root, {
       ...wrap.props,
       ...props,
     });
 
-    unsetOwner();
+    setCurrentComponent(parentContext);
 
     return context;
   };

@@ -63,13 +63,13 @@ class ReadonlyRef {
 }
 _ref = new WeakMap();
 const readonly = (ref2) => new ReadonlyRef(ref2);
+const warn = (message) => console.warn(message);
+const allRun = (fns) => fns.forEach((fn) => fn());
 function assert(condition, message) {
   if (!condition) {
     throw new Error(message || `unexpected condition`);
   }
 }
-const warn = (message) => console.warn(message);
-const allRun = (fns) => fns.forEach((fn) => fn());
 var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
   LifecycleHooks2["MOUNTED"] = "onMounted";
   LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
@@ -77,18 +77,17 @@ var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
 })(LifecycleHooks || {});
 const createHook = (lifecycleType) => {
   return (hook) => {
-    const context = getOwner(lifecycleType);
+    const context = getCurrentComponent(lifecycleType);
     context[lifecycleType].push(hook);
   };
 };
 const onMounted = createHook("onMounted");
 const onUnmounted = createHook("onUnmounted");
-let Owner = null;
-const setOwner = (context) => Owner = context;
-const unsetOwner = () => Owner = null;
-const getOwner = (hookName) => {
-  assert(Owner, `"${hookName}" called outside setup() will never be run.`);
-  return Owner;
+let currentComponent = null;
+const setCurrentComponent = (context) => currentComponent = context;
+const getCurrentComponent = (hookName) => {
+  assert(currentComponent, `"${hookName}" called outside setup() will never be run.`);
+  return currentComponent;
 };
 let uid = 0;
 class ComponentContext {
@@ -110,33 +109,32 @@ class ComponentContext {
         ...this.children.flatMap((child) => child.unmount)
       ]);
     });
+    __publicField(this, "addChild", (child) => {
+      this.children.push(child);
+      child.parent = this;
+    });
+    __publicField(this, "removeChild", (child) => {
+      const index = this.children.findIndex((context) => context === child);
+      if (index === -1) {
+        return;
+      }
+      this.children.splice(index, 1);
+      child.parent = null;
+    });
     this.element = element;
     this.uid = element.id || uid++;
-  }
-  addChild(child) {
-    this.children.push(child);
-    child.parent = this;
-  }
-  removeChild(child) {
-    const index = this.children.findIndex((context) => context === child);
-    if (index === -1) {
-      return;
-    }
-    this.children.splice(index, 1);
-    child.parent = null;
   }
 }
 _a = LifecycleHooks.MOUNTED, _b = LifecycleHooks.UNMOUNTED;
 function createComponent(wrap) {
+  const parentContext = currentComponent;
   return (root, props) => {
-    const context = new ComponentContext(root);
-    setOwner(context);
+    const context = setCurrentComponent(new ComponentContext(root));
     wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
-    unsetOwner();
+    setCurrentComponent(parentContext);
     return context;
   };
 }
-const COMPONENT_REGISTRY_MAP = /* @__PURE__ */ new Map();
 const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
 const bindDOMNodeToComponent = (el, component, name) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
@@ -147,36 +145,34 @@ const bindDOMNodeToComponent = (el, component, name) => {
 const defineComponent = (options) => options;
 function createApp() {
   return {
-    register(name, wrap) {
-      assert(!COMPONENT_REGISTRY_MAP.has(name), `${name} was already registered.`);
-      COMPONENT_REGISTRY_MAP.set(name, createComponent(wrap));
-      return COMPONENT_REGISTRY_MAP;
-    },
-    unregister(name) {
-      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} does not registered.`);
-      COMPONENT_REGISTRY_MAP.delete(name);
-      return COMPONENT_REGISTRY_MAP;
-    },
-    mount(el, props, name) {
-      assert(COMPONENT_REGISTRY_MAP.has(name), `${name} was never registered.`);
-      const component = COMPONENT_REGISTRY_MAP.get(name)(el, props);
-      bindDOMNodeToComponent(el, component, name);
-      component.mount();
+    component(wrap) {
+      return (el, props) => {
+        const component = createComponent(wrap)(el, props);
+        bindDOMNodeToComponent(el, component);
+        component.mount();
+      };
     },
     unmount(selector, scope) {
-      q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.has(el)).forEach((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
+      q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.get(el)).map((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
     }
   };
 }
-function createChildComponent() {
-  const context = getOwner("createChildComponent");
+function children() {
+  const context = getCurrentComponent("children");
   return {
-    addChild(selector, child, props) {
-      return q(selector, context.element).map((el) => {
+    addChild(targetOrTargets, child, props) {
+      const results = [];
+      const factory = (el) => {
         const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
         context.addChild(component);
-        return component;
-      });
+        results.push(component);
+      };
+      if (Array.isArray(targetOrTargets)) {
+        targetOrTargets.forEach((el) => factory(el));
+      } else {
+        factory(targetOrTargets);
+      }
+      return results;
     },
     removeChild(child) {
       context.removeChild(child);
@@ -212,7 +208,7 @@ function domRefs(ref2, scope) {
   return childRef;
 }
 function useDOMRef(...refKey) {
-  const context = getOwner("domRef");
+  const context = getCurrentComponent("domRef");
   return {
     refs: domRefs(new Set(refKey), context.element)
   };
@@ -259,4 +255,4 @@ function withSvelte(App) {
     }
   });
 }
-export { createApp, createChildComponent, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
+export { children, createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
