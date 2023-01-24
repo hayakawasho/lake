@@ -2,17 +2,20 @@ import {
   defineComponent,
   ref,
   readonly,
-  createChildComponent,
+  children,
+  useDOMRef,
 } from '../lib/main';
 import Child from './Child';
 
 export default defineComponent({
-  setup() {
-    const { addChild } = createChildComponent();
+  setup(_el) {
+    const { refs } = useDOMRef<{ child: HTMLButtonElement }>('child');
+
+    const { addChild } = children();
 
     const isOpen = ref(false);
 
-    addChild('.js-child', Child, {
+    addChild(refs.child, Child, {
       isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;

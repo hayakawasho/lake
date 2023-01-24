@@ -1,5 +1,5 @@
 export { q } from './util/selector';
-export type { RefElement } from './core/types';
+export type { RefElement, IComponent } from './core/types';
 export type { Ref, ReadonlyRef } from './core/ref';
 export { ref, readonly } from './core/ref';
 export { createApp, defineComponent } from './core/core';

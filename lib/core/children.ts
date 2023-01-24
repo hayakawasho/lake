@@ -13,7 +13,7 @@ export function children() {
     ) {
       const results: ComponentContext[] = [];
 
-      const factory = (el: RefElement) => {
+      const create = (el: RefElement) => {
         const component = createComponent(child)(el, {
           ...child.props,
           ...props,
@@ -23,9 +23,9 @@ export function children() {
       };
 
       if (Array.isArray(targetOrTargets)) {
-        targetOrTargets.forEach(el => factory(el));
+        targetOrTargets.forEach(el => create(el));
       } else {
-        factory(targetOrTargets);
+        create(targetOrTargets);
       }
 
       return results;

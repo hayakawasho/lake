@@ -5,5 +5,5 @@ export declare type Context$ = {
 };
 export declare function withSvelte(
   App: typeof SvelteComponent
-): import('../core/types').IComponent<unknown>;
+): import('../main').IComponent<unknown>;
 //# sourceMappingURL=withSvelte.d.ts.map

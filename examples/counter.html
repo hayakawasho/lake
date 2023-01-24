@@ -6,10 +6,12 @@
     <title>Counter App</title>
   </head>
   <body>
-    <div id="counter" class="js-counter">
-      <button data-ref="increment">COUNT UP</button>
-      <button data-ref="decrement">COUNT DOWN</button>
-      <div data-ref="count"></div>
+    <div id="root">
+      <div id="counter" data-ref="counter">
+        <button data-ref="increment">COUNT UP</button>
+        <button data-ref="decrement">COUNT DOWN</button>
+        <div data-ref="count"></div>
+      </div>
     </div>
     <script type="module" src="/examples/index.ts"></script>
   </body>

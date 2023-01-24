@@ -162,15 +162,15 @@ function children() {
   return {
     addChild(targetOrTargets, child, props) {
       const results = [];
-      const factory = (el) => {
+      const create = (el) => {
         const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
         context.addChild(component);
         results.push(component);
       };
       if (Array.isArray(targetOrTargets)) {
-        targetOrTargets.forEach((el) => factory(el));
+        targetOrTargets.forEach((el) => create(el));
       } else {
-        factory(targetOrTargets);
+        create(targetOrTargets);
       }
       return results;
     },
