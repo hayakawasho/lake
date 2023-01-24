@@ -6,10 +6,12 @@
     <title>Parent - Child App</title>
   </head>
   <body>
-    <div class="js-parent">
-      <button class="js-child">
-        OPEN
-      </button>
+    <div id="root">
+      <div data-ref="parent">
+        <button data-ref="child">
+          OPEN
+        </button>
+      </div>
     </div>
     <script type="module" src="/examples/index.ts"></script>
   </body>

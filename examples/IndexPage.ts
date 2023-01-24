@@ -1,17 +1,30 @@
-import { defineComponent, withSvelte } from '../lib/main';
+import {
+  defineComponent,
+  withSvelte,
+  children,
+  onUnmounted,
+  useDOMRef,
+} from '../lib/main';
 // @ts-ignore
 import Counter from './Counter.svelte';
 import Parent from './Parent';
 
 export default defineComponent({
-  components: {
-    '.js-counter': withSvelte(Counter),
-    '.js-parent': Parent,
-  },
-
   props: {},
 
-  setup() {
-    // noop
+  setup(_el) {
+    const { refs } = useDOMRef<{ counter: HTMLElement; parent: HTMLElement }>(
+      'counter',
+      'parent'
+    );
+
+    const { addChild } = children();
+
+    addChild(refs.counter, withSvelte(Counter), {});
+    addChild(refs.parent, Parent, {});
+
+    onUnmounted(() => {
+      //
+    });
   },
 });
