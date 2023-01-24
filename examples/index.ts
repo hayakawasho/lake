@@ -1,11 +1,13 @@
-import { createApp } from '../lib/main';
-import Index from './IndexPage';
+import { createApp, withSvelte } from '../lib/main';
+import Parent from './Parent';
+import Counter from './Counter.svelte';
 
 document.addEventListener('DOMContentLoaded', () => {
   const { component } = createApp();
 
-  const root = document.getElementById('root')!;
+  const createCounter = component(withSvelte(Counter));
+  createCounter(document.getElementById('counter')!, {});
 
-  const mount = component(Index);
-  mount(root, {});
+  const createParent = component(Parent);
+  createParent(document.getElementById('parent')!, {});
 });

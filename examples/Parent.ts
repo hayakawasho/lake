@@ -2,7 +2,7 @@ import {
   defineComponent,
   ref,
   readonly,
-  children,
+  useSlots,
   useDOMRef,
 } from '../lib/main';
 import Child from './Child';
@@ -11,7 +11,7 @@ export default defineComponent({
   setup(_el) {
     const { refs } = useDOMRef<{ child: HTMLButtonElement }>('child');
 
-    const { addChild } = children();
+    const { addChild } = useSlots();
 
     const isOpen = ref(false);
 

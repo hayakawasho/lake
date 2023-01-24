@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onUnmounted } from '../lib/main';
+import { defineComponent, onUnmounted } from '../lib/main';
 import type { ReadonlyRef } from '../lib/main';
 
 type Props = {
