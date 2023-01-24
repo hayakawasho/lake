@@ -1,9 +1,12 @@
-import { getCurrentComponent, createComponent } from './internal/component';
-import type { ComponentContext } from './internal/component';
-import type { IComponent, RefElement } from './types';
+import {
+  getCurrentComponent,
+  createComponent,
+} from '../core/internal/component';
+import type { ComponentContext } from '../core/internal/component';
+import type { IComponent, RefElement } from '../core/types';
 
-export function children() {
-  const context = getCurrentComponent('children');
+export const useSlots = () => {
+  const context = getCurrentComponent('slots');
 
   return {
     addChild(
@@ -35,4 +38,4 @@ export function children() {
       context.removeChild(child);
     },
   };
-}
+};

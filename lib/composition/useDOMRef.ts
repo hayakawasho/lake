@@ -5,6 +5,7 @@ export function useDOMRef<T>(...refKey: string[]): {
   refs: T;
 } {
   const context = getCurrentComponent('domRef');
+
   return {
     refs: domRefs(new Set(refKey), context.element),
   };
