@@ -5,8 +5,8 @@ import {
 import type { ComponentContext } from '../core/internal/component';
 import type { IComponent, RefElement } from '../core/types';
 
-export const useSlots = () => {
-  const context = getCurrentComponent('slots');
+export const useSlot = () => {
+  const context = getCurrentComponent('slot');
 
   return {
     addChild(
