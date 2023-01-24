@@ -157,28 +157,6 @@ function createApp() {
     }
   };
 }
-function children() {
-  const context = getCurrentComponent("children");
-  return {
-    addChild(targetOrTargets, child, props) {
-      const results = [];
-      const create = (el) => {
-        const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
-        context.addChild(component);
-        results.push(component);
-      };
-      if (Array.isArray(targetOrTargets)) {
-        targetOrTargets.forEach((el) => create(el));
-      } else {
-        create(targetOrTargets);
-      }
-      return results;
-    },
-    removeChild(child) {
-      context.removeChild(child);
-    }
-  };
-}
 const useEvent = (target, eventType, listener, optionsOrUseCapture) => {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
   onUnmounted(() => {
@@ -233,6 +211,28 @@ const useIntersectionWatch = (targetOrTargets, cb, opts = {
     unwatch
   };
 };
+const useSlots = () => {
+  const context = getCurrentComponent("slots");
+  return {
+    addChild(targetOrTargets, child, props) {
+      const results = [];
+      const create = (el) => {
+        const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
+        context.addChild(component);
+        results.push(component);
+      };
+      if (Array.isArray(targetOrTargets)) {
+        targetOrTargets.forEach((el) => create(el));
+      } else {
+        create(targetOrTargets);
+      }
+      return results;
+    },
+    removeChild(child) {
+      context.removeChild(child);
+    }
+  };
+};
 function withSvelte(App) {
   return defineComponent({
     setup(el, props) {
@@ -255,4 +255,4 @@ function withSvelte(App) {
     }
   });
 }
-export { children, createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, withSvelte };
+export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useSlots, withSvelte };
