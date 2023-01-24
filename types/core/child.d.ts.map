@@ -1,1 +1,0 @@
-{"version":3,"file":"child.d.ts","sourceRoot":"","sources":["../../lib/core/child.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,sBAAsB,CAAC;AAC7D,OAAO,KAAK,EAAE,UAAU,EAAE,UAAU,EAAE,MAAM,SAAS,CAAC;AAEtD,wBAAgB,oBAAoB;iCAKb,UAAU,GAAG,UAAU,EAAE,SACnC,UAAU,SACV,SAAS,OAAO,MAAM,EAAE,OAAO,CAAC,CAAC;uBA2BvB,gBAAgB;EAItC"}
