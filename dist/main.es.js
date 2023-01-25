@@ -211,8 +211,8 @@ const useIntersectionWatch = (targetOrTargets, cb, opts = {
     unwatch
   };
 };
-const useSlots = () => {
-  const context = getCurrentComponent("slots");
+const useSlot = () => {
+  const context = getCurrentComponent("slot");
   return {
     addChild(targetOrTargets, child, props) {
       const results = [];
@@ -255,4 +255,4 @@ function withSvelte(App) {
     }
   });
 }
-export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useSlots, withSvelte };
+export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useSlot, withSvelte };
