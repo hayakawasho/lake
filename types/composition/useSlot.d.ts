@@ -1,6 +1,6 @@
 import type { ComponentContext } from '../core/internal/component';
 import type { IComponent, RefElement } from '../core/types';
-export declare const useSlots: () => {
+export declare const useSlot: () => {
   addChild(
     targetOrTargets: RefElement | RefElement[],
     child: IComponent,
@@ -8,4 +8,4 @@ export declare const useSlots: () => {
   ): ComponentContext[];
   removeChild(child: ComponentContext): void;
 };
-//# sourceMappingURL=useSlots.d.ts.map
+//# sourceMappingURL=useSlot.d.ts.map

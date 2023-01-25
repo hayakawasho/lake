@@ -9,7 +9,7 @@ export { onMounted, onUnmounted } from './core/lifecycle';
 export { useEvent } from './composition/useEvent';
 export { useDOMRef } from './composition/useDOMRef';
 export { useIntersectionWatch } from './composition/useIntersectionWatch';
-export { useSlots } from './composition/useSlots';
+export { useSlot } from './composition/useSlot';
 
 export type { Context$ } from './svelte/withSvelte';
 export { withSvelte } from './svelte/withSvelte';
