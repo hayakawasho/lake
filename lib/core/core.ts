@@ -22,7 +22,7 @@ export const defineComponent = <Props>(options: IComponent<Props>) => options;
 export function createApp() {
   return {
     component(wrap: IComponent) {
-      return (el: RefElement, props: Record<string, any>) => {
+      return (el: RefElement, props: Record<string, any> = {}) => {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component);
         component.mount();

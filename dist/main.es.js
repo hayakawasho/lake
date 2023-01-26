@@ -146,7 +146,7 @@ const defineComponent = (options) => options;
 function createApp() {
   return {
     component(wrap) {
-      return (el, props) => {
+      return (el, props = {}) => {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component);
         component.mount();
@@ -214,7 +214,7 @@ const useIntersectionWatch = (targetOrTargets, cb, opts = {
 const useSlot = () => {
   const context = getCurrentComponent("slot");
   return {
-    addChild(targetOrTargets, child, props) {
+    addChild(targetOrTargets, child, props = {}) {
       const results = [];
       const create = (el) => {
         const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
