@@ -4,7 +4,7 @@ export declare const useSlot: () => {
   addChild(
     targetOrTargets: RefElement | RefElement[],
     child: IComponent,
-    props: Readonly<Record<string, unknown>>
+    props?: Readonly<Record<string, unknown>>
   ): ComponentContext[];
   removeChild(child: ComponentContext): void;
 };

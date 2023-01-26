@@ -5,7 +5,7 @@ export declare const defineComponent: <Props>(
 export declare function createApp(): {
   component(
     wrap: IComponent
-  ): (el: RefElement, props: Record<string, any>) => void;
+  ): (el: RefElement, props?: Record<string, any>) => void;
   unmount(selector: string, scope?: RefElement): void;
 };
 //# sourceMappingURL=core.d.ts.map
