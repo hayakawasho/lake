@@ -71,8 +71,8 @@ function assert(condition, message) {
   }
 }
 var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
-  LifecycleHooks2["MOUNTED"] = "onMounted";
-  LifecycleHooks2["UNMOUNTED"] = "onUnmounted";
+  LifecycleHooks2["MOUNTED"] = "Mounted";
+  LifecycleHooks2["UNMOUNTED"] = "Unmounted";
   return LifecycleHooks2;
 })(LifecycleHooks || {});
 const createHook = (lifecycleType) => {
@@ -81,8 +81,8 @@ const createHook = (lifecycleType) => {
     context[lifecycleType].push(hook);
   };
 };
-const onMounted = createHook("onMounted");
-const onUnmounted = createHook("onUnmounted");
+const useMount = createHook("Mounted");
+const useUnmount = createHook("Unmounted");
 let currentComponent = null;
 const setCurrentComponent = (context) => currentComponent = context;
 const getCurrentComponent = (hookName) => {
@@ -152,14 +152,14 @@ function createApp() {
         component.mount();
       };
     },
-    unmount(selector, scope) {
-      q(selector, scope).filter((el) => DOM_COMPONENT_INSTANCE.get(el)).map((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
+    unmount(elements) {
+      elements.filter((el) => DOM_COMPONENT_INSTANCE.get(el)).map((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
     }
   };
 }
 const useEvent = (target, eventType, listener, optionsOrUseCapture) => {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
-  onUnmounted(() => {
+  useUnmount(() => {
     target.removeEventListener(eventType, listener, optionsOrUseCapture);
   });
 };
@@ -201,7 +201,7 @@ const useIntersectionWatch = (targetOrTargets, cb, opts = {
   } else {
     io.observe(targetOrTargets);
   }
-  onUnmounted(() => {
+  useUnmount(() => {
     io.disconnect();
   });
   const unwatch = (el) => {
@@ -249,10 +249,10 @@ function withSvelte(App) {
         props,
         context
       });
-      onUnmounted(() => {
+      useUnmount(() => {
         app.$destroy();
       });
     }
   });
 }
-export { createApp, defineComponent, onMounted, onUnmounted, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useSlot, withSvelte };
+export { createApp, defineComponent, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useMount, useSlot, useUnmount, withSvelte };

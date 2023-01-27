@@ -1,6 +1,6 @@
 import type { SvelteComponent } from 'svelte';
 import type { RefElement } from '../core/types';
-import { defineComponent, onUnmounted } from '../main';
+import { defineComponent, useUnmount } from '../main';
 
 export type Context$ = {
   rootRef: RefElement;
@@ -24,7 +24,7 @@ export function withSvelte(App: typeof SvelteComponent) {
         context,
       });
 
-      onUnmounted(() => {
+      useUnmount(() => {
         app.$destroy();
       });
     },

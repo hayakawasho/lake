@@ -1,4 +1,4 @@
-import { onUnmounted } from '../core/lifecycle';
+import { useUnmount } from '../core/lifecycle';
 import type { RefElement } from '../core/types';
 
 export const useIntersectionWatch = (
@@ -17,7 +17,7 @@ export const useIntersectionWatch = (
     io.observe(targetOrTargets);
   }
 
-  onUnmounted(() => {
+  useUnmount(() => {
     io.disconnect();
   });
 
