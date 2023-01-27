@@ -1,4 +1,4 @@
-import { defineComponent, onUnmounted } from '../lib/main';
+import { defineComponent, useUnmount } from '../lib/main';
 import type { ReadonlyRef } from '../lib/main';
 
 type Props = {
@@ -14,7 +14,7 @@ export default defineComponent<Props>({
 
     el.addEventListener('click', onToggle);
 
-    onUnmounted(() => {
+    useUnmount(() => {
       el.removeEventListener('click', onToggle);
     });
   },

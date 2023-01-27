@@ -3,8 +3,8 @@ import { getCurrentComponent } from './internal/component';
 export type LifecycleHandler = () => void;
 
 export const enum LifecycleHooks {
-  MOUNTED = 'onMounted',
-  UNMOUNTED = 'onUnmounted',
+  MOUNTED = 'Mounted',
+  UNMOUNTED = 'Unmounted',
 }
 
 const createHook = (lifecycleType: LifecycleHooks) => {
@@ -14,5 +14,5 @@ const createHook = (lifecycleType: LifecycleHooks) => {
   };
 };
 
-export const onMounted = createHook(LifecycleHooks.MOUNTED);
-export const onUnmounted = createHook(LifecycleHooks.UNMOUNTED);
+export const useMount = createHook(LifecycleHooks.MOUNTED);
+export const useUnmount = createHook(LifecycleHooks.UNMOUNTED);

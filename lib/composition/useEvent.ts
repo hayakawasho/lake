@@ -1,4 +1,4 @@
-import { onUnmounted } from '../core/lifecycle';
+import { useUnmount } from '../core/lifecycle';
 
 type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
@@ -21,7 +21,7 @@ export const useEvent = <
 ) => {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
 
-  onUnmounted(() => {
+  useUnmount(() => {
     target.removeEventListener(eventType, listener, optionsOrUseCapture);
   });
 };
