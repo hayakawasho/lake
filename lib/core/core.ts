@@ -1,5 +1,4 @@
 import { warn } from '../util/function';
-import { q } from '../util/selector';
 import type { ComponentContext } from './internal/component';
 import { createComponent } from './internal/component';
 import type { RefElement, IComponent } from './types';
@@ -29,8 +28,8 @@ export function createApp() {
       };
     },
 
-    unmount(selector: string, scope?: RefElement) {
-      q(selector, scope)
+    unmount(elements: RefElement[]) {
+      elements
         .filter(el => DOM_COMPONENT_INSTANCE.get(el))
         .map(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());
     },
