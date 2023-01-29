@@ -25,6 +25,8 @@ export function createApp() {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component);
         component.mount();
+
+        return component;
       };
     },
 
