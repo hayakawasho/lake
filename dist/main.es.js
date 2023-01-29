@@ -36,7 +36,7 @@ var __privateSet = (obj, member, value, setter) => {
   setter ? setter.call(obj, value) : member.set(obj, value);
   return value;
 };
-var _rawValue, _ref, _a, _b;
+var _rawValue, _ref, _a, _b, _children;
 const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
 class Ref {
   constructor(value) {
@@ -94,31 +94,32 @@ class ComponentContext {
   constructor(element) {
     __publicField(this, _a, []);
     __publicField(this, _b, []);
-    __publicField(this, "uid");
     __publicField(this, "parent", null);
-    __publicField(this, "children", []);
+    __privateAdd(this, _children, []);
+    __publicField(this, "uid");
+    __publicField(this, "current", {});
     __publicField(this, "mount", () => {
       allRun([
         ...this[LifecycleHooks.MOUNTED],
-        ...this.children.flatMap((child) => child.mount)
+        ...__privateGet(this, _children).flatMap((child) => child.mount)
       ]);
     });
     __publicField(this, "unmount", () => {
       allRun([
         ...this[LifecycleHooks.UNMOUNTED],
-        ...this.children.flatMap((child) => child.unmount)
+        ...__privateGet(this, _children).flatMap((child) => child.unmount)
       ]);
     });
     __publicField(this, "addChild", (child) => {
-      this.children.push(child);
+      __privateGet(this, _children).push(child);
       child.parent = this;
     });
     __publicField(this, "removeChild", (child) => {
-      const index = this.children.findIndex((context) => context === child);
+      const index = __privateGet(this, _children).findIndex((context) => context === child);
       if (index === -1) {
         return;
       }
-      this.children.splice(index, 1);
+      __privateGet(this, _children).splice(index, 1);
       child.parent = null;
     });
     this.element = element;
@@ -126,11 +127,13 @@ class ComponentContext {
   }
 }
 _a = LifecycleHooks.MOUNTED, _b = LifecycleHooks.UNMOUNTED;
+_children = new WeakMap();
 function createComponent(wrap) {
   const parentContext = currentComponent;
   return (root, props) => {
     const context = setCurrentComponent(new ComponentContext(root));
-    wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
+    const provides = wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
+    context.current = provides || {};
     setCurrentComponent(parentContext);
     return context;
   };
@@ -150,6 +153,7 @@ function createApp() {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component);
         component.mount();
+        return component;
       };
     },
     unmount(elements) {

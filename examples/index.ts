@@ -6,8 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const { component } = createApp();
 
   const createCounter = component(withSvelte(Counter));
-  createCounter(document.getElementById('counter')!);
+  const refCounter = document.getElementById('counter');
+
+  if (refCounter) {
+    createCounter(refCounter);
+  }
 
   const createParent = component(Parent);
-  createParent(document.getElementById('parent')!);
+  const refParent = document.getElementById('parent');
+
+  if (refParent) {
+    createParent(refParent);
+  }
 });
