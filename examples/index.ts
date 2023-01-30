@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const refCounter = document.getElementById('counter');
 
   if (refCounter) {
-    createCounter(refCounter);
+    createCounter(refCounter, { test: 'hoge' });
   }
 
   const createParent = component(Parent);
