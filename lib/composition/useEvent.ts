@@ -4,12 +4,6 @@ type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 > = (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown;
 
-type Options = {
-  capture?: boolean;
-  once?: boolean;
-  passive?: boolean;
-};
-
 export const useEvent = <
   T extends HTMLElement = HTMLElement,
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
@@ -17,7 +11,7 @@ export const useEvent = <
   target: T,
   eventType: K,
   listener: ElementEventListener<K>,
-  optionsOrUseCapture?: Options | boolean
+  optionsOrUseCapture?: boolean | AddEventListenerOptions
 ) => {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
 
