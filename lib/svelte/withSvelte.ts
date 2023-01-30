@@ -1,10 +1,10 @@
 import type { SvelteComponent } from 'svelte';
-import type { RefElement } from '../core/types';
+import type { RefElement, ComponentProps } from '../core/types';
 import { defineComponent, useUnmount } from '../main';
 
-export type Context$ = {
+export type Context$<T = Record<string, unknown>> = {
   rootRef: RefElement;
-};
+} & ComponentProps<T>;
 
 export function withSvelte(App: typeof SvelteComponent) {
   return defineComponent({
@@ -14,13 +14,13 @@ export function withSvelte(App: typeof SvelteComponent) {
           '$',
           {
             rootRef: el,
+            ...props,
           },
         ],
       ]);
 
       const app = new App({
         target: el,
-        props,
         context,
       });
 

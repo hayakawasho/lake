@@ -1,11 +1,15 @@
 <script lang="ts">
   import { useEvent, useDOMRef } from '../lib/main'
+  import { getContext } from 'svelte'
+  import type { Context$ } from '../lib/main'
 
   type Refs = {
     increment: HTMLButtonElement
     decrement: HTMLButtonElement
     count: HTMLDivElement
   }
+
+  const { test: __ } = getContext<Context$<{ test: string }>>('$')
 
   const { refs } = useDOMRef<Refs>('increment', 'decrement', 'count')
 
