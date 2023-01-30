@@ -243,14 +243,13 @@ function withSvelte(App) {
       const context = /* @__PURE__ */ new Map([
         [
           "$",
-          {
+          __spreadValues({
             rootRef: el
-          }
+          }, props)
         ]
       ]);
       const app = new App({
         target: el,
-        props,
         context
       });
       useUnmount(() => {
