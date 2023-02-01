@@ -1,7 +1,6 @@
 import { warn } from '../util/function';
-import type { ComponentContext } from './internal/component';
 import { createComponent } from './internal/component';
-import type { RefElement, IComponent } from './types';
+import type { RefElement, IComponent, ComponentContext } from './types';
 
 const DOM_COMPONENT_INSTANCE = new WeakMap<RefElement, ComponentContext>();
 

@@ -1,5 +1,4 @@
-import type { ComponentContext } from './internal/component';
-import type { RefElement, IComponent } from './types';
+import type { RefElement, IComponent, ComponentContext } from './types';
 export declare const defineComponent: <Props>(
   options: IComponent<Props>
 ) => IComponent<Props>;
