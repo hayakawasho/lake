@@ -2,8 +2,7 @@ import {
   getCurrentComponent,
   createComponent,
 } from '../core/internal/component';
-import type { ComponentContext } from '../core/internal/component';
-import type { IComponent, RefElement } from '../core/types';
+import type { IComponent, RefElement, ComponentContext } from '../core/types';
 
 export const useSlot = () => {
   const context = getCurrentComponent('slot');

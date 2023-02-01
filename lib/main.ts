@@ -1,6 +1,6 @@
 export { q } from './util/selector';
 
-export type { RefElement, IComponent } from './core/types';
+export type { RefElement, IComponent, ComponentContext } from './core/types';
 export type { Ref, ReadonlyRef } from './core/ref';
 
 export { ref, readonly } from './core/ref';
