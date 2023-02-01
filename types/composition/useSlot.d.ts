@@ -1,5 +1,4 @@
-import type { ComponentContext } from '../core/internal/component';
-import type { IComponent, RefElement } from '../core/types';
+import type { IComponent, RefElement, ComponentContext } from '../core/types';
 export declare const useSlot: () => {
   addChild(
     targetOrTargets: RefElement | RefElement[],

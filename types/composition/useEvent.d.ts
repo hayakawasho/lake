@@ -1,11 +1,6 @@
 declare type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 > = (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown;
-declare type Options = {
-  capture?: boolean;
-  once?: boolean;
-  passive?: boolean;
-};
 export declare const useEvent: <
   T extends HTMLElement = HTMLElement,
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
@@ -13,7 +8,7 @@ export declare const useEvent: <
   target: T,
   eventType: K,
   listener: ElementEventListener<K>,
-  optionsOrUseCapture?: Options | boolean
+  optionsOrUseCapture?: boolean | AddEventListenerOptions
 ) => void;
 export {};
 //# sourceMappingURL=useEvent.d.ts.map
