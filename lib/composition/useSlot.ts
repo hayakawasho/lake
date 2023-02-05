@@ -9,11 +9,11 @@ export const useSlot = () => {
 
   return {
     addChild(
-      targetOrTargets: RefElement | RefElement[],
       child: IComponent,
+      targetOrTargets: RefElement | RefElement[],
       props: Readonly<Record<string, unknown>> = {}
     ) {
-      const results: ComponentContext[] = [];
+      const children: ComponentContext[] = [];
 
       const create = (el: RefElement) => {
         const component = createComponent(child)(el, {
@@ -21,7 +21,7 @@ export const useSlot = () => {
           ...props,
         });
         context.addChild(component);
-        results.push(component);
+        children.push(component);
       };
 
       if (Array.isArray(targetOrTargets)) {
@@ -30,7 +30,7 @@ export const useSlot = () => {
         create(targetOrTargets);
       }
 
-      return results;
+      return children;
     },
 
     removeChild(child: ComponentContext) {
