@@ -10,12 +10,11 @@ import Child from './Child';
 export default defineComponent({
   setup(_el) {
     const { refs } = useDOMRef<{ child: HTMLButtonElement }>('child');
-
     const { addChild } = useSlot();
 
     const isOpen = ref(false);
 
-    addChild(refs.child, Child, {
+    addChild(Child, refs.child, {
       isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;

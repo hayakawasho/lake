@@ -218,19 +218,19 @@ const useIntersectionWatch = (targetOrTargets, cb, opts = {
 const useSlot = () => {
   const context = getCurrentComponent("slot");
   return {
-    addChild(targetOrTargets, child, props = {}) {
-      const results = [];
+    addChild(child, targetOrTargets, props = {}) {
+      const children = [];
       const create = (el) => {
         const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
         context.addChild(component);
-        results.push(component);
+        children.push(component);
       };
       if (Array.isArray(targetOrTargets)) {
         targetOrTargets.forEach((el) => create(el));
       } else {
         create(targetOrTargets);
       }
-      return results;
+      return children;
     },
     removeChild(child) {
       context.removeChild(child);
