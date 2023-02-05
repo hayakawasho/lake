@@ -1,8 +1,8 @@
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 export declare const useSlot: () => {
   addChild(
-    targetOrTargets: RefElement | RefElement[],
     child: IComponent,
+    targetOrTargets: RefElement | RefElement[],
     props?: Readonly<Record<string, unknown>>
   ): ComponentContext[];
   removeChild(child: ComponentContext): void;
