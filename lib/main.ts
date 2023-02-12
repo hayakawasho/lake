@@ -5,7 +5,7 @@ export { ref, readonly } from './core/ref';
 export { factory, defineComponent } from './core/core';
 export { useMount, useUnmount } from './core/lifecycle';
 export { useEvent } from './composition/useEvent';
-export { useDOMRef } from './composition/useDOMRef';
+export { useDomRef } from './composition/useDomRef';
 export { useIntersectionWatch } from './composition/useIntersectionWatch';
 export { useSlot } from './composition/useSlot';
 

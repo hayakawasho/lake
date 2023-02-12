@@ -4,10 +4,9 @@ import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent, RefObject } from '../types';
 
-let owner: ComponentContext | null = null;
+let owner: ComponentContext;
 
-const setCurrentComponent = (context: ComponentContext | null) =>
-  (owner = context);
+const setCurrentComponent = (ctx: ComponentContext) => (owner = ctx);
 
 export const getCurrentComponent = (hookName: string) => {
   assert(owner, `"${hookName}" called outside setup() will never be run.`);
@@ -65,8 +64,7 @@ export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
   return (root: RefElement, props: Record<string, any>) => {
-    const ctx = setCurrentComponent(new ComponentContext(root))!;
-
+    const ctx = setCurrentComponent(new ComponentContext(root));
     const provides = wrap.setup(root, {
       ...wrap.props,
       ...props,
