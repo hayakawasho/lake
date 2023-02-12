@@ -1,17 +1,16 @@
-import { warn } from '../../util/function';
-import { q } from '../../util/selector';
+import { q as $ } from '../../util/selector';
 import type { RefElement } from '../types';
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
-  const findRef = (query: string) => {
-    const nodes = q(`[data-ref="${query}"]`, scope);
-    return reducer(nodes, query);
+  const findRef = (q: string) => {
+    const nodes = $(`[data-ref="${q}"]`, scope);
+    return reducer(nodes, q);
   };
 
-  const reducer = (nodes: RefElement[], query: string) => {
+  const reducer = (nodes: RefElement[], q: string) => {
     switch (nodes.length) {
       case 0:
-        warn(`[data-ref="${query}"] does not exist.`);
+        console.error(`[data-ref="${q}"] does not exist.`);
         return null;
       case 1:
         return nodes[0];

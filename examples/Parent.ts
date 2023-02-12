@@ -14,7 +14,7 @@ export default defineComponent({
 
     const isOpen = ref(false);
 
-    addChild(Child, refs.child, {
+    addChild(refs.child, Child, {
       isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;

@@ -9,10 +9,10 @@ export const useSlot = () => {
 
   return {
     addChild(
-      child: IComponent,
       targetOrTargets: RefElement | RefElement[],
+      child: IComponent,
       props: Readonly<Record<string, unknown>> = {}
-    ) {
+    ): ComponentContext[] {
       const children: ComponentContext[] = [];
 
       const create = (el: RefElement) => {
@@ -33,8 +33,8 @@ export const useSlot = () => {
       return children;
     },
 
-    removeChild(child: ComponentContext) {
-      context.removeChild(child);
+    removeChild(children: ComponentContext[]) {
+      children.forEach(child => context.removeChild(child));
     },
   };
 };
