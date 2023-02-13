@@ -1,9 +1,9 @@
-import { q as $ } from '../../util/selector';
+import { $$ } from '../../util/selector';
 import type { RefElement } from '../types';
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
   const findRef = (q: string) => {
-    const nodes = $(`[data-ref="${q}"]`, scope);
+    const nodes = $$(`[data-ref="${q}"]`, scope);
     return reducer(nodes, q);
   };
 

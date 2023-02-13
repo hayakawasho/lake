@@ -1,7 +1,6 @@
-import type { RefElement } from '../core/types';
 export declare const useIntersectionWatch: (
-  targetOrTargets: RefElement | RefElement[],
-  cb: IntersectionObserverCallback,
+  targetOrTargets: Element | Element[],
+  callback: IntersectionObserverCallback,
   opts?: IntersectionObserverInit
 ) => {
   unwatch: (el: Element) => void;

@@ -4,9 +4,8 @@ import { domRefs } from '../core/internal/domRefs';
 export function useDomRef<T>(...refKey: string[]): {
   refs: T;
 } {
-  const context = getCurrentComponent('DomRef');
-
+  const ctx = getCurrentComponent('DomRef');
   return {
-    refs: domRefs(new Set(refKey), context.element),
+    refs: domRefs(new Set(refKey), ctx.element),
   };
 }

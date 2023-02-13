@@ -1,11 +1,11 @@
 import type { RefElement, IComponent, ComponentContext } from './types';
-export declare const defineComponent: <Props>(
-  options: IComponent<Props>
-) => IComponent<Props>;
-export declare function createApp(): {
+export declare const factory: () => {
   component(
     wrap: IComponent
   ): (el: RefElement, props?: Record<string, any>) => ComponentContext;
-  unmount(elements: RefElement[]): void;
+  unmount(targets: RefElement[]): void;
 };
+export declare const defineComponent: <Props>(
+  opts: IComponent<Props>
+) => IComponent<Props>;
 //# sourceMappingURL=core.d.ts.map

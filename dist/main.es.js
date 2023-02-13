@@ -1,261 +1,204 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
+var D = Object.defineProperty;
+var $ = (t, n, e) => n in t ? D(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
+var u = (t, n, e) => ($(t, typeof n != "symbol" ? n + "" : n, e), e), C = (t, n, e) => {
+  if (!n.has(t))
+    throw TypeError("Cannot " + e);
 };
-var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-  return value;
-};
-var __accessCheck = (obj, member, msg) => {
-  if (!member.has(obj))
-    throw TypeError("Cannot " + msg);
-};
-var __privateGet = (obj, member, getter) => {
-  __accessCheck(obj, member, "read from private field");
-  return getter ? getter.call(obj) : member.get(obj);
-};
-var __privateAdd = (obj, member, value) => {
-  if (member.has(obj))
+var i = (t, n, e) => (C(t, n, "read from private field"), e ? e.call(t) : n.get(t)), f = (t, n, e) => {
+  if (n.has(t))
     throw TypeError("Cannot add the same private member more than once");
-  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-};
-var __privateSet = (obj, member, value, setter) => {
-  __accessCheck(obj, member, "write to private field");
-  setter ? setter.call(obj, value) : member.set(obj, value);
-  return value;
-};
-var _rawValue, _ref, _a, _b, _children;
-const q = (query, scope) => Array.from((scope != null ? scope : document).querySelectorAll(query));
-class Ref {
-  constructor(value) {
-    __privateAdd(this, _rawValue, void 0);
-    __privateSet(this, _rawValue, value);
+  n instanceof WeakSet ? n.add(t) : n.set(t, e);
+}, m = (t, n, e, o) => (C(t, n, "write to private field"), o ? o.call(t, e) : n.set(t, e), e);
+var d;
+class b {
+  constructor(n) {
+    f(this, d, void 0);
+    m(this, d, n);
   }
   get value() {
-    return __privateGet(this, _rawValue);
+    return i(this, d);
   }
-  set value(newVal) {
-    __privateSet(this, _rawValue, newVal);
+  set value(n) {
+    m(this, d, n);
   }
 }
-_rawValue = new WeakMap();
-const ref = (val) => new Ref(val);
-class ReadonlyRef {
-  constructor(value) {
-    __privateAdd(this, _ref, void 0);
-    __privateSet(this, _ref, value);
+d = new WeakMap();
+const V = (t) => new b(t);
+var h;
+class y {
+  constructor(n) {
+    f(this, h, void 0);
+    m(this, h, n);
   }
   get value() {
-    return __privateGet(this, _ref).value;
+    return i(this, h).value;
   }
 }
-_ref = new WeakMap();
-const readonly = (ref2) => new ReadonlyRef(ref2);
-const warn = (message) => console.warn(message);
-const allRun = (fns) => fns.forEach((fn) => fn());
-function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message || `unexpected condition`);
-  }
+h = new WeakMap();
+const j = (t) => new y(t);
+function A(t, n) {
+  if (!t)
+    throw new Error(n || "unexpected condition");
 }
-var LifecycleHooks = /* @__PURE__ */ ((LifecycleHooks2) => {
-  LifecycleHooks2["MOUNTED"] = "Mounted";
-  LifecycleHooks2["UNMOUNTED"] = "Unmounted";
-  return LifecycleHooks2;
-})(LifecycleHooks || {});
-const createHook = (lifecycleType) => {
-  return (hook) => {
-    const context = getCurrentComponent(lifecycleType);
-    context[lifecycleType].push(hook);
-  };
-};
-const useMount = createHook("Mounted");
-const useUnmount = createHook("Unmounted");
-let currentComponent = null;
-const setCurrentComponent = (context) => currentComponent = context;
-const getCurrentComponent = (hookName) => {
-  assert(currentComponent, `"${hookName}" called outside setup() will never be run.`);
-  return currentComponent;
-};
-let uid = 0;
-class ComponentContext {
-  constructor(element) {
-    __publicField(this, _a, []);
-    __publicField(this, _b, []);
-    __publicField(this, "parent", null);
-    __privateAdd(this, _children, []);
-    __publicField(this, "uid");
-    __publicField(this, "current", {});
-    __publicField(this, "mount", () => {
-      allRun([
-        ...this[LifecycleHooks.MOUNTED],
-        ...__privateGet(this, _children).flatMap((child) => child.mount)
+const N = (t) => t.forEach((n) => n());
+var l = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(l || {});
+const R = (t) => (n) => {
+  M(t)[t].push(n);
+}, q = R(
+  "Mounted"
+  /* MOUNTED */
+), E = R(
+  "Unmounted"
+  /* UNMOUNTED */
+);
+let p;
+const x = (t) => p = t, M = (t) => (A(p, `"${t}" called outside setup() will never be run.`), p);
+let O = 0;
+var k, L, a;
+class S {
+  constructor(n) {
+    u(this, k, []);
+    u(this, L, []);
+    u(this, "parent", null);
+    f(this, a, []);
+    u(this, "uid");
+    u(this, "current", {});
+    u(this, "mount", () => {
+      N([
+        ...this[l.MOUNTED],
+        ...i(this, a).flatMap((n) => n.mount)
       ]);
     });
-    __publicField(this, "unmount", () => {
-      allRun([
-        ...this[LifecycleHooks.UNMOUNTED],
-        ...__privateGet(this, _children).flatMap((child) => child.unmount)
+    u(this, "unmount", () => {
+      N([
+        ...this[l.UNMOUNTED],
+        ...i(this, a).flatMap((n) => n.unmount)
       ]);
     });
-    __publicField(this, "addChild", (child) => {
-      __privateGet(this, _children).push(child);
-      child.parent = this;
+    u(this, "addChild", (n) => {
+      i(this, a).push(n), n.parent = this;
     });
-    __publicField(this, "removeChild", (child) => {
-      const index = __privateGet(this, _children).findIndex((context) => context === child);
-      if (index === -1) {
-        return;
-      }
-      __privateGet(this, _children).splice(index, 1);
-      child.parent = null;
+    u(this, "removeChild", (n) => {
+      const e = i(this, a).findIndex((o) => o === n);
+      e !== -1 && (i(this, a).splice(e, 1), n.parent = null);
     });
-    this.element = element;
-    this.uid = element.id || uid++;
+    this.element = n, this.uid = O++;
   }
 }
-_a = LifecycleHooks.MOUNTED, _b = LifecycleHooks.UNMOUNTED;
-_children = new WeakMap();
-function createComponent(wrap) {
-  const parentContext = currentComponent;
-  return (root, props) => {
-    const context = setCurrentComponent(new ComponentContext(root));
-    const provides = wrap.setup(root, __spreadValues(__spreadValues({}, wrap.props), props));
-    context.current = provides || {};
-    setCurrentComponent(parentContext);
-    return context;
+k = l.MOUNTED, L = l.UNMOUNTED, a = new WeakMap();
+const U = (t) => {
+  const n = p;
+  return (e, o) => {
+    const c = x(new S(e)), r = t.setup(e, {
+      ...t.props,
+      ...o
+    });
+    return c.current = r || {}, x(n), c;
   };
-}
-const DOM_COMPONENT_INSTANCE = /* @__PURE__ */ new WeakMap();
-const bindDOMNodeToComponent = (el, component, name) => {
-  if (DOM_COMPONENT_INSTANCE.has(el)) {
-    warn(`The DOM of ${name} was already bind.`);
+}, v = /* @__PURE__ */ new WeakMap(), I = (t, n, e) => {
+  if (v.has(t)) {
+    console.error(`${e} was already bind.`);
+    return;
   }
-  DOM_COMPONENT_INSTANCE.set(el, component);
-};
-const defineComponent = (options) => options;
-function createApp() {
-  return {
-    component(wrap) {
-      return (el, props = {}) => {
-        const component = createComponent(wrap)(el, props);
-        bindDOMNodeToComponent(el, component);
-        component.mount();
-        return component;
-      };
-    },
-    unmount(elements) {
-      elements.filter((el) => DOM_COMPONENT_INSTANCE.get(el)).map((el) => DOM_COMPONENT_INSTANCE.get(el).unmount());
-    }
-  };
-}
-const useEvent = (target, eventType, listener, optionsOrUseCapture) => {
-  target.addEventListener(eventType, listener, optionsOrUseCapture);
-  useUnmount(() => {
-    target.removeEventListener(eventType, listener, optionsOrUseCapture);
+  v.set(t, n);
+}, z = () => ({
+  component(t) {
+    return (n, e = {}) => {
+      const o = U(t)(n, e);
+      return I(n, o, t.tag || ""), o.mount(), o;
+    };
+  },
+  unmount(t) {
+    t.filter((n) => v.has(n)).forEach((n) => v.get(n).unmount());
+  }
+}), T = (t) => t, B = (t, n, e, o) => {
+  t.addEventListener(n, e, o), E(() => {
+    t.removeEventListener(n, e, o);
   });
-};
-function domRefs(ref2, scope) {
-  const findRef = (query) => {
-    const nodes = q(`[data-ref="${query}"]`, scope);
-    return reducer(nodes, query);
-  };
-  const reducer = (nodes, query) => {
-    switch (nodes.length) {
+}, W = (t, n) => Array.from((n ?? document).querySelectorAll(t));
+function _(t, n) {
+  const e = (r) => {
+    const s = W(`[data-ref="${r}"]`, n);
+    return o(s, r);
+  }, o = (r, s) => {
+    switch (r.length) {
       case 0:
-        warn(`[data-ref="${query}"] does not exist.`);
-        return null;
+        return console.error(`[data-ref="${s}"] does not exist.`), null;
       case 1:
-        return nodes[0];
+        return r[0];
       default:
-        return nodes;
+        return r;
     }
   };
-  const childRef = [...ref2].reduce((acc, cur) => {
-    acc[cur] = findRef(cur);
-    return acc;
-  }, {});
-  return childRef;
+  return [...t].reduce((r, s) => (r[s] = e(s), r), {});
 }
-function useDOMRef(...refKey) {
-  const context = getCurrentComponent("domRef");
+function F(...t) {
+  const n = M("DomRef");
   return {
-    refs: domRefs(new Set(refKey), context.element)
+    refs: _(new Set(t), n.element)
   };
 }
-const useIntersectionWatch = (targetOrTargets, cb, opts = {
+const G = (t, n, e = {
   rootMargin: "0px",
   threshold: 0.1
 }) => {
-  const io = new IntersectionObserver(cb, opts);
-  if (Array.isArray(targetOrTargets)) {
-    targetOrTargets.forEach((el) => io.observe(el));
-  } else {
-    io.observe(targetOrTargets);
-  }
-  useUnmount(() => {
-    io.disconnect();
-  });
-  const unwatch = (el) => {
-    io.unobserve(el);
+  const o = new IntersectionObserver(n, e);
+  return Array.isArray(t) ? t.forEach((r) => o.observe(r)) : o.observe(t), E(() => {
+    o.disconnect();
+  }), {
+    unwatch: (r) => {
+      o.unobserve(r);
+    }
   };
+}, H = () => {
+  const t = M("Slot");
   return {
-    unwatch
-  };
-};
-const useSlot = () => {
-  const context = getCurrentComponent("slot");
-  return {
-    addChild(child, targetOrTargets, props = {}) {
-      const children = [];
-      const create = (el) => {
-        const component = createComponent(child)(el, __spreadValues(__spreadValues({}, child.props), props));
-        context.addChild(component);
-        children.push(component);
+    addChild(n, e, o = {}) {
+      const c = [], r = (s) => {
+        const w = U(e)(s, {
+          ...e.props,
+          ...o
+        });
+        t.addChild(w), c.push(w);
       };
-      if (Array.isArray(targetOrTargets)) {
-        targetOrTargets.forEach((el) => create(el));
-      } else {
-        create(targetOrTargets);
-      }
-      return children;
+      return Array.isArray(n) ? n.forEach((s) => r(s)) : r(n), c;
     },
-    removeChild(child) {
-      context.removeChild(child);
+    removeChild(n) {
+      n.forEach((e) => t.removeChild(e));
     }
   };
 };
-function withSvelte(App) {
-  return defineComponent({
-    setup(el, props) {
-      const context = /* @__PURE__ */ new Map([
+function J(t) {
+  return T({
+    setup(n, e) {
+      const o = /* @__PURE__ */ new Map([
         [
           "$",
-          __spreadValues({
-            rootRef: el
-          }, props)
+          {
+            rootRef: n,
+            ...e
+          }
         ]
-      ]);
-      const app = new App({
-        target: el,
-        context
+      ]), c = new t({
+        target: n,
+        context: o
       });
-      useUnmount(() => {
-        app.$destroy();
+      E(() => {
+        c.$destroy();
       });
     }
   });
 }
-export { createApp, defineComponent, q, readonly, ref, useDOMRef, useEvent, useIntersectionWatch, useMount, useSlot, useUnmount, withSvelte };
+export {
+  T as defineComponent,
+  z as factory,
+  j as readonly,
+  V as ref,
+  F as useDomRef,
+  B as useEvent,
+  G as useIntersectionWatch,
+  q as useMount,
+  H as useSlot,
+  E as useUnmount,
+  J as withSvelte
+};

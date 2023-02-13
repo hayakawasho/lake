@@ -1,4 +1,4 @@
-export declare type LifecycleHandler = () => void;
+export type LifecycleHandler = () => void;
 export declare const enum LifecycleHooks {
   MOUNTED = 'Mounted',
   UNMOUNTED = 'Unmounted',

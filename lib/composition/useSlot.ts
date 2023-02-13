@@ -5,7 +5,7 @@ import {
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 
 export const useSlot = () => {
-  const context = getCurrentComponent('Slot');
+  const ctx = getCurrentComponent('Slot');
 
   return {
     addChild(
@@ -20,7 +20,7 @@ export const useSlot = () => {
           ...child.props,
           ...props,
         });
-        context.addChild(component);
+        ctx.addChild(component);
         children.push(component);
       };
 
@@ -34,7 +34,7 @@ export const useSlot = () => {
     },
 
     removeChild(children: ComponentContext[]) {
-      children.forEach(child => context.removeChild(child));
+      children.forEach(child => ctx.removeChild(child));
     },
   };
 };

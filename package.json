@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -34,7 +34,7 @@
     "serve": "vite preview",
     "prettier:write": "prettier --write ./lib/**/*.ts",
     "eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
-    "format": "yarn prettier:write && yarn eslint"
+    "format": "npm run prettier:write && npm run eslint"
   },
   "devDependencies": {
     "@playwright/test": "1.30.0",
@@ -55,12 +55,12 @@
     "typescript": "4.9.5",
     "vite": "4.1.1"
   },
-  "dependencies": {},
   "prepare": "husky install",
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "type": "module"
 }
