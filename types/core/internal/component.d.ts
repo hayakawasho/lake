@@ -17,8 +17,8 @@ declare class ComponentContext {
   addChild: (child: ComponentContext) => void;
   removeChild: (child: ComponentContext) => void;
 }
-export declare function createComponent(
+export declare const createComponent: (
   wrap: IComponent
-): (root: RefElement, props: Record<string, any>) => ComponentContext;
+) => (root: RefElement, props: Record<string, any>) => ComponentContext;
 export type { ComponentContext };
 //# sourceMappingURL=component.d.ts.map

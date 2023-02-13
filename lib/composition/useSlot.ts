@@ -5,14 +5,14 @@ import {
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 
 export const useSlot = () => {
-  const context = getCurrentComponent('slot');
+  const ctx = getCurrentComponent('Slot');
 
   return {
     addChild(
-      child: IComponent,
       targetOrTargets: RefElement | RefElement[],
+      child: IComponent,
       props: Readonly<Record<string, unknown>> = {}
-    ) {
+    ): ComponentContext[] {
       const children: ComponentContext[] = [];
 
       const create = (el: RefElement) => {
@@ -20,7 +20,7 @@ export const useSlot = () => {
           ...child.props,
           ...props,
         });
-        context.addChild(component);
+        ctx.addChild(component);
         children.push(component);
       };
 
@@ -33,8 +33,8 @@ export const useSlot = () => {
       return children;
     },
 
-    removeChild(child: ComponentContext) {
-      context.removeChild(child);
+    removeChild(children: ComponentContext[]) {
+      children.forEach(child => ctx.removeChild(child));
     },
   };
 };

@@ -1,4 +1,4 @@
-declare type ElementEventListener<
+type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
 > = (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown;
 export declare const useEvent: <

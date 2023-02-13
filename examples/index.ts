@@ -1,21 +1,21 @@
-import { createApp, withSvelte } from '../lib/main';
+import { factory, withSvelte } from '../lib/main';
 import Parent from './Parent';
 import Counter from './Counter.svelte';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const { component } = createApp();
+  const { component } = factory();
 
-  const createCounter = component(withSvelte(Counter));
   const refCounter = document.getElementById('counter');
 
   if (refCounter) {
+    const createCounter = component(withSvelte(Counter));
     createCounter(refCounter, { test: 'hoge' });
   }
 
-  const createParent = component(Parent);
   const refParent = document.getElementById('parent');
 
   if (refParent) {
+    const createParent = component(Parent);
     createParent(refParent);
   }
 });

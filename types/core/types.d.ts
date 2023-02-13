@@ -1,7 +1,8 @@
-export declare type RefElement = HTMLElement | SVGElement;
-export declare type RefObject = Readonly<Record<string, unknown>>;
-export declare type ComponentProps<Props> = Readonly<Props>;
+export type RefElement = HTMLElement | SVGElement;
+export type RefObject = Readonly<Record<string, unknown>>;
+export type ComponentProps<Props> = Readonly<Props>;
 export interface IComponent<Props = Record<string, unknown>> {
+  tag?: string;
   props?: ComponentProps<Props>;
   setup(el: RefElement, props: ComponentProps<Props>): void | RefObject;
 }

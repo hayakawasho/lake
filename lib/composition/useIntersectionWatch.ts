@@ -1,15 +1,14 @@
 import { useUnmount } from '../core/lifecycle';
-import type { RefElement } from '../core/types';
 
 export const useIntersectionWatch = (
-  targetOrTargets: RefElement | RefElement[],
-  cb: IntersectionObserverCallback,
+  targetOrTargets: Element | Element[],
+  callback: IntersectionObserverCallback,
   opts: IntersectionObserverInit = {
     rootMargin: '0px',
     threshold: 0.1,
   }
 ) => {
-  const io = new IntersectionObserver(cb, opts);
+  const io = new IntersectionObserver(callback, opts);
 
   if (Array.isArray(targetOrTargets)) {
     targetOrTargets.forEach(el => io.observe(el));

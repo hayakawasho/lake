@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useEvent, useDOMRef } from '../lib/main'
+  import { useEvent, useDomRef } from '../lib/main'
   import { getContext } from 'svelte'
   import type { Context$ } from '../lib/main'
 
@@ -11,7 +11,7 @@
 
   const { test: __ } = getContext<Context$<{ test: string }>>('$')
 
-  const { refs } = useDOMRef<Refs>('increment', 'decrement', 'count')
+  const { refs } = useDomRef<Refs>('increment', 'decrement', 'count')
 
   let count = 0
 
