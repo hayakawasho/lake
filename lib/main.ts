@@ -2,7 +2,7 @@ export type { RefElement, IComponent, ComponentContext } from './core/types';
 export type { Ref, ReadonlyRef } from './core/ref';
 
 export { ref, readonly } from './core/ref';
-export { factory, defineComponent } from './core/core';
+export { create as default, defineComponent } from './core/core';
 export { useMount, useUnmount } from './core/lifecycle';
 export { useEvent } from './composition/useEvent';
 export { useDomRef } from './composition/useDomRef';

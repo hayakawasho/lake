@@ -25,7 +25,7 @@ class b {
 d = new WeakMap();
 const V = (t) => new b(t);
 var h;
-class y {
+class A {
   constructor(n) {
     f(this, h, void 0);
     m(this, h, n);
@@ -35,8 +35,8 @@ class y {
   }
 }
 h = new WeakMap();
-const j = (t) => new y(t);
-function A(t, n) {
+const j = (t) => new A(t);
+function y(t, n) {
   if (!t)
     throw new Error(n || "unexpected condition");
 }
@@ -52,7 +52,7 @@ const R = (t) => (n) => {
   /* UNMOUNTED */
 );
 let p;
-const x = (t) => p = t, M = (t) => (A(p, `"${t}" called outside setup() will never be run.`), p);
+const x = (t) => p = t, M = (t) => (y(p, `"${t}" called outside setup() will never be run.`), p);
 let O = 0;
 var k, L, a;
 class S {
@@ -190,8 +190,8 @@ function J(t) {
   });
 }
 export {
+  z as default,
   T as defineComponent,
-  z as factory,
   j as readonly,
   V as ref,
   F as useDomRef,

@@ -16,7 +16,7 @@ const bindDOMNodeToComponent = (
   DOM_COMPONENT_INSTANCE.set(el, component);
 };
 
-export const factory = () => {
+export const create = () => {
   return {
     component(wrap: IComponent) {
       return (el: RefElement, props: Record<string, any> = {}) => {
