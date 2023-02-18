@@ -1,5 +1,5 @@
 import type { RefElement, IComponent, ComponentContext } from './types';
-export declare const factory: () => {
+export declare const create: () => {
   component(
     wrap: IComponent
   ): (el: RefElement, props?: Record<string, any>) => ComponentContext;
