@@ -37,7 +37,7 @@
     "format": "npm run prettier:write && npm run eslint"
   },
   "devDependencies": {
-    "@playwright/test": "1.30.0",
+    "@playwright/test": "1.31.0",
     "@sveltejs/vite-plugin-svelte": "2.0.2",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
