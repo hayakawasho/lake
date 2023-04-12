@@ -20,7 +20,6 @@ export const useSlot = () => {
         });
 
         context.addChild(component);
-        component.mount();
 
         return component;
       };
