@@ -9,8 +9,8 @@ export const enum LifecycleHooks {
 
 const createHook = (lifecycleType: LifecycleHooks) => {
   return (hook: LifecycleHandler) => {
-    const ctx = getCurrentComponent(lifecycleType);
-    ctx[lifecycleType].push(hook);
+    const context = getCurrentComponent(lifecycleType);
+    context[lifecycleType].push(hook);
   };
 };
 

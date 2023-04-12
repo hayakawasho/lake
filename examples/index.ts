@@ -1,4 +1,4 @@
-import { factory, withSvelte } from '../lib/main';
+import factory, { withSvelte } from '../lib/main';
 import Parent from './Parent';
 import Counter from './Counter.svelte';
 

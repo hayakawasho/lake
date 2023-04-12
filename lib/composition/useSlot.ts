@@ -5,7 +5,7 @@ import {
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 
 export const useSlot = () => {
-  const ctx = getCurrentComponent('Slot');
+  const context = getCurrentComponent('Slot');
 
   return {
     addChild(
@@ -13,28 +13,25 @@ export const useSlot = () => {
       child: IComponent,
       props: Readonly<Record<string, unknown>> = {}
     ): ComponentContext[] {
-      const children: ComponentContext[] = [];
-
       const create = (el: RefElement) => {
         const component = createComponent(child)(el, {
           ...child.props,
           ...props,
         });
-        ctx.addChild(component);
-        children.push(component);
+
+        context.addChild(component);
+        component.mount();
+
+        return component;
       };
 
-      if (Array.isArray(targetOrTargets)) {
-        targetOrTargets.forEach(el => create(el));
-      } else {
-        create(targetOrTargets);
-      }
-
-      return children;
+      return Array.isArray(targetOrTargets)
+        ? targetOrTargets.map(el => create(el))
+        : [create(targetOrTargets)];
     },
 
     removeChild(children: ComponentContext[]) {
-      children.forEach(child => ctx.removeChild(child));
+      children.forEach(child => context.removeChild(child));
     },
   };
 };
