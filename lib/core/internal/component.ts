@@ -6,7 +6,7 @@ import type { RefElement, IComponent, RefObject } from '../types';
 
 let owner: ComponentContext;
 
-const setCurrentComponent = (ctx: ComponentContext) => (owner = ctx);
+const setCurrentComponent = (context: ComponentContext) => (owner = context);
 
 export const getCurrentComponent = (hookName: string) => {
   assert(owner, `"${hookName}" called outside setup() will never be run.`);
@@ -30,10 +30,7 @@ class ComponentContext {
   }
 
   mount = () => {
-    allRun([
-      ...this[LifecycleHooks.MOUNTED],
-      ...this.#children.flatMap(child => child.mount),
-    ]);
+    allRun(this[LifecycleHooks.MOUNTED]);
   };
 
   unmount = () => {
@@ -46,10 +43,12 @@ class ComponentContext {
   addChild = (child: ComponentContext) => {
     this.#children.push(child);
     child.parent = this;
+
+    child.mount();
   };
 
   removeChild = (child: ComponentContext) => {
-    const index = this.#children.findIndex(ctx => ctx === child);
+    const index = this.#children.indexOf(child);
 
     if (index === -1) {
       return;
@@ -57,6 +56,8 @@ class ComponentContext {
 
     this.#children.splice(index, 1);
     child.parent = null;
+
+    child.unmount();
   };
 }
 
@@ -64,16 +65,19 @@ export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
   return (root: RefElement, props: Record<string, any>) => {
-    const ctx = setCurrentComponent(new ComponentContext(root));
+    const component = new ComponentContext(root);
+    const context = setCurrentComponent(component);
+
     const provides = wrap.setup(root, {
       ...wrap.props,
       ...props,
     });
-    ctx.current = provides || {};
+
+    context.current = provides || {};
 
     setCurrentComponent(parent);
 
-    return ctx;
+    return context;
   };
 };
 
