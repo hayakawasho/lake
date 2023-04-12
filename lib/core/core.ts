@@ -22,6 +22,7 @@ export const create = () => {
       return (el: RefElement, props: Record<string, any> = {}) => {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component, wrap.tag || '');
+
         component.mount();
 
         return component;
