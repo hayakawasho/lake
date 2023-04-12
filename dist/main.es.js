@@ -156,7 +156,7 @@ const F = (t, n, e = {
           ...e.props,
           ...o
         });
-        return t.addChild(s), s.mount(), s;
+        return t.addChild(s), s;
       };
       return Array.isArray(n) ? n.map((r) => c(r)) : [c(n)];
     },
