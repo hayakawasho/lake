@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.32.3",
-    "@sveltejs/vite-plugin-svelte": "2.0.3",
+    "@sveltejs/vite-plugin-svelte": "2.0.4",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "eslint": "8.38.0",
