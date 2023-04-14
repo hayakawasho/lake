@@ -8,8 +8,7 @@ type Props = {
 };
 
 export default defineComponent({
-  tag: 'child',
-
+  tagName: 'child',
   setup(el, props: Props) {
     const { isOpen, onOpen, onClose } = props;
     const onToggle = () => (isOpen.value ? onClose() : onOpen());

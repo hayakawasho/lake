@@ -8,20 +8,22 @@ import {
 import Child from './Child';
 
 export default defineComponent({
-  tag: 'parent',
-
+  tagName: 'parent',
   setup(_el) {
-    const { refs } = useDomRef<{ child: HTMLButtonElement }>('child');
+    const { refs } = useDomRef<{
+      child: HTMLButtonElement;
+    }>('child');
+
     const { addChild } = useSlot();
 
     const isOpen = ref(false);
 
     const [child] = addChild(refs.child, Child, {
       isOpen: readonly(isOpen),
-      onOpen() {
+      onOpen: () => {
         isOpen.value = true;
       },
-      onClose() {
+      onClose: () => {
         isOpen.value = false;
       },
     });

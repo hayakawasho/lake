@@ -3,7 +3,7 @@ export type RefElement = HTMLElement | SVGElement;
 export type ComponentProps<Props> = Readonly<Props>;
 
 export interface IComponent<SetupResult = void | Record<string, unknown>> {
-  tag: string;
+  tagName: string;
   setup(
     el: RefElement,
     props: ComponentProps<Record<string, unknown>>
