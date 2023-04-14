@@ -38,7 +38,8 @@ export const create = () => {
 };
 
 export const defineComponent = <
-  SetupResult extends Record<string, unknown> | void
+  SetupResult extends Record<string, unknown> | void,
+  Props extends Record<string, unknown>
 >(
-  opts: IComponent<SetupResult>
+  opts: IComponent<SetupResult, Props>
 ) => opts;

@@ -22,7 +22,7 @@ class ComponentContext<T = any> {
   parent: ComponentContext<T> | null = null;
   #children: ComponentContext<T>[] = [];
 
-  uid: string;
+  readonly uid: string;
   current = {} as ReturnType<IComponent<T>['setup']>;
 
   constructor(public element: RefElement, tagName: string) {
