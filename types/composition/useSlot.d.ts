@@ -1,11 +1,6 @@
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 export declare const useSlot: () => {
-  addChild<
-    Child extends IComponent<
-      Record<string, unknown>,
-      void | Record<string, unknown>
-    >
-  >(
+  addChild<Child extends IComponent<void | Record<string, unknown>>>(
     targetOrTargets: RefElement | RefElement[],
     child: Child,
     props?: Readonly<Record<string, unknown>>

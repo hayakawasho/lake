@@ -32,9 +32,9 @@
     "build": "NODE_ENV=production tsc && vite build",
     "watch": "vite build -w",
     "serve": "vite preview",
-    "prettier:write": "prettier --write ./lib/**/*.ts",
-    "eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
-    "format": "npm run prettier:write && npm run eslint"
+    "fix:prettier": "prettier --write ./lib/**/*.ts",
+    "fix:eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
+    "fix": "npm run fix:prettier && npm run fix:eslint"
   },
   "devDependencies": {
     "@playwright/test": "1.32.3",

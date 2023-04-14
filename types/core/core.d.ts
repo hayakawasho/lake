@@ -5,7 +5,9 @@ export declare const create: () => {
   ): (el: RefElement, props?: Record<string, any>) => ComponentContext<any>;
   unmount(targets: RefElement[]): void;
 };
-export declare const defineComponent: <Props, SetupResult>(
-  opts: IComponent<Props, SetupResult>
-) => IComponent<Props, SetupResult>;
+export declare const defineComponent: <
+  SetupResult extends void | Record<string, unknown>
+>(
+  opts: IComponent<SetupResult>
+) => IComponent<SetupResult>;
 //# sourceMappingURL=core.d.ts.map
