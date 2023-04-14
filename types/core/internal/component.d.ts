@@ -1,16 +1,16 @@
 import { LifecycleHooks } from '../lifecycle';
-import type { RefElement, IComponent, RefObject } from '../types';
+import type { RefElement, IComponent } from '../types';
 export declare const getCurrentComponent: (
   hookName: string
-) => ComponentContext;
-declare class ComponentContext {
+) => ComponentContext<any>;
+declare class ComponentContext<T = any> {
   #private;
   element: RefElement;
   private [LifecycleHooks.MOUNTED];
   private [LifecycleHooks.UNMOUNTED];
-  parent: ComponentContext | null;
+  parent: ComponentContext<T> | null;
   readonly uid: string | number;
-  current: RefObject;
+  current: T;
   constructor(element: RefElement);
   mount: () => void;
   unmount: () => void;
@@ -19,6 +19,6 @@ declare class ComponentContext {
 }
 export declare const createComponent: (
   wrap: IComponent
-) => (root: RefElement, props: Record<string, any>) => ComponentContext;
+) => (root: RefElement, props: Record<string, any>) => ComponentContext<any>;
 export type { ComponentContext };
 //# sourceMappingURL=component.d.ts.map

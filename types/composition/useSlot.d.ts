@@ -1,10 +1,15 @@
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 export declare const useSlot: () => {
-  addChild(
+  addChild<
+    Child extends IComponent<
+      Record<string, unknown>,
+      void | Record<string, unknown>
+    >
+  >(
     targetOrTargets: RefElement | RefElement[],
-    child: IComponent,
+    child: Child,
     props?: Readonly<Record<string, unknown>>
-  ): ComponentContext[];
+  ): ComponentContext<ReturnType<Child['setup']>>[];
   removeChild(children: ComponentContext[]): void;
 };
 //# sourceMappingURL=useSlot.d.ts.map
