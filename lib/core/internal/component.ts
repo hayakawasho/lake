@@ -2,7 +2,7 @@ import { assert } from '../../util/assert';
 import { allRun } from '../../util/function';
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
-import type { RefElement, IComponent, RefObject } from '../types';
+import type { RefElement, IComponent } from '../types';
 
 let owner: ComponentContext;
 
@@ -15,15 +15,15 @@ export const getCurrentComponent = (hookName: string) => {
 
 let uid = 0;
 
-class ComponentContext {
+class ComponentContext<T = any> {
   private [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
   private [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
-  parent: ComponentContext | null = null;
-  #children: ComponentContext[] = [];
+  parent: ComponentContext<T> | null = null;
+  #children: ComponentContext<T>[] = [];
 
   readonly uid: string | number;
-  current: RefObject = {};
+  current = {} as ReturnType<IComponent<Record<string, unknown>, T>['setup']>;
 
   constructor(public element: RefElement) {
     this.uid = uid++;

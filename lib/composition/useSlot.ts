@@ -8,11 +8,11 @@ export const useSlot = () => {
   const context = getCurrentComponent('Slot');
 
   return {
-    addChild(
+    addChild<Child extends IComponent>(
       targetOrTargets: RefElement | RefElement[],
-      child: IComponent,
+      child: Child,
       props: Readonly<Record<string, unknown>> = {}
-    ): ComponentContext[] {
+    ): ComponentContext<ReturnType<Child['setup']>>[] {
       const create = (el: RefElement) => {
         const component = createComponent(child)(el, {
           ...child.props,

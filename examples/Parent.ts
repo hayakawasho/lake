@@ -14,7 +14,7 @@ export default defineComponent({
 
     const isOpen = ref(false);
 
-    addChild(refs.child, Child, {
+    const [child] = addChild(refs.child, Child, {
       isOpen: readonly(isOpen),
       onOpen() {
         isOpen.value = true;
@@ -23,5 +23,7 @@ export default defineComponent({
         isOpen.value = false;
       },
     });
+
+    child.current.test();
   },
 });

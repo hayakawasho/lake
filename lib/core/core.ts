@@ -37,4 +37,6 @@ export const create = () => {
   };
 };
 
-export const defineComponent = <Props>(opts: IComponent<Props>) => opts;
+export const defineComponent = <Props, SetupResult>(
+  opts: IComponent<Props, SetupResult>
+) => opts;
