@@ -14,11 +14,7 @@ export const useSlot = () => {
       props: Readonly<Record<string, unknown>> = {}
     ): ComponentContext<ReturnType<Child['setup']>>[] {
       const create = (el: RefElement) => {
-        const component = createComponent(child)(el, {
-          ...child.props,
-          ...props,
-        });
-
+        const component = createComponent(child)(el, props);
         context.addChild(component);
 
         return component;

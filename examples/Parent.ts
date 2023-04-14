@@ -8,6 +8,8 @@ import {
 import Child from './Child';
 
 export default defineComponent({
+  tag: 'parent',
+
   setup(_el) {
     const { refs } = useDomRef<{ child: HTMLButtonElement }>('child');
     const { addChild } = useSlot();

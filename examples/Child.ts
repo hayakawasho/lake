@@ -7,13 +7,10 @@ type Props = {
   onClose: () => void;
 };
 
-export default defineComponent<
-  Props,
-  {
-    test: () => void;
-  }
->({
-  setup(el, props) {
+export default defineComponent({
+  tag: 'child',
+
+  setup(el, props: Props) {
     const { isOpen, onOpen, onClose } = props;
     const onToggle = () => (isOpen.value ? onClose() : onOpen());
 

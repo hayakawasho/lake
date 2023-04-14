@@ -22,11 +22,10 @@ class ComponentContext<T = any> {
   parent: ComponentContext<T> | null = null;
   #children: ComponentContext<T>[] = [];
 
-  readonly uid: string | number;
-  current = {} as ReturnType<IComponent<Record<string, unknown>, T>['setup']>;
+  current = {} as ReturnType<IComponent<T>['setup']>;
 
-  constructor(public element: RefElement) {
-    this.uid = uid++;
+  constructor(public element: RefElement, tagName: string) {
+    this.element.dataset[`${tagName.toLowerCase()}Id`] = uid++ + '';
   }
 
   mount = () => {
@@ -65,13 +64,10 @@ export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
   return (root: RefElement, props: Record<string, any>) => {
-    const component = new ComponentContext(root);
+    const component = new ComponentContext(root, wrap.tag);
     const context = setCurrentComponent(component);
 
-    const provides = wrap.setup(root, {
-      ...wrap.props,
-      ...props,
-    });
+    const provides = wrap.setup(root, props);
 
     context.current = provides || {};
 
