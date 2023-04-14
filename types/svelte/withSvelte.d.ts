@@ -5,6 +5,6 @@ export type Context$<T = Record<string, unknown>> = {
 } & ComponentProps<T>;
 export declare function withSvelte(
   App: ComponentType,
-  tag: string
-): import('../main').IComponent<void>;
+  tagName: string
+): import('../main').IComponent<void, Record<string, unknown>>;
 //# sourceMappingURL=withSvelte.d.ts.map

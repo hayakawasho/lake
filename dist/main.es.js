@@ -1,49 +1,49 @@
 var U = Object.defineProperty;
-var D = (n, t, e) => t in n ? U(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
-var u = (n, t, e) => (D(n, typeof t != "symbol" ? t + "" : t, e), e), E = (n, t, e) => {
-  if (!t.has(n))
+var D = (t, n, e) => n in t ? U(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
+var u = (t, n, e) => (D(t, typeof n != "symbol" ? n + "" : n, e), e), E = (t, n, e) => {
+  if (!n.has(t))
     throw TypeError("Cannot " + e);
 };
-var a = (n, t, e) => (E(n, t, "read from private field"), e ? e.call(n) : t.get(n)), m = (n, t, e) => {
-  if (t.has(n))
+var a = (t, n, e) => (E(t, n, "read from private field"), e ? e.call(t) : n.get(t)), m = (t, n, e) => {
+  if (n.has(t))
     throw TypeError("Cannot add the same private member more than once");
-  t instanceof WeakSet ? t.add(n) : t.set(n, e);
-}, f = (n, t, e, o) => (E(n, t, "write to private field"), o ? o.call(n, e) : t.set(n, e), e);
+  n instanceof WeakSet ? n.add(t) : n.set(t, e);
+}, f = (t, n, e, o) => (E(t, n, "write to private field"), o ? o.call(t, e) : n.set(t, e), e);
 var d;
 class $ {
-  constructor(t) {
+  constructor(n) {
     m(this, d, void 0);
-    f(this, d, t);
+    f(this, d, n);
   }
   get value() {
     return a(this, d);
   }
-  set value(t) {
-    f(this, d, t);
+  set value(n) {
+    f(this, d, n);
   }
 }
 d = new WeakMap();
-const P = (n) => new $(n);
+const P = (t) => new $(t);
 var h;
 class b {
-  constructor(t) {
+  constructor(n) {
     m(this, h, void 0);
-    f(this, h, t);
+    f(this, h, n);
   }
   get value() {
     return a(this, h).value;
   }
 }
 h = new WeakMap();
-const V = (n) => new b(n);
-function A(n, t) {
-  if (!n)
-    throw new Error(t || "unexpected condition");
+const V = (t) => new b(t);
+function A(t, n) {
+  if (!t)
+    throw new Error(n || "unexpected condition");
 }
-const M = (n) => n.forEach((t) => t());
-var l = /* @__PURE__ */ ((n) => (n.MOUNTED = "Mounted", n.UNMOUNTED = "Unmounted", n))(l || {});
-const x = (n) => (t) => {
-  C(n)[n].push(t);
+const M = (t) => t.forEach((n) => n());
+var l = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(l || {});
+const x = (t) => (n) => {
+  C(t)[t].push(n);
 }, g = x(
   "Mounted"
   /* MOUNTED */
@@ -52,15 +52,16 @@ const x = (n) => (t) => {
   /* UNMOUNTED */
 );
 let p;
-const N = (n) => p = n, C = (n) => (A(p, `"${n}" called outside setup() will never be run.`), p);
+const N = (t) => p = t, C = (t) => (A(p, `"${t}" called outside setup() will never be run.`), p);
 let O = 0;
-var W, _, i;
+var _, k, i;
 class y {
-  constructor(t, e) {
-    u(this, W, []);
+  constructor(n, e) {
     u(this, _, []);
+    u(this, k, []);
     u(this, "parent", null);
     m(this, i, []);
+    u(this, "uid");
     u(this, "current", {});
     u(this, "mount", () => {
       M(this[l.MOUNTED]);
@@ -68,50 +69,50 @@ class y {
     u(this, "unmount", () => {
       M([
         ...this[l.UNMOUNTED],
-        ...a(this, i).flatMap((t) => t.unmount)
+        ...a(this, i).flatMap((n) => n.unmount)
       ]);
     });
-    u(this, "addChild", (t) => {
-      a(this, i).push(t), t.parent = this, t.mount();
+    u(this, "addChild", (n) => {
+      a(this, i).push(n), n.parent = this, n.mount();
     });
-    u(this, "removeChild", (t) => {
-      const e = a(this, i).indexOf(t);
-      e !== -1 && (a(this, i).splice(e, 1), t.parent = null, t.unmount());
+    u(this, "removeChild", (n) => {
+      const e = a(this, i).indexOf(n);
+      e !== -1 && (a(this, i).splice(e, 1), n.parent = null, n.unmount());
     });
-    this.element = t, this.element.dataset[`${e.toLowerCase()}Id`] = O++ + "";
+    this.element = n, this.uid = `${e}.${O++}`;
   }
 }
-W = l.MOUNTED, _ = l.UNMOUNTED, i = new WeakMap();
-const R = (n) => {
-  const t = p;
+_ = l.MOUNTED, k = l.UNMOUNTED, i = new WeakMap();
+const R = (t) => {
+  const n = p;
   return (e, o) => {
-    const c = new y(e, n.tag), r = N(c), s = n.setup(e, o);
-    return r.current = s || {}, N(t), r;
+    const c = new y(e, t.tagName), r = N(c), s = t.setup(e, o);
+    return r.current = s || {}, N(n), r;
   };
-}, v = /* @__PURE__ */ new WeakMap(), S = (n, t, e) => {
-  if (v.has(n)) {
+}, v = /* @__PURE__ */ new WeakMap(), S = (t, n, e) => {
+  if (v.has(t)) {
     console.error(`${e} was already bind.`);
     return;
   }
-  v.set(n, t);
+  v.set(t, n);
 }, j = () => ({
-  component(n) {
-    return (t, e = {}) => {
-      const o = R(n)(t, e);
-      return S(t, o, n.tag), o.mount(), o;
+  component(t) {
+    return (n, e = {}) => {
+      const o = R(t)(n, e);
+      return S(n, o, t.tagName), o.mount(), o;
     };
   },
-  unmount(n) {
-    n.filter((t) => v.has(t)).forEach((t) => v.get(t).unmount());
+  unmount(t) {
+    t.filter((n) => v.has(n)).forEach((n) => v.get(n).unmount());
   }
-}), I = (n) => n, q = (n, t, e, o) => {
-  n.addEventListener(t, e, o), w(() => {
-    n.removeEventListener(t, e, o);
+}), I = (t) => t, q = (t, n, e, o) => {
+  t.addEventListener(n, e, o), w(() => {
+    t.removeEventListener(n, e, o);
   });
-}, T = (n, t) => Array.from((t ?? document).querySelectorAll(n));
-function L(n, t) {
+}, T = (t, n) => Array.from((n ?? document).querySelectorAll(t));
+function W(t, n) {
   const e = (r) => {
-    const s = T(`[data-ref="${r}"]`, t);
+    const s = T(`[data-ref="${r}"]`, n);
     return o(s, r);
   }, o = (r, s) => {
     switch (r.length) {
@@ -123,20 +124,20 @@ function L(n, t) {
         return r;
     }
   };
-  return [...n].reduce((r, s) => (r[s] = e(s), r), {});
+  return [...t].reduce((r, s) => (r[s] = e(s), r), {});
 }
-function z(...n) {
-  const t = C("DomRef");
+function z(...t) {
+  const n = C("DomRef");
   return {
-    refs: L(new Set(n), t.element)
+    refs: W(new Set(t), n.element)
   };
 }
-const B = (n, t, e = {
+const B = (t, n, e = {
   rootMargin: "0px",
   threshold: 0.1
 }) => {
-  const o = new IntersectionObserver(t, e);
-  return Array.isArray(n) ? n.forEach((r) => o.observe(r)) : o.observe(n), w(() => {
+  const o = new IntersectionObserver(n, e);
+  return Array.isArray(t) ? t.forEach((r) => o.observe(r)) : o.observe(t), w(() => {
     o.disconnect();
   }), {
     unwatch: (r) => {
@@ -144,23 +145,23 @@ const B = (n, t, e = {
     }
   };
 }, F = () => {
-  const n = C("Slot");
+  const t = C("Slot");
   return {
-    addChild(t, e, o = {}) {
+    addChild(n, e, o = {}) {
       const c = (r) => {
         const s = R(e)(r, o);
-        return n.addChild(s), s;
+        return t.addChild(s), s;
       };
-      return Array.isArray(t) ? t.map((r) => c(r)) : [c(t)];
+      return Array.isArray(n) ? n.map((r) => c(r)) : [c(n)];
     },
-    removeChild(t) {
-      t.forEach((e) => n.removeChild(e));
+    removeChild(n) {
+      n.forEach((e) => t.removeChild(e));
     }
   };
 };
-function G(n, t) {
+function G(t, n) {
   return I({
-    tag: t,
+    tagName: n,
     setup(e, o) {
       const c = /* @__PURE__ */ new Map([
         [
@@ -170,7 +171,7 @@ function G(n, t) {
             ...o
           }
         ]
-      ]), r = new n({
+      ]), r = new t({
         target: e,
         context: c
       });

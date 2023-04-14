@@ -9,6 +9,7 @@ declare class ComponentContext<T = any> {
   private [LifecycleHooks.MOUNTED];
   private [LifecycleHooks.UNMOUNTED];
   parent: ComponentContext<T> | null;
+  readonly uid: string;
   current: T;
   constructor(element: RefElement, tagName: string);
   mount: () => void;
