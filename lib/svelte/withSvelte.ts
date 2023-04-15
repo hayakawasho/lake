@@ -6,7 +6,7 @@ export type Context$<T = Record<string, unknown>> = {
   rootRef: RefElement;
 } & ComponentProps<T>;
 
-export function withSvelte(App: ComponentType, tagName: string) {
+export function withSvelte(App: ComponentType, tagName = 'WithSvelte') {
   return defineComponent({
     tagName,
     setup(el, props) {

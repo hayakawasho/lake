@@ -1,4 +1,4 @@
 export declare function useDomRef<T>(...refKey: string[]): {
-  refs: T;
+    refs: T;
 };
 //# sourceMappingURL=useDomRef.d.ts.map
