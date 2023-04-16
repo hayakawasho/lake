@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -32,9 +32,9 @@
     "build": "NODE_ENV=production tsc && vite build",
     "watch": "vite build -w",
     "serve": "vite preview",
-    "prettier:write": "prettier --write ./lib/**/*.ts",
-    "eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
-    "format": "npm run prettier:write && npm run eslint"
+    "fix:prettier": "prettier --write ./lib/**/*.ts",
+    "fix:eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
+    "fix": "npm run fix:prettier && npm run fix:eslint"
   },
   "devDependencies": {
     "@playwright/test": "1.32.3",
@@ -46,21 +46,12 @@
     "eslint-import-resolver-typescript": "3.5.5",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-prettier": "4.2.1",
-    "husky": "8.0.3",
-    "lint-staged": "13.2.1",
     "prettier": "2.8.7",
     "svelte": "3.58.0",
     "svelte-check": "3.2.0",
     "svelte-preprocess": "5.0.3",
     "typescript": "5.0.4",
     "vite": "4.2.1"
-  },
-  "prepare": "husky install",
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
   },
   "type": "module"
 }

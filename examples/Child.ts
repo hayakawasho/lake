@@ -7,8 +7,9 @@ type Props = {
   onClose: () => void;
 };
 
-export default defineComponent<Props>({
-  setup(el, props) {
+export default defineComponent({
+  tagName: 'child',
+  setup(el, props: Props) {
     const { isOpen, onOpen, onClose } = props;
     const onToggle = () => (isOpen.value ? onClose() : onOpen());
 
@@ -17,5 +18,11 @@ export default defineComponent<Props>({
     useUnmount(() => {
       el.removeEventListener('click', onToggle);
     });
+
+    return {
+      test: () => {
+        //
+      },
+    };
   },
 });

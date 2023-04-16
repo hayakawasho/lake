@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const refCounter = document.getElementById('counter');
 
   if (refCounter) {
-    const createCounter = component(withSvelte(Counter));
+    const createCounter = component(withSvelte(Counter, 'counter'));
     createCounter(refCounter, { test: 'hoge' });
   }
 

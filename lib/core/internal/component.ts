@@ -2,7 +2,7 @@ import { assert } from '../../util/assert';
 import { allRun } from '../../util/function';
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
-import type { RefElement, IComponent, RefObject } from '../types';
+import type { RefElement, IComponent } from '../types';
 
 let owner: ComponentContext;
 
@@ -15,18 +15,18 @@ export const getCurrentComponent = (hookName: string) => {
 
 let uid = 0;
 
-class ComponentContext {
+class ComponentContext<T = any> {
   private [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
   private [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
 
-  parent: ComponentContext | null = null;
-  #children: ComponentContext[] = [];
+  parent: ComponentContext<T> | null = null;
+  #children: ComponentContext<T>[] = [];
 
-  readonly uid: string | number;
-  current: RefObject = {};
+  readonly uid: string;
+  current = {} as ReturnType<IComponent<T>['setup']>;
 
-  constructor(public element: RefElement) {
-    this.uid = uid++;
+  constructor(public element: RefElement, tagName: string) {
+    this.uid = `${tagName}.${uid++}`;
   }
 
   mount = () => {
@@ -65,13 +65,10 @@ export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
   return (root: RefElement, props: Record<string, any>) => {
-    const component = new ComponentContext(root);
+    const component = new ComponentContext(root, wrap.tagName);
     const context = setCurrentComponent(component);
 
-    const provides = wrap.setup(root, {
-      ...wrap.props,
-      ...props,
-    });
+    const provides = wrap.setup(root, props);
 
     context.current = provides || {};
 

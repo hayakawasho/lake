@@ -21,7 +21,7 @@ export const create = () => {
     component(wrap: IComponent) {
       return (el: RefElement, props: Record<string, any> = {}) => {
         const component = createComponent(wrap)(el, props);
-        bindDOMNodeToComponent(el, component, wrap.tag || '');
+        bindDOMNodeToComponent(el, component, wrap.tagName);
 
         component.mount();
 
@@ -37,4 +37,9 @@ export const create = () => {
   };
 };
 
-export const defineComponent = <Props>(opts: IComponent<Props>) => opts;
+export const defineComponent = <
+  SetupResult extends Record<string, unknown> | void,
+  Props extends Record<string, unknown>
+>(
+  opts: IComponent<SetupResult, Props>
+) => opts;
