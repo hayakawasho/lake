@@ -25,8 +25,8 @@ class ComponentContext<T = any> {
   readonly uid: string;
   current = {} as ReturnType<IComponent<T>['setup']>;
 
-  constructor(public element: RefElement, tagName: string) {
-    this.uid = `${tagName}.${uid++}`;
+  constructor(public element: RefElement, name: string) {
+    this.uid = `${name}.${uid++}`;
   }
 
   mount = () => {
@@ -65,7 +65,7 @@ export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
   return (root: RefElement, props: Record<string, any>) => {
-    const component = new ComponentContext(root, wrap.tagName);
+    const component = new ComponentContext(root, wrap.name);
     const context = setCurrentComponent(component);
 
     const provides = wrap.setup(root, props);
