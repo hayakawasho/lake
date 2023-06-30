@@ -44,7 +44,7 @@ const M = (t) => t.forEach((n) => n());
 var l = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(l || {});
 const x = (t) => (n) => {
   C(t)[t].push(n);
-}, g = x(
+}, j = x(
   "Mounted"
   /* MOUNTED */
 ), w = x(
@@ -86,7 +86,7 @@ _ = l.MOUNTED, k = l.UNMOUNTED, a = new WeakMap();
 const R = (t) => {
   const n = p;
   return (e, o) => {
-    const c = new S(e, t.tagName), r = N(c), s = t.setup(e, o);
+    const c = new S(e, t.name), r = N(c), s = t.setup(e, o);
     return r.current = s || {}, N(n), r;
   };
 }, v = /* @__PURE__ */ new WeakMap(), y = (t, n, e) => {
@@ -95,17 +95,17 @@ const R = (t) => {
     return;
   }
   v.set(t, n);
-}, j = () => ({
+}, q = () => ({
   component(t) {
     return (n, e = {}) => {
       const o = R(t)(n, e);
-      return y(n, o, t.tagName), o.mount(), o;
+      return y(n, o, t.name), o.mount(), o;
     };
   },
   unmount(t) {
     t.filter((n) => v.has(n)).forEach((n) => v.get(n).unmount());
   }
-}), I = (t) => t, q = (t, n, e, o) => {
+}), I = (t) => t, z = (t, n, e, o) => {
   t.addEventListener(n, e, o), w(() => {
     t.removeEventListener(n, e, o);
   });
@@ -126,13 +126,13 @@ function W(t, n) {
   };
   return [...t].reduce((r, s) => (r[s] = e(s), r), {});
 }
-function z(...t) {
+function B(...t) {
   const n = C("DomRef");
   return {
     refs: W(new Set(t), n.element)
   };
 }
-const B = (t, n, e = {
+const F = (t, n, e = {
   rootMargin: "0px",
   threshold: 0.1
 }) => {
@@ -144,7 +144,7 @@ const B = (t, n, e = {
       o.unobserve(r);
     }
   };
-}, F = () => {
+}, G = () => {
   const t = C("Slot");
   return {
     addChild(n, e, o = {}) {
@@ -159,9 +159,9 @@ const B = (t, n, e = {
     }
   };
 };
-function G(t, n = "WithSvelte") {
+function H(t, n = "withSvelte") {
   return I({
-    tagName: n,
+    name: n,
     setup(e, o) {
       const c = /* @__PURE__ */ new Map([
         [
@@ -182,15 +182,15 @@ function G(t, n = "WithSvelte") {
   });
 }
 export {
-  j as create,
+  q as create,
   I as defineComponent,
   V as readonly,
   P as ref,
-  z as useDomRef,
-  q as useEvent,
-  B as useIntersectionWatch,
-  g as useMount,
-  F as useSlot,
+  B as useDomRef,
+  z as useEvent,
+  F as useIntersectionWatch,
+  j as useMount,
+  G as useSlot,
   w as useUnmount,
-  G as withSvelte
+  H as withSvelte
 };
