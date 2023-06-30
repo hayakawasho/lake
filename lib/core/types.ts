@@ -6,7 +6,7 @@ export interface IComponent<
   SetupResult = void | Record<string, unknown>,
   Props = Record<string, unknown>
 > {
-  tagName: string;
+  name: string;
   setup(el: RefElement, props: ComponentProps<Props>): SetupResult;
 }
 

@@ -9,7 +9,7 @@ declare class ComponentContext<T = any> {
     parent: ComponentContext<T> | null;
     readonly uid: string;
     current: T;
-    constructor(element: RefElement, tagName: string);
+    constructor(element: RefElement, name: string);
     mount: () => void;
     unmount: () => void;
     addChild: (child: ComponentContext) => void;

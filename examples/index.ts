@@ -1,9 +1,9 @@
-import factory, { withSvelte } from '../lib/main';
+import { create, withSvelte } from '../lib/main';
 import Parent from './Parent';
 import Counter from './Counter.svelte';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const { component } = factory();
+  const { component } = create();
 
   const refCounter = document.getElementById('counter');
 

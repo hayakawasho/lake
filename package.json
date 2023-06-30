@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {

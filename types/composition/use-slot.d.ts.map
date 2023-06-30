@@ -1,0 +1,1 @@
+{"version":3,"file":"use-slot.d.ts","sourceRoot":"","sources":["../../lib/composition/use-slot.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,UAAU,EAAE,UAAU,EAAE,gBAAgB,EAAE,MAAM,eAAe,CAAC;AAE9E,eAAO,MAAM,OAAO;iHAKG,UAAU,GAAG,UAAU,EAAE;0BAgBtB,gBAAgB,EAAE;CAI3C,CAAC"}

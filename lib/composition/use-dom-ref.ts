@@ -1,5 +1,5 @@
 import { getCurrentComponent } from '../core/internal/component';
-import { domRefs } from '../core/internal/domRefs';
+import { domRefs } from '../core/internal/dom-refs';
 
 export function useDomRef<T>(...refKey: string[]): {
   refs: T;
