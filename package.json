@@ -36,7 +36,7 @@
     "fix": "npm run fix:prettier && npm run fix:eslint"
   },
   "devDependencies": {
-    "@playwright/test": "1.35.1",
+    "@playwright/test": "1.37.1",
     "@sveltejs/vite-plugin-svelte": "2.4.2",
     "@typescript-eslint/eslint-plugin": "5.60.1",
     "@typescript-eslint/parser": "5.60.1",
