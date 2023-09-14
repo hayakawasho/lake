@@ -1,6 +1,6 @@
 var U = Object.defineProperty;
 var D = (t, n, e) => n in t ? U(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
-var u = (t, n, e) => (D(t, typeof n != "symbol" ? n + "" : n, e), e), E = (t, n, e) => {
+var s = (t, n, e) => (D(t, typeof n != "symbol" ? n + "" : n, e), e), E = (t, n, e) => {
   if (!n.has(t))
     throw TypeError("Cannot " + e);
 };
@@ -23,7 +23,7 @@ class $ {
   }
 }
 d = new WeakMap();
-const P = (t) => new $(t);
+const L = (t) => new $(t);
 var h;
 class b {
   constructor(n) {
@@ -35,7 +35,7 @@ class b {
   }
 }
 h = new WeakMap();
-const V = (t) => new b(t);
+const P = (t) => new b(t);
 function A(t, n) {
   if (!t)
     throw new Error(n || "unexpected condition");
@@ -44,7 +44,7 @@ const M = (t) => t.forEach((n) => n());
 var l = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(l || {});
 const x = (t) => (n) => {
   C(t)[t].push(n);
-}, j = x(
+}, V = x(
   "Mounted"
   /* MOUNTED */
 ), w = x(
@@ -57,25 +57,25 @@ let O = 0;
 var _, k, a;
 class S {
   constructor(n, e) {
-    u(this, _, []);
-    u(this, k, []);
-    u(this, "parent", null);
+    s(this, _, []);
+    s(this, k, []);
+    s(this, "parent", null);
     m(this, a, []);
-    u(this, "uid");
-    u(this, "current", {});
-    u(this, "mount", () => {
+    s(this, "uid");
+    s(this, "current", {});
+    s(this, "mount", () => {
       M(this[l.MOUNTED]);
     });
-    u(this, "unmount", () => {
+    s(this, "unmount", () => {
       M([
         ...this[l.UNMOUNTED],
         ...i(this, a).flatMap((n) => n.unmount)
       ]);
     });
-    u(this, "addChild", (n) => {
+    s(this, "addChild", (n) => {
       i(this, a).push(n), n.parent = this, n.mount();
     });
-    u(this, "removeChild", (n) => {
+    s(this, "removeChild", (n) => {
       const e = i(this, a).indexOf(n);
       e !== -1 && (i(this, a).splice(e, 1), n.parent = null, n.unmount());
     });
@@ -86,8 +86,8 @@ _ = l.MOUNTED, k = l.UNMOUNTED, a = new WeakMap();
 const R = (t) => {
   const n = p;
   return (e, o) => {
-    const c = new S(e, t.name), r = N(c), s = t.setup(e, o);
-    return r.current = s || {}, N(n), r;
+    const c = new S(e, t.name), r = N(c), u = t.setup(e, o);
+    return r.current = u || {}, N(n), r;
   };
 }, v = /* @__PURE__ */ new WeakMap(), y = (t, n, e) => {
   if (v.has(t)) {
@@ -95,7 +95,7 @@ const R = (t) => {
     return;
   }
   v.set(t, n);
-}, q = () => ({
+}, j = () => ({
   component(t) {
     return (n, e = {}) => {
       const o = R(t)(n, e);
@@ -112,19 +112,13 @@ const R = (t) => {
 }, T = (t, n) => Array.from((n ?? document).querySelectorAll(t));
 function W(t, n) {
   const e = (r) => {
-    const s = T(`[data-ref="${r}"]`, n);
-    return o(s, r);
-  }, o = (r, s) => {
-    switch (r.length) {
-      case 0:
-        return console.error(`[data-ref="${s}"] does not exist.`), null;
-      case 1:
-        return r[0];
-      default:
-        return r;
-    }
-  };
-  return [...t].reduce((r, s) => (r[s] = e(s), r), {});
+    const u = T(`[data-ref="${r}"]`, n);
+    return o(u);
+  }, o = (r) => ({
+    0: null,
+    1: r[0]
+  })[r.length] ?? r;
+  return [...t].reduce((r, u) => (r[u] = e(u), r), {});
 }
 function B(...t) {
   const n = C("DomRef");
@@ -149,8 +143,8 @@ const F = (t, n, e = {
   return {
     addChild(n, e, o = {}) {
       const c = (r) => {
-        const s = R(e)(r, o);
-        return t.addChild(s), s;
+        const u = R(e)(r, o);
+        return t.addChild(u), u;
       };
       return Array.isArray(n) ? n.map((r) => c(r)) : [c(n)];
     },
@@ -182,14 +176,14 @@ function H(t, n = "withSvelte") {
   });
 }
 export {
-  q as create,
+  j as create,
   I as defineComponent,
-  V as readonly,
-  P as ref,
+  P as readonly,
+  L as ref,
   B as useDomRef,
   z as useEvent,
   F as useIntersectionWatch,
-  j as useMount,
+  V as useMount,
   G as useSlot,
   w as useUnmount,
   H as withSvelte

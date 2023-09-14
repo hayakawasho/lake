@@ -11,7 +11,7 @@ export const useSlot = () => {
     addChild<Child extends IComponent>(
       targetOrTargets: RefElement | RefElement[],
       child: Child,
-      props: Parameters<Child['setup']>[1] = {}
+      props: Parameters<Child['setup']>[1] = {},
     ): ComponentContext<ReturnType<Child['setup']>>[] {
       const create = (el: RefElement) => {
         const component = createComponent(child)(el, props);

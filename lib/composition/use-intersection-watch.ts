@@ -6,7 +6,7 @@ export const useIntersectionWatch = (
   opts: IntersectionObserverInit = {
     rootMargin: '0px',
     threshold: 0.1,
-  }
+  },
 ) => {
   const io = new IntersectionObserver(callback, opts);
 
