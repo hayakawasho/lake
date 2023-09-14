@@ -4,21 +4,19 @@ import type { RefElement } from '../types';
 export function domRefs(ref: Set<string>, scope: RefElement) {
   const findRef = (q: string) => {
     const nodes = $$(`[data-ref="${q}"]`, scope);
-    return reducer(nodes, q);
+    return reducer(nodes);
   };
 
-  const reducer = (nodes: RefElement[], q: string) => {
-    switch (nodes.length) {
-      case 0:
-        console.error(`[data-ref="${q}"] does not exist.`);
-        return null;
-      case 1:
-        return nodes[0];
-      default:
-        return nodes;
-    }
+  const reducer = (nodes: RefElement[]) => {
+    return (
+      {
+        0: null,
+        1: nodes[0],
+      }[nodes.length] ?? nodes
+    );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const childRef = [...ref].reduce<any>((acc, cur) => {
     acc[cur] = findRef(cur);
     return acc;
