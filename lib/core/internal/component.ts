@@ -15,6 +15,7 @@ export const getCurrentComponent = (hookName: string) => {
 
 let uid = 0;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ComponentContext<T = any> {
   private [LifecycleHooks.MOUNTED]: LifecycleHandler[] = [];
   private [LifecycleHooks.UNMOUNTED]: LifecycleHandler[] = [];
@@ -25,7 +26,10 @@ class ComponentContext<T = any> {
   readonly uid: string;
   current = {} as ReturnType<IComponent<T>['setup']>;
 
-  constructor(public element: RefElement, name: string) {
+  constructor(
+    public element: RefElement,
+    name: string,
+  ) {
     this.uid = `${name}.${uid++}`;
   }
 
@@ -64,6 +68,7 @@ class ComponentContext<T = any> {
 export const createComponent = (wrap: IComponent) => {
   const parent = owner;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (root: RefElement, props: Record<string, any>) => {
     const component = new ComponentContext(root, wrap.name);
     const context = setCurrentComponent(component);
