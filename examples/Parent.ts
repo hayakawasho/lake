@@ -8,7 +8,7 @@ import {
 import Child from './Child';
 
 export default defineComponent({
-  tagName: 'parent',
+  name: 'parent',
   setup(_el) {
     const { refs } = useDomRef<{
       child: HTMLButtonElement;
