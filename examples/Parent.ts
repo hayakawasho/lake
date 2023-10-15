@@ -9,13 +9,15 @@ import {
 } from '../lib/main';
 import Child from './Child';
 
+type Refs = {
+  child: HTMLButtonElement;
+  or: HTMLElement | null;
+};
+
 export default defineComponent({
   name: 'parent',
   setup(_el) {
-    const { refs } = useDomRef<{
-      child: HTMLButtonElement;
-    }>('child');
-
+    const { refs } = useDomRef<Refs>('child', 'or');
     const { addChild } = useSlot();
 
     const isOpen = ref(false);
