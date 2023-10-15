@@ -1,4 +1,4 @@
-export declare const useIntersectionWatch: (targetOrTargets: Element | Element[], callback: IntersectionObserverCallback, opts?: IntersectionObserverInit) => {
-    unwatch: (el: Element) => void;
+export declare const useIntersectionWatch: <T extends Element>(targetOrTargets: T | T[], callback: IntersectionObserverCallback, opts?: IntersectionObserverInit) => {
+    unwatch: (el: T) => void;
 };
 //# sourceMappingURL=use-intersection-watch.d.ts.map
