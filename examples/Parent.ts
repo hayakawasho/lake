@@ -4,6 +4,8 @@ import {
   readonly,
   useSlot,
   useDomRef,
+  useMount,
+  useUnmount,
 } from '../lib/main';
 import Child from './Child';
 
@@ -29,5 +31,13 @@ export default defineComponent({
     });
 
     child.current.test();
+
+    useMount(() => {
+      console.log('parent:mount');
+    });
+
+    useUnmount(() => {
+      console.log('parent:unmount');
+    });
   },
 });

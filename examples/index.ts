@@ -3,7 +3,7 @@ import Parent from './Parent';
 import Counter from './Counter.svelte';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const { component } = create();
+  const { component, unmount } = create();
 
   const refCounter = document.getElementById('counter');
 
@@ -17,5 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (refParent) {
     const createParent = component(Parent);
     createParent(refParent);
+
+    setTimeout(() => {
+      unmount([refParent]);
+    }, 1000);
   }
 });

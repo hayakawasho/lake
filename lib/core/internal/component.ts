@@ -1,5 +1,4 @@
 import { assert } from '../../util/assert';
-import { allRun } from '../../util/function';
 import { LifecycleHooks } from '../lifecycle';
 import type { LifecycleHandler } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
@@ -33,22 +32,27 @@ class ComponentContext<T = any> {
     this.uid = `${name}.${uid++}`;
   }
 
-  mount = () => {
-    allRun(this[LifecycleHooks.MOUNTED]);
+  onMount = () => {
+    const unmounts = this[LifecycleHooks.MOUNTED]
+      .map(fn => fn())
+      .filter(cleanup => typeof cleanup === 'function') as (() => void)[];
+
+    this[LifecycleHooks.UNMOUNTED].push(...unmounts);
   };
 
-  unmount = () => {
-    allRun([
+  onUnmount = () => {
+    const unmounts = [
       ...this[LifecycleHooks.UNMOUNTED],
-      ...this.#children.flatMap(child => child.unmount),
-    ]);
+      ...this.#children.flatMap(child => child.onUnmount),
+    ];
+    unmounts.forEach(fn => fn());
   };
 
   addChild = (child: ComponentContext) => {
     this.#children.push(child);
     child.parent = this;
 
-    child.mount();
+    child.onMount();
   };
 
   removeChild = (child: ComponentContext) => {
@@ -61,7 +65,7 @@ class ComponentContext<T = any> {
     this.#children.splice(index, 1);
     child.parent = null;
 
-    child.unmount();
+    child.onUnmount();
   };
 }
 
@@ -74,7 +78,6 @@ export const createComponent = (wrap: IComponent) => {
     const context = setCurrentComponent(component);
 
     const provides = wrap.setup(root, props);
-
     context.current = provides || {};
 
     setCurrentComponent(parent);

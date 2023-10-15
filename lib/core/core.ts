@@ -24,7 +24,7 @@ export const create = () => {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component, wrap.name);
 
-        component.mount();
+        component.onMount();
 
         return component;
       };
@@ -33,7 +33,7 @@ export const create = () => {
     unmount(targets: RefElement[]) {
       targets
         .filter(el => DOM_COMPONENT_INSTANCE.has(el))
-        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());
+        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.onUnmount());
     },
   };
 };
