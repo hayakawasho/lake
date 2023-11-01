@@ -1,17 +1,17 @@
 import { useUnmount } from '../core/lifecycle';
 
 type ElementEventListener<
-  K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
+  K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap,
 > = (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown;
 
 export const useEvent = <
   T extends HTMLElement = HTMLElement,
-  K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap
+  K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap,
 >(
   target: T,
   eventType: K,
   listener: ElementEventListener<K>,
-  optionsOrUseCapture?: boolean | AddEventListenerOptions
+  optionsOrUseCapture?: boolean | AddEventListenerOptions,
 ) => {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
 

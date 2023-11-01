@@ -4,7 +4,7 @@ export type ComponentProps<Props> = Readonly<Props>;
 
 export interface IComponent<
   SetupResult = void | Record<string, unknown>,
-  Props = Record<string, unknown>
+  Props = Record<string, unknown>,
 > {
   name: string;
   setup(el: RefElement, props: ComponentProps<Props>): SetupResult;

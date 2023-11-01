@@ -24,6 +24,25 @@
   "plugins": ["@typescript-eslint", "import", "prettier"],
   "rules": {
     "sort-imports": 0,
-    "import/order": [2, { "alphabetize": { "order": "asc" } }]
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "object",
+          "type",
+          "index"
+        ],
+        "newlines-between": "never",
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   }
 }

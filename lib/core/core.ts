@@ -6,7 +6,7 @@ const DOM_COMPONENT_INSTANCE = new WeakMap<RefElement, ComponentContext>();
 const bindDOMNodeToComponent = (
   el: RefElement,
   component: ComponentContext,
-  name: string
+  name: string,
 ) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
     console.error(`${name} was already bind.`);
@@ -19,11 +19,12 @@ const bindDOMNodeToComponent = (
 export const create = () => {
   return {
     component(wrap: IComponent) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (el: RefElement, props: Record<string, any> = {}) => {
         const component = createComponent(wrap)(el, props);
         bindDOMNodeToComponent(el, component, wrap.name);
 
-        component.mount();
+        component.onMount();
 
         return component;
       };
@@ -32,14 +33,14 @@ export const create = () => {
     unmount(targets: RefElement[]) {
       targets
         .filter(el => DOM_COMPONENT_INSTANCE.has(el))
-        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.unmount());
+        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.onUnmount());
     },
   };
 };
 
 export const defineComponent = <
   SetupResult extends Record<string, unknown> | void,
-  Props extends Record<string, unknown>
+  Props extends Record<string, unknown>,
 >(
-  opts: IComponent<SetupResult, Props>
+  opts: IComponent<SetupResult, Props>,
 ) => opts;

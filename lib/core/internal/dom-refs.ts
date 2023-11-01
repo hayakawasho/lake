@@ -1,24 +1,19 @@
-import { $$ } from '../../util/selector';
+import { qsa } from '../../util/selector';
 import type { RefElement } from '../types';
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
   const findRef = (q: string) => {
-    const nodes = $$(`[data-ref="${q}"]`, scope);
-    return reducer(nodes, q);
+    const nodes = qsa(`[data-ref="${q}"]`, scope);
+    const { length } = nodes;
+
+    return length === 0
+      ? null
+      : {
+          1: nodes[0],
+        }[length] ?? nodes;
   };
 
-  const reducer = (nodes: RefElement[], q: string) => {
-    switch (nodes.length) {
-      case 0:
-        console.error(`[data-ref="${q}"] does not exist.`);
-        return null;
-      case 1:
-        return nodes[0];
-      default:
-        return nodes;
-    }
-  };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const childRef = [...ref].reduce<any>((acc, cur) => {
     acc[cur] = findRef(cur);
     return acc;

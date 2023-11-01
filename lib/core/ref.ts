@@ -14,6 +14,7 @@ class Ref<T> {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ref = <T = any>(val: T) => new Ref(val);
 
 class ReadonlyRef<T> {
@@ -28,6 +29,7 @@ class ReadonlyRef<T> {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const readonly = <T = any>(ref: Ref<T>) => new ReadonlyRef(ref);
 
 export { ref, readonly };

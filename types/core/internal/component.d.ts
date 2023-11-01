@@ -10,8 +10,8 @@ declare class ComponentContext<T = any> {
     readonly uid: string;
     current: T;
     constructor(element: RefElement, name: string);
-    mount: () => void;
-    unmount: () => void;
+    onMount: () => void;
+    onUnmount: () => void;
     addChild: (child: ComponentContext) => void;
     removeChild: (child: ComponentContext) => void;
 }
