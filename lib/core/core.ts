@@ -9,11 +9,30 @@ const bindDOMNodeToComponent = (
   name: string,
 ) => {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
-    console.error(`${name} was already bind.`);
-    return;
+    const report = {
+      payload: {
+        el,
+        component,
+        name,
+      },
+      reason: '',
+    };
+    throw new Error(JSON.stringify(report));
   }
 
-  DOM_COMPONENT_INSTANCE.set(el, component);
+  try {
+    DOM_COMPONENT_INSTANCE.set(el, component);
+  } catch (error) {
+    const report = {
+      payload: {
+        el,
+        component,
+        name,
+      },
+      reason: '',
+    };
+    throw new Error(JSON.stringify(report));
+  }
 };
 
 export const create = () => {

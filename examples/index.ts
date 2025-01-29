@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const refParent = document.getElementById('parent');
+  const refTest = document.querySelector<HTMLElement>('.js-test');
 
   if (refParent) {
     const createParent = component(Parent);
@@ -22,4 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       unmount([refParent]);
     }, 1000);
   }
+
+  const createParent = component(Parent);
+  createParent(refTest!);
 });

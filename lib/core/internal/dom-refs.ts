@@ -8,9 +8,9 @@ export function domRefs(ref: Set<string>, scope: RefElement) {
 
     return length === 0
       ? null
-      : {
+      : ({
           1: nodes[0],
-        }[length] ?? nodes;
+        }[length] ?? nodes);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -8,7 +8,7 @@ declare class ComponentContext<T = any> {
     private [LifecycleHooks.UNMOUNTED];
     parent: ComponentContext<T> | null;
     readonly uid: string;
-    current: T;
+    current: ReturnType<IComponent<T>["setup"]>;
     constructor(element: RefElement, name: string);
     onMount: () => void;
     onUnmount: () => void;
