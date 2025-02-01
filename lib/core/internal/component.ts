@@ -7,10 +7,10 @@ let owner: ComponentContext;
 
 const setCurrentComponent = (context: ComponentContext) => (owner = context);
 
-export const getCurrentComponent = (hookName: string) => {
+export function getCurrentComponent(hookName: string) {
   assert(owner, `"${hookName}" called outside setup() will never be run.`);
   return owner;
-};
+}
 
 let uid = 0;
 
@@ -69,7 +69,7 @@ class ComponentContext<T = any> {
   };
 }
 
-export const createComponent = (wrap: IComponent) => {
+export function createComponent(wrap: IComponent) {
   const parent = owner;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,6 +84,6 @@ export const createComponent = (wrap: IComponent) => {
 
     return context;
   };
-};
+}
 
 export type { ComponentContext };

@@ -4,8 +4,8 @@ import {
 } from '../core/internal/component';
 import type { IComponent, RefElement, ComponentContext } from '../core/types';
 
-export const useSlot = () => {
-  const context = getCurrentComponent('Slot');
+export function useSlot() {
+  const context = getCurrentComponent('useSlot');
 
   return {
     addChild<Child extends IComponent>(
@@ -29,4 +29,4 @@ export const useSlot = () => {
       children.forEach(child => context.removeChild(child));
     },
   };
-};
+}

@@ -3,11 +3,11 @@ import type { RefElement, IComponent, ComponentContext } from './types';
 
 const DOM_COMPONENT_INSTANCE = new WeakMap<RefElement, ComponentContext>();
 
-const bindDOMNodeToComponent = (
+function bindDOMNodeToComponent(
   el: RefElement,
   component: ComponentContext,
   name: string,
-) => {
+) {
   if (DOM_COMPONENT_INSTANCE.has(el)) {
     const report = {
       payload: {
@@ -33,9 +33,9 @@ const bindDOMNodeToComponent = (
     };
     throw new Error(JSON.stringify(report));
   }
-};
+}
 
-export const create = () => {
+export function create() {
   return {
     component(wrap: IComponent) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,7 +55,7 @@ export const create = () => {
         .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.onUnmount());
     },
   };
-};
+}
 
 export const defineComponent = <
   SetupResult extends Record<string, unknown> | void,

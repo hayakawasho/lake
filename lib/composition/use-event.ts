@@ -4,7 +4,7 @@ type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap,
 > = (this: HTMLElement, ev: HTMLElementEventMap[K]) => unknown;
 
-export const useEvent = <
+export function useEvent<
   T extends HTMLElement = HTMLElement,
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap,
 >(
@@ -12,10 +12,10 @@ export const useEvent = <
   eventType: K,
   listener: ElementEventListener<K>,
   optionsOrUseCapture?: boolean | AddEventListenerOptions,
-) => {
+) {
   target.addEventListener(eventType, listener, optionsOrUseCapture);
 
   useUnmount(() => {
     target.removeEventListener(eventType, listener, optionsOrUseCapture);
   });
-};
+}
