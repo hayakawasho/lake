@@ -1,1 +1,1 @@
-{"version":3,"file":"use-intersection-watch.d.ts","sourceRoot":"","sources":["../../lib/composition/use-intersection-watch.ts"],"names":[],"mappings":"AAEA,eAAO,MAAM,oBAAoB,GAAI,CAAC,SAAS,OAAO,mBACnC,CAAC,GAAG,CAAC,EAAE,YACd,4BAA4B,SAChC,wBAAwB;kBAuBT,CAAC;CAOvB,CAAC"}
+{"version":3,"file":"use-intersection-watch.d.ts","sourceRoot":"","sources":["../../lib/composition/use-intersection-watch.ts"],"names":[],"mappings":"AAEA,wBAAgB,oBAAoB,CAAC,CAAC,SAAS,OAAO,EACpD,eAAe,EAAE,CAAC,GAAG,CAAC,EAAE,EACxB,QAAQ,EAAE,4BAA4B,EACtC,IAAI,GAAE,wBAGL;kBAoBoB,CAAC;EAOvB"}

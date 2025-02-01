@@ -7,6 +7,4 @@ export { useEvent } from './composition/use-event';
 export { useDomRef } from './composition/use-dom-ref';
 export { useIntersectionWatch } from './composition/use-intersection-watch';
 export { useSlot } from './composition/use-slot';
-export type { Context$ } from './svelte/with-svelte';
-export { withSvelte } from './svelte/with-svelte';
 //# sourceMappingURL=main.d.ts.map

@@ -1,6 +1,6 @@
 import { LifecycleHooks } from '../lifecycle';
 import type { RefElement, IComponent } from '../types';
-export declare const getCurrentComponent: (hookName: string) => ComponentContext<any>;
+export declare function getCurrentComponent(hookName: string): ComponentContext<any>;
 declare class ComponentContext<T = any> {
     #private;
     element: RefElement;
@@ -15,6 +15,6 @@ declare class ComponentContext<T = any> {
     addChild: (child: ComponentContext) => void;
     removeChild: (child: ComponentContext) => void;
 }
-export declare const createComponent: (wrap: IComponent) => (root: RefElement, props: Record<string, any>) => ComponentContext<any>;
+export declare function createComponent(wrap: IComponent): (root: RefElement, props: Record<string, any>) => ComponentContext<any>;
 export type { ComponentContext };
 //# sourceMappingURL=component.d.ts.map
