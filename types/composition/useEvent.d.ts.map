@@ -1,1 +1,0 @@
-{"version":3,"file":"useEvent.d.ts","sourceRoot":"","sources":["../../lib/composition/useEvent.ts"],"names":[],"mappings":"AAEA,KAAK,oBAAoB,CACvB,CAAC,SAAS,MAAM,mBAAmB,GAAG,MAAM,mBAAmB,IAC7D,CAAC,IAAI,EAAE,WAAW,EAAE,EAAE,EAAE,mBAAmB,CAAC,CAAC,CAAC,KAAK,OAAO,CAAC;AAE/D,eAAO,MAAM,QAAQ,2LAOG,OAAO,GAAG,uBAAuB,SAOxD,CAAC"}

@@ -1,13 +1,13 @@
 import { useMount, useUnmount } from '../core/lifecycle';
 
-export const useIntersectionWatch = <T extends Element>(
+export function useIntersectionWatch<T extends Element>(
   targetOrTargets: T | T[],
   callback: IntersectionObserverCallback,
   opts: IntersectionObserverInit = {
     rootMargin: '0px',
     threshold: 0.1,
   },
-) => {
+) {
   const io = new IntersectionObserver(callback, opts);
 
   const watch = (targetOrTargets: T | T[]) => {
@@ -33,4 +33,4 @@ export const useIntersectionWatch = <T extends Element>(
   return {
     unwatch,
   };
-};
+}
