@@ -35,7 +35,7 @@
     "fix": "npm run fix:prettier && npm run fix:eslint"
   },
   "devDependencies": {
-    "@playwright/test": "1.50.1",
+    "@playwright/test": "1.51.1",
     "@typescript-eslint/eslint-plugin": "8.22.0",
     "@typescript-eslint/parser": "8.22.0",
     "eslint": "8.57.1",
