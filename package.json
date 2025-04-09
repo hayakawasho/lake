@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.51.1",
-    "@typescript-eslint/eslint-plugin": "8.22.0",
-    "@typescript-eslint/parser": "8.22.0",
+    "@typescript-eslint/eslint-plugin": "8.29.1",
+    "@typescript-eslint/parser": "8.29.1",
     "eslint": "9.24.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-typescript": "3.7.0",
