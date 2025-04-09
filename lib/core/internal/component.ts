@@ -1,11 +1,14 @@
-import { assert } from '../../util/assert';
-import { LifecycleHooks } from '../lifecycle';
-import type { LifecycleHandler } from '../lifecycle';
-import type { RefElement, IComponent } from '../types';
+import { assert } from "../../util/assert";
+import { LifecycleHooks } from "../lifecycle";
+import type { LifecycleHandler } from "../lifecycle";
+import type { RefElement, IComponent } from "../types";
 
 let owner: ComponentContext;
 
-const setCurrentComponent = (context: ComponentContext) => (owner = context);
+const setCurrentComponent = (context: ComponentContext) => {
+  owner = context;
+  return context;
+};
 
 export function getCurrentComponent(hookName: string) {
   assert(owner, `"${hookName}" called outside setup() will never be run.`);
@@ -23,19 +26,18 @@ class ComponentContext<T = any> {
   #children: ComponentContext<T>[] = [];
 
   readonly uid: string;
-  current = {} as ReturnType<IComponent<T>['setup']>;
+  current = {} as ReturnType<IComponent<T>["setup"]>;
+  element: RefElement;
 
-  constructor(
-    public element: RefElement,
-    name: string,
-  ) {
+  constructor(element: RefElement, name: string) {
     this.uid = `${name}.${uid++}`;
+    this.element = element;
   }
 
   onMount = () => {
     const unmounts = this[LifecycleHooks.MOUNTED]
-      .map(fn => fn())
-      .filter(cleanup => typeof cleanup === 'function') as (() => void)[];
+      .map((fn) => fn())
+      .filter((cleanup) => typeof cleanup === "function") as (() => void)[];
 
     this[LifecycleHooks.UNMOUNTED].push(...unmounts);
   };
@@ -43,9 +45,9 @@ class ComponentContext<T = any> {
   onUnmount = () => {
     const unmounts = [
       ...this[LifecycleHooks.UNMOUNTED],
-      ...this.#children.flatMap(child => child.onUnmount),
+      ...this.#children.flatMap((child) => child.onUnmount),
     ];
-    unmounts.forEach(fn => fn());
+    unmounts.forEach((fn) => fn());
   };
 
   addChild = (child: ComponentContext) => {

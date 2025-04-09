@@ -1,4 +1,4 @@
-import { useUnmount } from '../core/lifecycle';
+import { useUnmount } from "../core/lifecycle";
 
 type ElementEventListener<
   K extends keyof HTMLElementEventMap = keyof HTMLElementEventMap,

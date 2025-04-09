@@ -1,6 +1,6 @@
 {
   "name": "lake",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "./dist/main.umd.js",
   "module": "./dist/main.es.js",
   "exports": {
@@ -30,20 +30,13 @@
     "build": "NODE_ENV=production tsc && vite build",
     "watch": "vite build -w",
     "serve": "vite preview",
-    "fix:prettier": "prettier --write ./lib/**/*.ts",
-    "fix:eslint": "eslint './lib/**/*.ts' -c .eslintrc.json --fix",
-    "fix": "npm run fix:prettier && npm run fix:eslint"
+    "format": "biome format --write ./lib",
+    "fix:biome": "biome check --write ./lib",
+    "fix": "npm run fix:biome"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@playwright/test": "1.51.1",
-    "@typescript-eslint/eslint-plugin": "8.29.1",
-    "@typescript-eslint/parser": "8.29.1",
-    "eslint": "9.24.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-import-resolver-typescript": "4.3.2",
-    "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-prettier": "5.2.6",
-    "prettier": "3.5.3",
     "typescript": "^5.5.3",
     "vite": "6.2.5"
   },

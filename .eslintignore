@@ -1,6 +1,0 @@
-.gitignore
-/dist
-/types
-/.eslintrc.js
-/vite.config.ts
-/examples

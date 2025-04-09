@@ -4,5 +4,5 @@ export interface IComponent<SetupResult = void | Record<string, unknown>, Props 
     name: string;
     setup(el: RefElement, props: ComponentProps<Props>): SetupResult;
 }
-export type { ComponentContext } from './internal/component';
+export type { ComponentContext } from "./internal/component";
 //# sourceMappingURL=types.d.ts.map

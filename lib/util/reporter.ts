@@ -1,5 +1,5 @@
 const UNKNOWN =
-  '予期せぬエラーが発生しました。時間を置いてもう一度お試しください。';
+  "予期せぬエラーが発生しました。時間を置いてもう一度お試しください。";
 
 export const createErrorReporter = (
   reason: string,
@@ -8,7 +8,7 @@ export const createErrorReporter = (
 ) => {
   return {
     message: UNKNOWN,
-    name: 'UnknownError',
+    name: "UnknownError",
     payload: {
       ...payload,
       error,

@@ -1,4 +1,4 @@
-import type { RefElement, IComponent, ComponentContext } from './types';
+import type { RefElement, IComponent, ComponentContext } from "./types";
 export declare function create(): {
     component(wrap: IComponent): (el: RefElement, props?: Record<string, any>) => ComponentContext<any>;
     unmount(targets: RefElement[]): void;

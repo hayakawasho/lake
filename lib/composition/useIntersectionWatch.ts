@@ -1,10 +1,10 @@
-import { useMount, useUnmount } from '../core/lifecycle';
+import { useMount, useUnmount } from "../core/lifecycle";
 
 export function useIntersectionWatch<T extends Element>(
   targetOrTargets: T | T[],
   callback: IntersectionObserverCallback,
   opts: IntersectionObserverInit = {
-    rootMargin: '0px',
+    rootMargin: "0px",
     threshold: 0.1,
   },
 ) {
@@ -12,7 +12,7 @@ export function useIntersectionWatch<T extends Element>(
 
   const watch = (targetOrTargets: T | T[]) => {
     if (Array.isArray(targetOrTargets)) {
-      targetOrTargets.forEach(el => io.observe(el));
+      targetOrTargets.forEach((el) => io.observe(el));
     } else {
       io.observe(targetOrTargets);
     }

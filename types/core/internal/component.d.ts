@@ -1,14 +1,14 @@
-import { LifecycleHooks } from '../lifecycle';
-import type { RefElement, IComponent } from '../types';
+import { LifecycleHooks } from "../lifecycle";
+import type { RefElement, IComponent } from "../types";
 export declare function getCurrentComponent(hookName: string): ComponentContext<any>;
 declare class ComponentContext<T = any> {
     #private;
-    element: RefElement;
     private [LifecycleHooks.MOUNTED];
     private [LifecycleHooks.UNMOUNTED];
     parent: ComponentContext<T> | null;
     readonly uid: string;
     current: ReturnType<IComponent<T>["setup"]>;
+    element: RefElement;
     constructor(element: RefElement, name: string);
     onMount: () => void;
     onUnmount: () => void;
