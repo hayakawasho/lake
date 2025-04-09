@@ -1,24 +1,24 @@
-var R = Object.defineProperty;
+var O = Object.defineProperty;
 var N = (t) => {
   throw TypeError(t);
 };
-var A = (t, n, e) => n in t ? R(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
+var A = (t, n, e) => n in t ? O(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
 var c = (t, n, e) => A(t, typeof n != "symbol" ? n + "" : n, e), v = (t, n, e) => n.has(t) || N("Cannot " + e);
 var i = (t, n, e) => (v(t, n, "read from private field"), e ? e.call(t) : n.get(t)), l = (t, n, e) => n.has(t) ? N("Cannot add the same private member more than once") : n instanceof WeakSet ? n.add(t) : n.set(t, e), m = (t, n, e, o) => (v(t, n, "write to private field"), o ? o.call(t, e) : n.set(t, e), e);
-var f;
+var d;
 class S {
   constructor(n) {
-    l(this, f);
-    m(this, f, n);
+    l(this, d);
+    m(this, d, n);
   }
   get value() {
-    return i(this, f);
+    return i(this, d);
   }
   set value(n) {
-    m(this, f, n);
+    m(this, d, n);
   }
 }
-f = new WeakMap();
+d = new WeakMap();
 const L = (t) => new S(t);
 var h;
 class b {
@@ -36,16 +36,16 @@ function T(t, n) {
   if (!t)
     throw new Error(n || "unexpected condition");
 }
-var d = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(d || {});
-function D(t) {
+var f = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(f || {});
+function R(t) {
   return (n) => {
     M(t)[t].push(n);
   };
 }
-const $ = D(
+const $ = R(
   "Mounted"
   /* MOUNTED */
-), x = D(
+), x = R(
   "Unmounted"
   /* UNMOUNTED */
 );
@@ -56,7 +56,7 @@ function M(t) {
 }
 let I = 0;
 var w, C, a;
-C = d.MOUNTED, w = d.UNMOUNTED;
+C = f.MOUNTED, w = f.UNMOUNTED;
 class q {
   constructor(n, e) {
     c(this, C, []);
@@ -67,12 +67,12 @@ class q {
     c(this, "current", {});
     c(this, "element");
     c(this, "onMount", () => {
-      const n = this[d.MOUNTED].map((e) => e()).filter((e) => typeof e == "function");
-      this[d.UNMOUNTED].push(...n);
+      const n = this[f.MOUNTED].map((e) => e()).filter((e) => typeof e == "function");
+      this[f.UNMOUNTED].push(...n);
     });
     c(this, "onUnmount", () => {
       [
-        ...this[d.UNMOUNTED],
+        ...this[f.UNMOUNTED],
         ...i(this, a).flatMap((e) => e.onUnmount)
       ].forEach((e) => e());
     });
@@ -87,7 +87,7 @@ class q {
   }
 }
 a = new WeakMap();
-function y(t) {
+function D(t) {
   const n = p;
   return (e, o) => {
     const s = new q(e, t.name), r = U(s), u = t.setup(e, o);
@@ -125,7 +125,7 @@ function V() {
   return {
     component(t) {
       return (n, e = {}) => {
-        const o = y(t)(n, e);
+        const o = D(t)(n, e);
         return J(n, o, t.name), o.onMount(), o;
       };
     },
@@ -163,7 +163,7 @@ function F(t, n, e = {
   threshold: 0.1
 }) {
   const o = new IntersectionObserver(n, e), s = (u) => {
-    Array.isArray(u) ? u.forEach((O) => o.observe(O)) : o.observe(u);
+    Array.isArray(u) ? u.forEach((y) => o.observe(y)) : o.observe(u);
   };
   return $(() => {
     s(t);
@@ -180,7 +180,7 @@ function G() {
   return {
     addChild(n, e, o = {}) {
       const s = (r) => {
-        const u = y(e)(r, o);
+        const u = D(e)(r, o);
         return t.addChild(u), u;
       };
       return Array.isArray(n) ? n.map((r) => s(r)) : [s(n)];
@@ -189,6 +189,9 @@ function G() {
       n.forEach((e) => t.removeChild(e));
     }
   };
+}
+function H() {
+  return M("useRootRef").element;
 }
 export {
   V as create,
@@ -199,6 +202,7 @@ export {
   z as useEvent,
   F as useIntersectionWatch,
   $ as useMount,
+  H as useRootRef,
   G as useSlot,
   x as useUnmount
 };
