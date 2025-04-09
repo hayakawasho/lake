@@ -51,7 +51,8 @@
       "suspicious": {
         "recommended": true,
         "noArrayIndexKey": "off",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noConfusingVoidType": "off"
       }
     }
   }

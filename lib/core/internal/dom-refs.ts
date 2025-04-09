@@ -1,5 +1,5 @@
-import { qsa } from '../../util/selector';
-import type { RefElement } from '../types';
+import { qsa } from "../../util/selector";
+import type { RefElement } from "../types";
 
 export function domRefs(ref: Set<string>, scope: RefElement) {
   const findRef = (q: string) => {

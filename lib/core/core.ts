@@ -1,5 +1,5 @@
-import { createComponent } from './internal/component';
-import type { RefElement, IComponent, ComponentContext } from './types';
+import { createComponent } from "./internal/component";
+import type { RefElement, IComponent, ComponentContext } from "./types";
 
 const DOM_COMPONENT_INSTANCE = new WeakMap<RefElement, ComponentContext>();
 
@@ -15,7 +15,7 @@ function bindDOMNodeToComponent(
         component,
         name,
       },
-      reason: '',
+      reason: "",
     };
     throw new Error(JSON.stringify(report));
   }
@@ -29,7 +29,7 @@ function bindDOMNodeToComponent(
         component,
         name,
       },
-      reason: '',
+      reason: "",
     };
     throw new Error(JSON.stringify(report));
   }
@@ -51,8 +51,10 @@ export function create() {
 
     unmount(targets: RefElement[]) {
       targets
-        .filter(el => DOM_COMPONENT_INSTANCE.has(el))
-        .forEach(el => DOM_COMPONENT_INSTANCE.get(el)!.onUnmount());
+        .filter((el) => DOM_COMPONENT_INSTANCE.has(el))
+        .forEach((el) => {
+          (DOM_COMPONENT_INSTANCE.get(el) as ComponentContext).onUnmount();
+        });
     },
   };
 }

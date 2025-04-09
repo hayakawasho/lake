@@ -1,10 +1,10 @@
-import { getCurrentComponent } from './internal/component';
+import { getCurrentComponent } from "./internal/component";
 
 export type LifecycleHandler = () => void | (() => void);
 
-export const enum LifecycleHooks {
-  MOUNTED = 'Mounted',
-  UNMOUNTED = 'Unmounted',
+export enum LifecycleHooks {
+  MOUNTED = "Mounted",
+  UNMOUNTED = "Unmounted",
 }
 
 function createHook(lifecycleType: LifecycleHooks) {
