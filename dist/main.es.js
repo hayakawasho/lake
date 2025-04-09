@@ -1,18 +1,14 @@
-var D = Object.defineProperty;
-var y = (t, n, e) => n in t ? D(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
-var c = (t, n, e) => (y(t, typeof n != "symbol" ? n + "" : n, e), e), N = (t, n, e) => {
-  if (!n.has(t))
-    throw TypeError("Cannot " + e);
+var R = Object.defineProperty;
+var N = (t) => {
+  throw TypeError(t);
 };
-var i = (t, n, e) => (N(t, n, "read from private field"), e ? e.call(t) : n.get(t)), l = (t, n, e) => {
-  if (n.has(t))
-    throw TypeError("Cannot add the same private member more than once");
-  n instanceof WeakSet ? n.add(t) : n.set(t, e);
-}, m = (t, n, e, o) => (N(t, n, "write to private field"), o ? o.call(t, e) : n.set(t, e), e);
+var A = (t, n, e) => n in t ? R(t, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : t[n] = e;
+var c = (t, n, e) => A(t, typeof n != "symbol" ? n + "" : n, e), v = (t, n, e) => n.has(t) || N("Cannot " + e);
+var i = (t, n, e) => (v(t, n, "read from private field"), e ? e.call(t) : n.get(t)), l = (t, n, e) => n.has(t) ? N("Cannot add the same private member more than once") : n instanceof WeakSet ? n.add(t) : n.set(t, e), m = (t, n, e, o) => (v(t, n, "write to private field"), o ? o.call(t, e) : n.set(t, e), e);
 var f;
-class O {
+class S {
   constructor(n) {
-    l(this, f, void 0);
+    l(this, f);
     m(this, f, n);
   }
   get value() {
@@ -23,11 +19,11 @@ class O {
   }
 }
 f = new WeakMap();
-const k = (t) => new O(t);
+const L = (t) => new S(t);
 var h;
-class R {
+class b {
   constructor(n) {
-    l(this, h, void 0);
+    l(this, h);
     m(this, h, n);
   }
   get value() {
@@ -35,39 +31,41 @@ class R {
   }
 }
 h = new WeakMap();
-const L = (t) => new R(t);
-function A(t, n) {
+const P = (t) => new b(t);
+function T(t, n) {
   if (!t)
     throw new Error(n || "unexpected condition");
 }
 var d = /* @__PURE__ */ ((t) => (t.MOUNTED = "Mounted", t.UNMOUNTED = "Unmounted", t))(d || {});
-function U(t) {
+function D(t) {
   return (n) => {
     M(t)[t].push(n);
   };
 }
-const S = U(
+const $ = D(
   "Mounted"
   /* MOUNTED */
-), w = U(
+), x = D(
   "Unmounted"
   /* UNMOUNTED */
 );
 let p;
-const v = (t) => p = t;
+const U = (t) => (p = t, t);
 function M(t) {
-  return A(p, `"${t}" called outside setup() will never be run.`), p;
+  return T(p, `"${t}" called outside setup() will never be run.`), p;
 }
-let b = 0;
-var J, W, a;
-class T {
+let I = 0;
+var w, C, a;
+C = d.MOUNTED, w = d.UNMOUNTED;
+class q {
   constructor(n, e) {
-    c(this, J, []);
-    c(this, W, []);
+    c(this, C, []);
+    c(this, w, []);
     c(this, "parent", null);
     l(this, a, []);
     c(this, "uid");
     c(this, "current", {});
+    c(this, "element");
     c(this, "onMount", () => {
       const n = this[d.MOUNTED].map((e) => e()).filter((e) => typeof e == "function");
       this[d.UNMOUNTED].push(...n);
@@ -85,19 +83,19 @@ class T {
       const e = i(this, a).indexOf(n);
       e !== -1 && (i(this, a).splice(e, 1), n.parent = null, n.onUnmount());
     });
-    this.element = n, this.uid = `${e}.${b++}`;
+    this.uid = `${e}.${I++}`, this.element = n;
   }
 }
-J = d.MOUNTED, W = d.UNMOUNTED, a = new WeakMap();
-function C(t) {
+a = new WeakMap();
+function y(t) {
   const n = p;
   return (e, o) => {
-    const s = new T(e, t.name), r = v(s), u = t.setup(e, o);
-    return r.current = u || {}, v(n), r;
+    const s = new q(e, t.name), r = U(s), u = t.setup(e, o);
+    return r.current = u || {}, U(n), r;
   };
 }
 const E = /* @__PURE__ */ new WeakMap();
-function $(t, n, e) {
+function J(t, n, e) {
   if (E.has(t)) {
     const o = {
       payload: {
@@ -123,51 +121,53 @@ function $(t, n, e) {
     throw new Error(JSON.stringify(s));
   }
 }
-function P() {
+function V() {
   return {
     component(t) {
       return (n, e = {}) => {
-        const o = C(t)(n, e);
-        return $(n, o, t.name), o.onMount(), o;
+        const o = y(t)(n, e);
+        return J(n, o, t.name), o.onMount(), o;
       };
     },
     unmount(t) {
-      t.filter((n) => E.has(n)).forEach((n) => E.get(n).onUnmount());
+      t.filter((n) => E.has(n)).forEach((n) => {
+        E.get(n).onUnmount();
+      });
     }
   };
 }
-const V = (t) => t;
-function j(t, n, e, o) {
-  t.addEventListener(n, e, o), w(() => {
+const j = (t) => t;
+function z(t, n, e, o) {
+  t.addEventListener(n, e, o), x(() => {
     t.removeEventListener(n, e, o);
   });
 }
-const I = (t, n) => Array.from((n ?? document).querySelectorAll(t));
-function q(t, n) {
+const W = (t, n) => Array.from((n ?? document).querySelectorAll(t));
+function _(t, n) {
   const e = (s) => {
-    const r = I(`[data-ref="${s}"]`, n), { length: u } = r;
+    const r = W(`[data-ref="${s}"]`, n), { length: u } = r;
     return u === 0 ? null : {
       1: r[0]
     }[u] ?? r;
   };
   return [...t].reduce((s, r) => (s[r] = e(r), s), {});
 }
-function z(...t) {
+function B(...t) {
   const n = M("useDomRef");
   return {
-    refs: q(new Set(t), n.element)
+    refs: _(new Set(t), n.element)
   };
 }
-function B(t, n, e = {
+function F(t, n, e = {
   rootMargin: "0px",
   threshold: 0.1
 }) {
   const o = new IntersectionObserver(n, e), s = (u) => {
-    Array.isArray(u) ? u.forEach((x) => o.observe(x)) : o.observe(u);
+    Array.isArray(u) ? u.forEach((O) => o.observe(O)) : o.observe(u);
   };
-  return S(() => {
+  return $(() => {
     s(t);
-  }), w(() => {
+  }), x(() => {
     o.disconnect();
   }), {
     unwatch: (u) => {
@@ -175,12 +175,12 @@ function B(t, n, e = {
     }
   };
 }
-function F() {
+function G() {
   const t = M("useSlot");
   return {
     addChild(n, e, o = {}) {
       const s = (r) => {
-        const u = C(e)(r, o);
+        const u = y(e)(r, o);
         return t.addChild(u), u;
       };
       return Array.isArray(n) ? n.map((r) => s(r)) : [s(n)];
@@ -191,14 +191,14 @@ function F() {
   };
 }
 export {
-  P as create,
-  V as defineComponent,
-  L as readonly,
-  k as ref,
-  z as useDomRef,
-  j as useEvent,
-  B as useIntersectionWatch,
-  S as useMount,
-  F as useSlot,
-  w as useUnmount
+  V as create,
+  j as defineComponent,
+  P as readonly,
+  L as ref,
+  B as useDomRef,
+  z as useEvent,
+  F as useIntersectionWatch,
+  $ as useMount,
+  G as useSlot,
+  x as useUnmount
 };
